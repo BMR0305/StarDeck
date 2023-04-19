@@ -1,0 +1,1 @@
+En esta carpeta se pondrá los scripts necesarios para alzar la base de datos y su configuracion
