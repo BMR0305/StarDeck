@@ -11,6 +11,15 @@ label {
   font-weight: bold;
 }
 
+input-account {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
 
 button {
   background-color: #4caf50;

@@ -5,22 +5,26 @@ import { RouterModule } from "@angular/router";
 import { AuthRoutingModule } from './auth-routing.module';
 import { RegisterComponent } from './register/register.component';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { CardSelectionComponent } from './card-selection/card-selection.component';
+import {MatGridListModule} from "@angular/material/grid-list";
 
 
 
 @NgModule({
   declarations: [
-    RegisterComponent
+    RegisterComponent,
+    CardSelectionComponent
   ],
   imports: [
     CommonModule,
     AuthRoutingModule,
     RouterModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    MatGridListModule
   ],
   exports: [
-    RegisterComponent
+    RegisterComponent,
   ]
 })
 export class AuthModule { }

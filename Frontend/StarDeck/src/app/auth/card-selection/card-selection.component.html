@@ -1,0 +1,63 @@
+
+<div class = "box">
+
+  <div>
+
+  <div style="flex: 1 1 100%;">
+    <h1 class="box-title">Gallery</h1>
+  </div>
+
+  <mat-grid-list cols="4"  rowHeight="4:3">
+    <mat-grid-tile *ngFor="let item of items">
+      <img src= '{{item.image}}' style="object-fit: cover; object-position: center center; width:100%; height: 100%;">
+    </mat-grid-tile>
+  </mat-grid-list>
+
+  </div>
+
+  <div *ngIf="firstCard">
+
+    <div style="flex: 1 1 100%;">
+      <h1 class="box-title">Elegir primer carta</h1>
+    </div>
+
+    <div class="fila-imagenes">
+      <img src='{{cardsPosible[0].image}}' class="imagen" (click)="cardSelection(0)">
+      <img src='{{cardsPosible[0].image}}' class="imagen" (click)="cardSelection(1)">
+      <img src='{{cardsPosible[0].image}}' class="imagen" (click)="cardSelection(2)">
+    </div>
+
+  </div>
+
+  <div *ngIf="secondCard">
+    <div style="flex: 1 1 100%;">
+      <h1 class="box-title">Elegir segunda carta</h1>
+    </div>
+
+    <div class="fila-imagenes">
+      <img src='{{cardsPosible[0].image}}' class="imagen" (click)="cardSelection(0)">
+      <img src='{{cardsPosible[0].image}}' class="imagen" (click)="cardSelection(1)">
+      <img src='{{cardsPosible[0].image}}' class="imagen" (click)="cardSelection(2)">
+    </div>
+  </div>
+
+  <div *ngIf="thirdCard">
+    <div style="flex: 1 1 100%;">
+      <h1 class="box-title">Elegir tercera carta</h1>
+    </div>
+
+    <div class="fila-imagenes">
+      <img src='{{cardsPosible[0].image}}' class="imagen" (click)="cardSelection(0)">
+      <img src='{{cardsPosible[0].image}}' class="imagen" (click)="cardSelection(1)">
+      <img src='{{cardsPosible[0].image}}' class="imagen" (click)="cardSelection(2)">
+    </div>
+  </div>
+
+  <div *ngIf="finish">
+    <button class="botón">Click aquí</button>
+  </div>
+
+
+
+</div>
+
