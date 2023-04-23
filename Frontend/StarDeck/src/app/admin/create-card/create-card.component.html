@@ -1,0 +1,119 @@
+
+
+
+<div style="display: flex; flex-wrap: wrap;" class="box">
+
+    <div style="flex: 1 1 100%;">
+        <h1>Crear carta </h1>
+    </div>
+
+    
+
+
+    <div style="flex: 1 1 50%;">
+        <form [formGroup]="cardForm" (ngSubmit)="onSubmit()" class="monospace">
+            <label>
+                Nombre <span class="red-text">* </span> <br>
+                <input class="cardForm" type="name" formControlName="name" [attr.maxlength]="maxCharsName">
+                <div class = "required" *ngIf="cardForm.get('name')?.hasError('required') && cardForm.get('name')?.touched">
+                    El nombre es requerido.
+                </div>
+                <div class = "required" *ngIf="cardForm.get('name')?.hasError('minlength') && cardForm.get('name')?.touched">
+                    Largo menor a 5
+                </div>
+            </label>
+
+            <br>
+
+            <label>
+            Costo de energía<span class="red-text">* </span> <br>
+            <input class="cardForm" type="energy" formControlName="energy" >
+            <div class = "required" *ngIf="cardForm.get('energy')?.hasError('required') && cardForm.get('energy')?.touched">
+                La energía es requerida
+            </div>
+            <div class = "required" *ngIf="cardForm.get('energy')?.hasError('min') && cardForm.get('energy')?.touched">
+                No se aceptan valores menores a -100
+            </div>
+            <div class = "required" *ngIf="cardForm.get('energy')?.hasError('max') && cardForm.get('energy')?.touched">
+                No se aceptan valores mayores a 100
+            </div>
+            </label>
+
+            <br>
+
+            <label>
+                Costo en batalla<span class="red-text">* </span> <br>
+                <input class="cardForm" type="battle" formControlName="battle" >
+                <div class = "required" *ngIf="cardForm.get('battle')?.hasError('required') && cardForm.get('battle')?.touched">
+                El coste en batalla es requerido
+                </div>
+                <div class = "required" *ngIf="cardForm.get('battle')?.hasError('min') && cardForm.get('battle')?.touched">
+                No se aceptan valores menores a 0
+            </div>
+            <div class = "required" *ngIf="cardForm.get('battle')?.hasError('max') && cardForm.get('battle')?.touched">
+                No se aceptan valores mayores a 100
+            </div>   
+            </label>
+        </form>
+
+    </div>
+
+    <div style="flex: 1 1 50%;" class="file-input">
+        
+        <form [formGroup]="cardForm" style="margin-top: 0px; margin-bottom: 0px;" (ngSubmit)="onSubmit()" class="monospace">
+            <label> 
+                Imagen<span class="red-text">* </span> 
+                <input type="file" id="file" name="file" formControlName="image" (change)="onFileSelected($event)">
+                <img [src]="imageUrl" *ngIf="imageUrl">
+            </label>
+        </form>
+      </div>
+
+    <div style="flex: 1 1 100%;">
+
+    <form [formGroup]="cardForm" (ngSubmit)="onSubmit()" class="monospace">
+
+    <label> Tipo de carta<span class="red-text">* </span> </label> <br>
+    <select  class="cardForm" formControlName="type">
+        <option value="type1">Basica</option>
+        <option value="type2">Normal</option>
+        <option value="type3">Rara</option>
+        <option value="type4">Muy Rara</option>
+        <option value="type5">Ultra Rara</option>
+    </select>
+    <div class = "required" *ngIf="cardForm.get('type')?.hasError('required') && cardForm.get('type')?.touched">
+        El tipo de carta es requerido
+      </div>
+
+    <br>
+
+    <label>Raza de la carta<span class="red-text">* </span> </label> <br>
+    <select class="cardForm" formControlName="race">
+        <option value="race1">Raza 1</option>
+        <option value="race2">Raza 2</option>
+        <option value="race3">Raza 3</option>
+        <option value="race4">Raza 4</option>
+        <option value="race5">Raza 5</option>
+    </select>
+    <div class = "required" *ngIf="cardForm.get('race')?.hasError('required') && cardForm.get('race')?.touched">
+        La raza de carta es requerida
+      </div>
+
+    <br>
+
+    <label>
+      Descripcion<span class="red-text">* </span>  <br>
+      <input class="cardFormDescription" style = "height: 80px;" type="description" formControlName="description" [attr.maxlength]="maxCharsDesccrip">
+      <div class = "required" *ngIf="cardForm.get('description')?.hasError('required') && cardForm.get('description')?.touched">
+        La descripcion es requerida.       
+      </div>
+    </label> <br>
+    <button class="cardForm" type="submit" [disabled]="cardForm.invalid">Crear carta</button>
+
+  </form>
+  </div>
+
+
+
+</div>
+  
