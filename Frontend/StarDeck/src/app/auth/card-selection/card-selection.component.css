@@ -6,6 +6,7 @@
   width: 80%;
   margin: auto;
   padding: 70px;
+  height: auto;
 
 }
 
@@ -18,14 +19,24 @@ h1{
 }
 
 .fila-imagenes {
-  display: flex;
+  display:flex;
   justify-content: center;
   align-items: center;
-  padding: 10px;
+  padding: 50px;
+  margin-left: 50px;
+  
+
+}
+
+.imagen{
+  width:50%;
+  height:50%;
+  margin-right: 0px;
+  margin-left: 0px;
 }
 
 .botón {
   display: block; /* cambia la visualización del botón a bloque para centrarlo */
-  margin: 0 auto; /* establece los márgenes izquierdo y derecho en "auto" para centrar el botón */
+  margin: -1 auto; /* establece los márgenes izquierdo y derecho en "auto" para centrar el botón */
   /* Establece otros estilos para el botón según tus necesidades */
 }
