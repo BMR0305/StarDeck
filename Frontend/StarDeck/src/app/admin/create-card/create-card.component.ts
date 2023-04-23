@@ -4,7 +4,6 @@ import { AdminModule } from '../admin.module';
 import { NgSelectModule } from '@ng-select/ng-select';
 
 
-
 @Component({
   selector: 'app-create-card',
   templateUrl: './create-card.component.html',
@@ -15,7 +14,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
 export class CreateCardComponent {
 
   imageUrl: any;
-
+  base64Image: any;
+  
   maxCharsName = 30
   maxCharsDesccrip = 1000
   isNumeric(value: string | number): boolean {
@@ -28,7 +28,8 @@ export class CreateCardComponent {
     type: new FormControl('',[Validators.required]),
     race: new FormControl('',[Validators.required]),
     description: new FormControl('', [Validators.required, Validators.maxLength(1000)]),
-    image: new FormControl('', Validators.required)
+    image: new FormControl('', Validators.required),
+    image64: new FormControl('')
   
 });
 typeoptions = ['Ultra-Rara', 'Muy Rara', 'Rara', 'Normal', 'Básica'];
@@ -41,7 +42,12 @@ onFileSelected(event: any) {
     reader.readAsDataURL(file);
     reader.onload = () => {
       this.imageUrl = reader.result;
+      this.base64Image = reader.result;
+      this.cardForm.get('image64')?.setValue(this.base64Image);
     };
+
+    
+
   }
 }
 
