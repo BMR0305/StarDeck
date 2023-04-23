@@ -2,6 +2,6 @@
 {
     public class Race
     {
-        public string name { get; set; }
+        public string r_name { get; set; }
     }
 }

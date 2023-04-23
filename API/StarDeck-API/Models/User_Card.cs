@@ -2,8 +2,8 @@
 {
     public class User_Card
     {
-        public string userKey { get; set; }
+        public string user_key { get; set; }
 
-        public string cardKey { get; set; }
+        public string card_key { get; set; }
     }
 }

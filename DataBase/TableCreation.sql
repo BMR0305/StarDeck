@@ -6,11 +6,32 @@ CREATE TABLE Users(
 	nickname VARCHAR(30),
 	u_name VARCHAR(30),
 	birthday DATE,
-	nacionality VARCHAR(50),
+	nationality VARCHAR(50),
 	u_password VARCHAR(8),
 	u_status VARCHAR(10),
 	avatar VARCHAR(1000),
 	ranking INT,
 	coins INT,
 	UNIQUE(email)
+);
+
+CREATE TABLE Cards(
+	ID VARCHAR(15) NOT NULL PRIMARY KEY,
+	c_name VARCHAR(30),
+	battle_pts INT,
+	energy INT,
+	c_image VARCHAR(1000),
+	c_type VARCHAR(5),
+	race VARCHAR(20),
+	c_status VARCHAR(20),
+	c_description VARCHAR(1000)
+);
+
+CREATE TABLE User_card(
+	user_key VARCHAR(15) NOT NULL,
+	card_key VARCHAR(15) NOT NULL
+);
+
+CREATE TABLE Race(
+	r_name VARCHAR(20) NOT NULL PRIMARY KEY
 );
