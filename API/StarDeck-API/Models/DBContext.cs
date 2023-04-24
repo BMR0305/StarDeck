@@ -6,7 +6,7 @@ namespace StarDeck_API.Models
     {
         public DBContext(DbContextOptions<DBContext> options) : base(options) { }
 
-        public DbSet<Users> users => Set<Users>();
+        public DbSet<Users> users => Set<Users>(); 
 
         public DbSet<Race> race => Set<Race>();
 
