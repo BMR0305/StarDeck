@@ -43,7 +43,7 @@ export class RegisterComponent {
     }
     else {
 
-      this.apiService.post("Users",{
+      this.apiService.post("Users/post",{
 
         id: "string",
         email: this.mail,

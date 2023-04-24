@@ -12,19 +12,19 @@ export class ApiService {
   }
 
   public post(controller: string, data: any) {
-    return this.http.post(this.url_base + controller + "/post", data);
+    return this.http.post(this.url_base + controller, data);
   }
 
   public get(controller: string) {
-    return this.http.get(this.url_base + controller+ "/get");
+    return this.http.get(this.url_base + controller);
   }
 
   public delete(controller: string) {
-    return this.http.delete(this.url_base + controller + "/delete");
+    return this.http.delete(this.url_base + controller);
   }
 
   public update(controller: string, data: any) {
-    return this.http.put(this.url_base + controller + "/put", data);
+    return this.http.put(this.url_base + controller, data);
   }
 
 

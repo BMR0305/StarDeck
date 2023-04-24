@@ -58,7 +58,7 @@ onSubmit() {
   if (this.cardForm.valid) {
     console.log(this.cardForm.value);
     console.log(this.cardForm.get('name')?.value)
-    this.apiService.post("Card",{
+    this.apiService.post("Card/post",{
 
       id: "id",
       c_name: this.cardForm.get('name')?.value,
