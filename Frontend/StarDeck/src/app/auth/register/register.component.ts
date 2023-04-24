@@ -42,6 +42,26 @@ export class RegisterComponent {
       alert("Por favor, acepte los términos y condiciones");
     }
     else {
+
+      this.apiService.post("Users",{
+
+        id: "string",
+        email: this.mail,
+        nickname: this.nickname,
+        u_name: this.name,
+        birthday: this.birthdate + "T20:33:24.106Z",
+        nationality: this.country,
+        u_password: this.password,
+        u_status: "active",
+        avatar: "string",
+        ranking: 0,
+        coins: 0,
+        u_type: "admin"
+
+      }).subscribe(data =>{
+        console.log("Usuario registrado")
+      });
+
       alert("Registro completado");
     }
 

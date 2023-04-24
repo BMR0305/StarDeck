@@ -39,26 +39,37 @@ namespace StarDeck_API.Controllers
                 List<Users> users = context.users.ToList();
                 string id = "";
 
-                while (flag){
-                    Random rnd = new Random();
-                    id = "U-" + new String(Enumerable.Range(0, 12).Select(n => chars[rnd.Next(chars.Length)]).ToArray());
+                if (users.Count > 0) {
 
-                    for (int i = 0; i < users.Count; i++)
+                    while (flag)
                     {
-                        if (users[i].ID == id)
+                        Random rnd = new Random();
+                        id = "U-" + new String(Enumerable.Range(0, 12).Select(n => chars[rnd.Next(chars.Length)]).ToArray());
+
+                        for (int i = 0; i < users.Count; i++)
                         {
-                            flag = true;
-                            break;
+                            if (users[i].ID == id)
+                            {
+                                flag = true;
+                                break;
+                            }
+
+                            else
+                            {
+                                flag = false;
+                            }
+
                         }
 
-                        else
-                        {
-                            flag = false;
-                        }
-
-                    }
+                    } 
 
                 }
+                else
+                {
+                    Random rnd = new Random();
+                    id = "U-" + new String(Enumerable.Range(0, 12).Select(n => chars[rnd.Next(chars.Length)]).ToArray());
+                }
+
 
                 u.ID = id;
 

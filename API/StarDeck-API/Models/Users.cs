@@ -14,5 +14,7 @@
         public int ranking { get; set; }
         public int coins { get; set; }
 
+        public string u_type { get; set; }
+
     }
 }
