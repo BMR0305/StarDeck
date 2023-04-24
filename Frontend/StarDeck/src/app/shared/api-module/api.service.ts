@@ -3,11 +3,12 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 @Injectable({
   providedIn: 'root'
 })
-export class ApiserviceService {
+export class ApiService {
 
   url_base : string = "http://localhost:3000/api/";
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+  }
 
   public post(controller: string, data: any) {
     return this.http.post(this.url_base + controller, data);
@@ -24,5 +25,6 @@ export class ApiserviceService {
   public update(controller: string, data: any) {
     return this.http.put(this.url_base + controller, data);
   }
+
 
 }

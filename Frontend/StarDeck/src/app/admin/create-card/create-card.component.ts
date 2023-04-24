@@ -2,18 +2,18 @@ import { Component, NgModule } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule, NgModel} from '@angular/forms';
 import { AdminModule } from '../admin.module';
 import { NgSelectModule } from '@ng-select/ng-select';
-import  {ApiserviceService} from '../../shared/apiservice.service';
+import { ApiService } from '../../shared/api-module/api.service';
 
 @Component({
   selector: 'app-create-card',
   templateUrl: './create-card.component.html',
   styleUrls: ['./create-card.component.css'],
-
 })
 
 export class CreateCardComponent {
 
-  constructor(private apiService: ApiserviceService) { }
+  constructor(private apiService: ApiService) {
+  }
 
   imageUrl: any;
   base64Image: any;

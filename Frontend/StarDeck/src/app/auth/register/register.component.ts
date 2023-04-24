@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import { ApiserviceService} from "../../shared/apiservice.service";
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { ApiService } from '../../shared/api-module/api.service';
+
 
 @Component({
   selector: 'app-register',
@@ -8,7 +10,7 @@ import { ApiserviceService} from "../../shared/apiservice.service";
 })
 export class RegisterComponent {
 
-  constructor(private apiService: ApiserviceService) { }
+  constructor(private apiService: ApiService) { }
 
   maxCharsName = 30;
   maxCharsPassword = 8;

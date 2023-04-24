@@ -2,9 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { ApiserviceService } from "../shared/apiservice.service";
 import { AdminRoutingModule } from './admin-routing.module';
 import { CreateCardComponent } from './create-card/create-card.component';
+import { HttpClientModule }  from "@angular/common/http";
 
 
 @NgModule({
@@ -15,12 +15,14 @@ import { CreateCardComponent } from './create-card/create-card.component';
     CommonModule,
     AdminRoutingModule,
     ReactiveFormsModule,
-    RouterModule
+    RouterModule,
+    HttpClientModule
   ],
   exports:[
     CreateCardComponent
   ],
-  providers: [ApiserviceService]
+
+
 })
 export class AdminModule {
 
