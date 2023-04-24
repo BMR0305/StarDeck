@@ -9,7 +9,7 @@ CREATE TABLE Users(
 	nationality VARCHAR(50),
 	u_password VARCHAR(8),
 	u_status VARCHAR(10),
-	avatar VARCHAR(1000),
+	avatar VARCHAR(MAX),
 	ranking INT,
 	coins INT,
 	UNIQUE(email)
@@ -20,7 +20,7 @@ CREATE TABLE Cards(
 	c_name VARCHAR(30),
 	battle_pts INT,
 	energy INT,
-	c_image VARCHAR(1000),
+	c_image VARCHAR(MAX),
 	c_type VARCHAR(5),
 	race VARCHAR(20),
 	c_status VARCHAR(20),
