@@ -1,0 +1,45 @@
+
+
+  <form class="form-container" >
+    <h1>Crear cuenta</h1>
+    <div>
+      <label class="userForm" for="email">Correo<span class="red-text">* </span></label>
+      <input class="inputstyle" style="width: 100%;" type="email" id="email" [(ngModel)]="mail" [ngModelOptions] = "{standalone: true}">
+    </div>
+    <div>
+      <label class="userForm" for="name">Nombre<span class="red-text">* </span></label>
+      <input class="inputstyle" type="text" id="name" [(ngModel)]="name" [ngModelOptions] = "{standalone: true}" [attr.maxlength]="maxCharsName">
+    </div>
+    <div>
+      <label class="userForm" for="nickname">Nick Name<span class="red-text">* </span></label>
+      <input class="inputstyle" type="text" id="nickname" [(ngModel)]="nickname" [ngModelOptions] = "{standalone: true}" [attr.maxlength]="maxCharsName">
+    </div>
+    <div>
+      <label class="userForm" for="country">País<span class="red-text">* </span></label>
+      <select class="inputstyle" id="country" [(ngModel)]="country" [ngModelOptions] = "{standalone: true}">
+        <option value="MX">México</option>
+        <option value="CR">Costa Rica</option>
+        <option value="US">Estados Unidos</option>
+      </select>
+    </div>
+    <div>
+      <label class="userForm" for="birthdate">Fecha de nacimiento<span class="red-text">* </span></label>
+      <input class="inputstyle" type="date" id="birthdate" [(ngModel)]="birthdate" [ngModelOptions] = "{standalone: true}">
+    </div>
+    <div>
+      <label class="userForm" for="password">Contraseña<span class="red-text">* </span></label>
+      <input class="inputstyle" type="password" id="password" [(ngModel)]="password" [ngModelOptions] = "{standalone: true}" [attr.maxlength]="maxCharsPassword" required pattern="[a-zA-Z0-9]+">
+    </div>
+    <div>
+      <label class="userForm" for="confirmPassword">Confirmar contraseña<span class="red-text">* </span></label>
+      <input class="inputstyle" type="password" id="confirmPassword" [(ngModel)]="passwordConfirm" [ngModelOptions] = "{standalone: true}" [attr.maxlength]="maxCharsPassword" required pattern="[a-zA-Z0-9]+">
+    </div>
+    <div>
+      <input type="checkbox" id="termsAndConditions" [(ngModel)]="checkboxButton" [ngModelOptions] = "{standalone: true}">
+      <label class="inputstyle" for="termsAndConditions">Acepto los términos y condiciones<span class="red-text">*</span></label>
+      <strong  class="inputstyle"> <a href="https://drive.google.com/file/d/1ZwYynIlGtbLxbeTpz0G_OaMAQ8qLTnLq/view?usp=share_link"> Leer términos y condiciones</a>.</strong>
+    </div>
+    <button class="userForm" style="background-color: #FFFF; color: #000;" type="submit" (click)="onSubmit()">Crear cuenta</button>
+
+  </form>
+
