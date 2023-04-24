@@ -2,20 +2,22 @@ import { Component, NgModule } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule, NgModel} from '@angular/forms';
 import { AdminModule } from '../admin.module';
 import { NgSelectModule } from '@ng-select/ng-select';
-
+import  {ApiserviceService} from '../../shared/apiservice.service';
 
 @Component({
   selector: 'app-create-card',
   templateUrl: './create-card.component.html',
   styleUrls: ['./create-card.component.css'],
-  
+
 })
 
 export class CreateCardComponent {
 
+  constructor(private apiService: ApiserviceService) { }
+
   imageUrl: any;
   base64Image: any;
-  
+
   maxCharsName = 30
   maxCharsDesccrip = 1000
   isNumeric(value: string | number): boolean {
@@ -30,7 +32,7 @@ export class CreateCardComponent {
     description: new FormControl('', [Validators.required, Validators.maxLength(1000)]),
     image: new FormControl('', Validators.required),
     image64: new FormControl('')
-  
+
 });
 typeoptions = ['Ultra-Rara', 'Muy Rara', 'Rara', 'Normal', 'Básica'];
 raceoptions = ['Opción A', 'Opción B', 'Opción C'];
@@ -46,7 +48,7 @@ onFileSelected(event: any) {
       this.cardForm.get('image64')?.setValue(this.base64Image);
     };
 
-    
+
 
   }
 }

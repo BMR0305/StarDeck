@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { Routes,RouterModule, RouterOutlet} from "@angular/router";
-import { ReactiveFormsModule } from '@angular/forms';
+
 import { MatGridListModule } from '@angular/material/grid-list';
 
 
@@ -25,7 +25,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     AppRoutingModule,
     AuthRoutingModule,
     AuthModule,
-    MatGridListModule
+    MatGridListModule,
     AdminRoutingModule
   ],
   providers: [],

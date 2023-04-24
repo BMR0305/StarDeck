@@ -7,7 +7,7 @@ import { RegisterComponent } from './register/register.component';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { CardSelectionComponent } from './card-selection/card-selection.component';
 import {MatGridListModule} from "@angular/material/grid-list";
-
+import {ApiserviceService} from "../shared/apiservice.service";
 
 
 @NgModule({
@@ -25,6 +25,7 @@ import {MatGridListModule} from "@angular/material/grid-list";
   ],
   exports: [
     RegisterComponent,
-  ]
+  ],
+  providers: [ApiserviceService]
 })
 export class AuthModule { }

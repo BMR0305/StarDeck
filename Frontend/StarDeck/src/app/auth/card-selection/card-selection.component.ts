@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
+import { ApiserviceService} from "../../shared/apiservice.service";
 import { MatGridList } from '@angular/material/grid-list';
 
 interface Cards {
@@ -13,6 +14,8 @@ interface Cards {
 })
 
 export class CardSelectionComponent {
+
+  constructor(private apiService: ApiserviceService) { }
 
   firstCard: boolean = true;
   secondCard: boolean = false;
