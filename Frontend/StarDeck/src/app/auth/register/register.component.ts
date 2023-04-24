@@ -19,6 +19,10 @@ export class RegisterComponent {
   passwordConfirm : any;
   checkboxButton : any;
 
+  /**
+   * Show a alert
+   */
+
   onSubmit() {
 
     let decission = this.verification();
@@ -29,37 +33,45 @@ export class RegisterComponent {
       alert("Las contraseñas no coinciden");
     } else if (decission == 2) {
       alert("La contraseña debe tener al menos una letra y un número");
-    } else {
+    } else if(decission == 3) {
+      alert("Por favor, acepte los términos y condiciones");
+    }
+    else {
       alert("Registro completado");
     }
 
   }
 
-  verification() {
+  /**
+   * Check if all the fields are filled, if the passwords match, if the password has at least one letter and one number and if the checkbox is checked.
+   */
 
-    //verificar que la contraseña tenga numeros y letras
+  verification() {
 
     let numbers = "0123456789";
     let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
     let hasNumbers = false;
     let hasLetters = false;
+    let passwordString = this.password.toString();
 
-    for(let i = 0; i < this.password.length; i++) {
-      if(numbers.indexOf(this.password[i]) != -1) {
+    for(let i = 0; i < this.maxCharsPassword; i++) {
+      if(numbers.indexOf(passwordString[i]) != -1) {
         hasNumbers = true;
       }
-      if(letters.indexOf(this.password[i]) != -1) {
+      if(letters.indexOf(passwordString[i]) != -1) {
         hasLetters = true;
       }
     }
 
-    if(this.mail == null || this.name == null || this.nickname == null || this.country == null || this.birthdate == null || this.password == null || this.passwordConfirm == null || this.checkboxButton == null) {
+    if(this.mail == null || this.name == null || this.nickname == null || this.country == null || this.birthdate == null || this.password == null || this.passwordConfirm == null) {
       return 0;
     } else if (this.password != this.passwordConfirm) {
       return 1;
     } else if(!hasNumbers || !hasLetters) {
       return 2;
+    } else if(!this.checkboxButton) {
+      return 3;
     }
 
     return -1;

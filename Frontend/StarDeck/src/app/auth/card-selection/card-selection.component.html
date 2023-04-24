@@ -8,7 +8,7 @@
   </div>
 
   <mat-grid-list cols="6"  rowHeight="2:3">
-    <mat-grid-tile *ngFor="let item of items">
+    <mat-grid-tile *ngFor="let item of cards">
       <img src= '{{item.image}}' style="object-fit: cover; object-position: center center; width:90%; height: 90%;">
     </mat-grid-tile>
   </mat-grid-list>
@@ -56,8 +56,6 @@
   <div *ngIf="finish">
     <button class="botón">Click aquí</button>
   </div>
-
-
 
 </div>
 

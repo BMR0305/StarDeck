@@ -1,7 +1,7 @@
 
-  
+
   <form class="form-container" >
-    <h1>Crear cuenta</h1> 
+    <h1>Crear cuenta</h1>
     <div>
       <label class="userForm" for="email">Correo<span class="red-text">* </span></label>
       <input class="inputstyle" style="width: 100%;" type="email" id="email" [(ngModel)]="mail" [ngModelOptions] = "{standalone: true}">
@@ -37,6 +37,7 @@
     <div>
       <input type="checkbox" id="termsAndConditions" [(ngModel)]="checkboxButton" [ngModelOptions] = "{standalone: true}">
       <label class="inputstyle" for="termsAndConditions">Acepto los términos y condiciones<span class="red-text">*</span></label>
+      <strong  class="inputstyle"> <a href="https://drive.google.com/file/d/1ZwYynIlGtbLxbeTpz0G_OaMAQ8qLTnLq/view?usp=share_link"> Leer términos y condiciones</a>.</strong>
     </div>
     <button class="userForm" style="background-color: #FFFF; color: #000;" type="submit" (click)="onSubmit()">Crear cuenta</button>
 
