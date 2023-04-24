@@ -5,8 +5,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class ApiService {
 
-  //url_base : string = "http://localhost:3000/api/";
-  url_base : string = "https://localhost:44373/api/";
+  url_base : string = "https://stardeckapi.azurewebsites.net/api/";
+  //url_base : string = "https://localhost:44373/api/";
 
   constructor(private http: HttpClient) {
   }
@@ -16,15 +16,15 @@ export class ApiService {
   }
 
   public get(controller: string) {
-    return this.http.get(this.url_base + controller);
+    return this.http.get(this.url_base + controller+ "/get");
   }
 
   public delete(controller: string) {
-    return this.http.delete(this.url_base + controller);
+    return this.http.delete(this.url_base + controller + "/delete");
   }
 
   public update(controller: string, data: any) {
-    return this.http.put(this.url_base + controller, data);
+    return this.http.put(this.url_base + controller + "/put", data);
   }
 
 
