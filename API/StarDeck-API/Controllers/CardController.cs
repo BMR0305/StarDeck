@@ -25,10 +25,33 @@ namespace StarDeck_API.Controllers
                
                 c.c_status = "a";
                 string chars = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                
+                List<Card> cards = context.cards.ToList();
+                string id = "";
+                bool flag = true;
+                while (flag)
+                {
+                    Random rnd = new Random();
+                    id = "C-" + new String(Enumerable.Range(0, 12).Select(n => chars[rnd.Next(chars.Length)]).ToArray());
 
-                Random rnd = new Random();
-                c.ID = "C-" + new String(Enumerable.Range(0, 12).Select(n => chars[rnd.Next(chars.Length)]).ToArray());
+                    for (int i = 0; i < cards.Count; i++)
+                    {
+                        if (cards[i].ID == id)
+                        {
+                            flag = true;
+                            break;
+                        }
 
+                        else
+                        {
+                            flag = false;
+                        }
+
+                    }
+
+                }
+
+                c.ID = id;
 
                 context.cards.Add(c);
                 context.SaveChanges();
@@ -42,7 +65,7 @@ namespace StarDeck_API.Controllers
         }
 
         [HttpGet]
-        [Route("get/{num}")]
+        [Route("getRandom/{num}")]
 
         public string GetRandomCards(int num, [FromQuery] List<string> types)
         {

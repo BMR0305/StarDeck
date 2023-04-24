@@ -28,10 +28,32 @@ namespace StarDeck_API.Controllers
                 u.coins = 20;
                 u.u_status = "a";
                 string chars = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                bool flag = true;
+                List<Users> users = context.users.ToList();
+                string id = "";
 
-                Random rnd = new Random();
-                u.ID = "U-" + new String(Enumerable.Range(0, 12).Select(n => chars[rnd.Next(chars.Length)]).ToArray());
+                while (flag){
+                    Random rnd = new Random();
+                    id = "U-" + new String(Enumerable.Range(0, 12).Select(n => chars[rnd.Next(chars.Length)]).ToArray());
 
+                    for (int i = 0; i < users.Count; i++)
+                    {
+                        if (users[i].ID == id)
+                        {
+                            flag = true;
+                            break;
+                        }
+
+                        else
+                        {
+                            flag = false;
+                        }
+
+                    }
+
+                }
+
+                u.ID = id;
 
                 context.users.Add(u);
                 context.SaveChanges();
