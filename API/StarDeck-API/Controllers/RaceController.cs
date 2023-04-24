@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using StarDeck_API.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -31,6 +32,25 @@ namespace StarDeck_API.Controllers
                 context.race.Add(r);
                 context.SaveChanges();
                 return Ok();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return BadRequest(ex.Message);
+            }
+        }
+        /*
+         * Function that allows to get all races
+         * return: it returns a list with all races in json format if it succedes, and if it doesn't succed it returns the error  
+         */
+        [HttpGet]
+        [Route("getAll")]
+        public dynamic getAll()
+        {
+            try
+            {
+                string output = JsonConvert.SerializeObject(context.race.ToArray(), Formatting.Indented);
+                return output;
             }
             catch (Exception ex)
             {
