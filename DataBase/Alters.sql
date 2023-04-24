@@ -1,0 +1,15 @@
+ALTER TABLE User_card
+ADD CONSTRAINT PK_UserCard
+PRIMARY KEY (user_key,card_key);
+
+ALTER TABLE User_card
+ADD CONSTRAINT FK_UserCard
+FOREIGN  KEY (user_key) REFERENCES Users(ID);
+
+ALTER TABLE User_card
+ADD CONSTRAINT FK_UserCard2
+FOREIGN KEY (card_key) REFERENCES Cards(ID);
+
+ALTER TABLE Cards
+ADD CONSTRAINT FK_CardRace
+FOREIGN KEY (race) REFERENCES Race(r_name);
