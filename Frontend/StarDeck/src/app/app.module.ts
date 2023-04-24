@@ -7,8 +7,13 @@ import { MatGridListModule } from '@angular/material/grid-list';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+
 import { AuthModule} from "./auth/auth.module";
 import { AuthRoutingModule} from "./auth/auth-routing.module";
+
+import { AdminRoutingModule } from './admin/admin-routing.module';
+import { ReactiveFormsModule } from '@angular/forms';
+
 
 @NgModule({
   declarations: [
@@ -21,6 +26,7 @@ import { AuthRoutingModule} from "./auth/auth-routing.module";
     AuthRoutingModule,
     AuthModule,
     MatGridListModule
+    AdminRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]
