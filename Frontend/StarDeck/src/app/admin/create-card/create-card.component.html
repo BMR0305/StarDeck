@@ -7,7 +7,7 @@
         <h1>Crear carta </h1>
     </div>
 
-    
+
 
 
     <div style="flex: 1 1 50%;">
@@ -52,17 +52,17 @@
             </div>
             <div class = "required" *ngIf="cardForm.get('battle')?.hasError('max') && cardForm.get('battle')?.touched">
                 No se aceptan valores mayores a 100
-            </div>   
+            </div>
             </label>
         </form>
 
     </div>
 
     <div style="flex: 1 1 50%;" class="file-input">
-        
+
         <form [formGroup]="cardForm" style="margin-top: 0px; margin-bottom: 0px;" (ngSubmit)="onSubmit()" class="monospace">
-            <label> 
-                Imagen<span class="red-text">* </span> 
+            <label>
+                Imagen<span class="red-text">* </span>
                 <input type="file" id="file" name="file" formControlName="image" (change)="onFileSelected($event)">
                 <img [src]="imageUrl" *ngIf="imageUrl">
             </label>
@@ -75,11 +75,11 @@
 
     <label> Tipo de carta<span class="red-text">* </span> </label> <br>
     <select  class="cardForm" formControlName="type">
-        <option value="type1">Basica</option>
-        <option value="type2">Normal</option>
-        <option value="type3">Rara</option>
-        <option value="type4">Muy Rara</option>
-        <option value="type5">Ultra Rara</option>
+        <option value="Basica">Basica</option>
+        <option value="Normal">Normal</option>
+        <option value="Rara">Rara</option>
+        <option value="Muy Rara">Muy Rara</option>
+        <option value="Ultra-Rara">Ultra Rara</option>
     </select>
     <div class = "required" *ngIf="cardForm.get('type')?.hasError('required') && cardForm.get('type')?.touched">
         El tipo de carta es requerido
@@ -89,11 +89,11 @@
 
     <label>Raza de la carta<span class="red-text">* </span> </label> <br>
     <select class="cardForm" formControlName="race">
-        <option value="race1">Raza 1</option>
-        <option value="race2">Raza 2</option>
-        <option value="race3">Raza 3</option>
-        <option value="race4">Raza 4</option>
-        <option value="race5">Raza 5</option>
+        <option value="Raza 1">Raza 1</option>
+        <option value="Raza 2">Raza 2</option>
+        <option value="Raza 3">Raza 3</option>
+        <option value="Raza 4">Raza 4</option>
+        <option value="Raza 5">Raza 5</option>
     </select>
     <div class = "required" *ngIf="cardForm.get('race')?.hasError('required') && cardForm.get('race')?.touched">
         La raza de carta es requerida
@@ -105,7 +105,7 @@
       Descripcion<span class="red-text">* </span>  <br>
       <input class="cardFormDescription" style = "height: 80px;" type="description" formControlName="description" [attr.maxlength]="maxCharsDesccrip">
       <div class = "required" *ngIf="cardForm.get('description')?.hasError('required') && cardForm.get('description')?.touched">
-        La descripcion es requerida.       
+        La descripcion es requerida.
       </div>
     </label> <br>
     <button class="cardForm" type="submit" [disabled]="cardForm.invalid">Crear carta</button>
@@ -116,4 +116,4 @@
 
 
 </div>
-  
+

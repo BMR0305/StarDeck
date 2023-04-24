@@ -57,6 +57,24 @@ onFileSelected(event: any) {
 onSubmit() {
   if (this.cardForm.valid) {
     console.log(this.cardForm.value);
+    console.log(this.cardForm.get('name')?.value)
+    this.apiService.post("Card",{
+
+      id: "id",
+      c_name: this.cardForm.get('name')?.value,
+      battle_pts: this.cardForm.get('battle')?.value,
+      energy: this.cardForm.get('energy')?.value,
+      c_image: this.base64Image,
+      c_type: this.cardForm.get('type')?.value,
+      race: this.cardForm.get('race')?.value,
+      c_status: "a",
+      c_description: this.cardForm.get('description')?.value
+
+
+    }).subscribe((data)=>{
+      console.log("Carta agregada");
+    });
+
   } else {
     this.cardForm.markAllAsTouched();
   }

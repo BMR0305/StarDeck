@@ -5,13 +5,14 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class ApiService {
 
-  url_base : string = "http://localhost:3000/api/";
+  //url_base : string = "http://localhost:3000/api/";
+  url_base : string = "https://localhost:44373/api/";
 
   constructor(private http: HttpClient) {
   }
 
   public post(controller: string, data: any) {
-    return this.http.post(this.url_base + controller, data);
+    return this.http.post(this.url_base + controller + "/post", data);
   }
 
   public get(controller: string) {

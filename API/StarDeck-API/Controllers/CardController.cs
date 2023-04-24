@@ -35,27 +35,37 @@ namespace StarDeck_API.Controllers
                 List<Card> cards = context.cards.ToList();
                 string id = "";
                 bool flag = true;
-                while (flag)
-                {
-                    Random rnd = new Random();
-                    id = "C-" + new String(Enumerable.Range(0, 12).Select(n => chars[rnd.Next(chars.Length)]).ToArray());
 
-                    for (int i = 0; i < cards.Count; i++)
+                if (cards.Count > 0) {
+
+                    while (flag)
                     {
-                        if (cards[i].ID == id)
-                        {
-                            flag = true;
-                            break;
-                        }
+                        Random rnd = new Random();
+                        id = "C-" + new String(Enumerable.Range(0, 12).Select(n => chars[rnd.Next(chars.Length)]).ToArray());
 
-                        else
+                        for (int i = 0; i < cards.Count; i++)
                         {
-                            flag = false;
+                            if (cards[i].ID == id)
+                            {
+                                flag = true;
+                                break;
+                            }
+
+                            else
+                            {
+                                flag = false;
+                            }
+
                         }
 
                     }
 
+                } else
+                {
+                    Random rnd = new Random();
+                    id = "C-" + new String(Enumerable.Range(0, 12).Select(n => chars[rnd.Next(chars.Length)]).ToArray());
                 }
+
 
                 c.ID = id;
 

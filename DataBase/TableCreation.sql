@@ -21,7 +21,7 @@ CREATE TABLE Cards(
 	battle_pts INT,
 	energy INT,
 	c_image VARCHAR(MAX),
-	c_type VARCHAR(5),
+	c_type VARCHAR(15),
 	race VARCHAR(20),
 	c_status VARCHAR(20),
 	c_description VARCHAR(1000)
