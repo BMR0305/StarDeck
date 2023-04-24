@@ -10,12 +10,18 @@ namespace StarDeck_API.Controllers
     [ApiController]
     public class CardController : ControllerBase
     {
+        //Context of the DB
         private readonly DBContext context;
+        //Constructor of the class
         public CardController(DBContext context)
         {
             this.context = context;
         }
-        // POST api/<UsersController>
+        /*
+         * Function that allows to post a new card
+         * c: card that it's going to be posted
+         * return: it returns Ok state if it succedes, and if it doesn't succed it returns the error  
+         */
         [HttpPost]
         [Route("post")]
         public dynamic PostCard([FromBody] Card c)
@@ -64,54 +70,70 @@ namespace StarDeck_API.Controllers
             }
         }
 
+        /*
+        * Function that allows to get n different random cards of m types 
+        * num: number of different random cards
+        * types: list of types allowed for the selection of the random cards. Format: ["type", "type2", ...] Example: ["R", "N"]
+        * return: it returns the list of random cards selected in json format if it succeds, and if it doesn't succed it returns the error  
+        */
         [HttpGet]
         [Route("getRandom/{num}")]
 
-        public string GetRandomCards(int num, [FromQuery] List<string> types)
+        public dynamic GetRandomCards(int num, [FromQuery] List<string> types)
         {
-            List<Card> cards = context.cards.ToList();
-            List<Card> cardsType = new List<Card>();
-            bool flag = false;
-
-            for (int i = 0; i < cards.Count; i++)
+            try
             {
-                for (int j = 0; j < types.Count; j++)
+                List<Card> cards = context.cards.ToList();
+                List<Card> cardsType = new List<Card>();
+                bool flag = false;
+
+                for (int i = 0; i < cards.Count; i++)
                 {
-                    if (cards[i].c_type == types[j])
+                    for (int j = 0; j < types.Count; j++)
                     {
-                        flag = true;
+                        if (cards[i].c_type == types[j])
+                        {
+                            flag = true;
+                        }
                     }
-                }
-                if (flag)
-                {
-                    cardsType.Add(cards[i]);
-                }
-                flag = false;
-            }
-
-            if (num <= cardsType.Count)
-            {
-                List<Card> returnCards = new List<Card>();
-
-                for (int k = 0; k < num;)
-                {
-                    Random rnd = new Random();
-                    int ind = rnd.Next(0, cardsType.Count);
-
-                    if (!returnCards.Contains(cardsType[ind]))
+                    if (flag)
                     {
-                        returnCards.Add(cardsType[ind]);
-                        k++;
+                        cardsType.Add(cards[i]);
                     }
+                    flag = false;
                 }
-                string output = JsonConvert.SerializeObject(returnCards.ToArray(), Formatting.Indented);
-                return output;
-            }
 
-            else
-            {
-               return "Not enough cards of specify types";
+                if (num <= cardsType.Count)
+                {
+                    List<Card> returnCards = new List<Card>();
+
+                    for (int k = 0; k < num;)
+                    {
+                        Random rnd = new Random();
+                        int ind = rnd.Next(0, cardsType.Count);
+
+                        if (!returnCards.Contains(cardsType[ind]))
+                        {
+                            returnCards.Add(cardsType[ind]);
+                            k++;
+                        }
+                    }
+                    string output = JsonConvert.SerializeObject(returnCards.ToArray(), Formatting.Indented);
+                    return output;
+                }
+
+                else
+                {
+                    return "Not enough cards of specify types";
+                }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return BadRequest(ex.Message);
+
+            }
+            
         }
 
     }

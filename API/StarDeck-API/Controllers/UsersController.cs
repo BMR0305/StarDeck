@@ -5,17 +5,24 @@ using StarDeck_API.Models;
 
 namespace StarDeck_API.Controllers
 {
+    //Controller clase for the Users
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
     {
+        //Context of the DB
         private readonly DBContext context;
+        //Constructor of the class
         public UsersController(DBContext context)
         {
             this.context = context;
         }
 
-        // POST api/<UsersController>
+        /*
+         * Function that allows to post a new User
+         * u: User that it's going to be posted
+         * return: it returns Ok state if it succedes, and if it doesn't succed it returns the error  
+         */
         [HttpPost]
         [Route("post")]
         public dynamic PostUsers([FromBody] Users u)

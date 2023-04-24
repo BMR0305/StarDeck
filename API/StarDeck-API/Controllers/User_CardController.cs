@@ -6,16 +6,24 @@ using Newtonsoft.Json;
 
 namespace StarDeck_API.Controllers
 {
+    //Controller clase for the User_Card
     [Route("api/[controller]")]
     [ApiController]
     public class User_CardController : ControllerBase
     {
+        //Context of the DB
         private readonly DBContext context;
+        //Constructor of the class
         public User_CardController(DBContext context)
         {
             this.context = context;
         }
-        // POST api/<UsersController>
+        /*
+         * Function that allows to post a list of cards of one user
+         * email: email of the user who owns the cards of the list
+         * cards: List of cards that is going to be added to the user
+         * return: it returns Ok state if it succedes, and if it doesn't succed it returns the error  
+         */
         [HttpPost]
         [Route("post/{email}")]
         public dynamic PostUserCard(string email, [FromBody] List<Card> cards)
