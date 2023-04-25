@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { ApiService } from '../../shared/api-module/api.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -6,6 +9,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent {
+
+  constructor( private router: Router, private apiService: ApiService) { }
 
   maxCharsName = 30;
   maxCharsPassword = 8;
@@ -20,12 +25,17 @@ export class RegisterComponent {
   checkboxButton : any;
 
   /**
-   * Show a alert
+   * Show a alert and send data to api
    */
 
   onSubmit() {
 
     let decission = this.verification();
+    let condition = true;
+
+    if (decission != -1) {
+      condition = false;
+    }
 
     if(decission == 0) {
       alert("Por favor, rellene todos los campos");
@@ -36,9 +46,14 @@ export class RegisterComponent {
     } else if(decission == 3) {
       alert("Por favor, acepte los términos y condiciones");
     }
-    else {
-      alert("Registro completado");
-    }
+
+    this.apiService.get("Users/mail/" + this.mail).subscribe((data)=>{
+      if (data) {
+        this.sendData()
+      } else if (condition) {
+        alert("El email ya está registrado")
+      }
+    });
 
   }
 
@@ -75,6 +90,36 @@ export class RegisterComponent {
     }
 
     return -1;
+
+  }
+
+  /**
+   * Send data to api
+   */
+
+  sendData() {
+
+    this.apiService.post("Users/post",{
+
+      id: "string",
+      email: this.mail,
+      nickname: this.nickname,
+      u_name: this.name,
+      birthday: this.birthdate + "T20:33:24.106Z",
+      nationality: this.country,
+      u_password: this.password,
+      u_status: "active",
+      avatar: "string",
+      ranking: 0,
+      coins: 0,
+      u_type: "admin"
+
+    }).subscribe(data =>{
+      localStorage.setItem("email", JSON.stringify(this.mail));
+      this.router.navigate(['/card-selection']);
+    });
+
+    alert("Registro completado");
 
   }
 
