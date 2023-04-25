@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 })
 export class RegisterComponent {
 
-  constructor( private router: Router,private apiService: ApiService) { }
+  constructor( private router: Router, private apiService: ApiService) { }
 
   maxCharsName = 30;
   maxCharsPassword = 8;
@@ -41,30 +41,14 @@ export class RegisterComponent {
     } else if(decission == 3) {
       alert("Por favor, acepte los términos y condiciones");
     }
-    else {
 
-      this.apiService.post("Users/post",{
-
-        id: "string",
-        email: this.mail,
-        nickname: this.nickname,
-        u_name: this.name,
-        birthday: this.birthdate + "T20:33:24.106Z",
-        nationality: this.country,
-        u_password: this.password,
-        u_status: "active",
-        avatar: "string",
-        ranking: 0,
-        coins: 0,
-        u_type: "admin"
-
-      }).subscribe(data =>{
-        localStorage.setItem("email", JSON.stringify(this.mail));
-        this.router.navigate(['/card-selection']);
-      });
-
-      alert("Registro completado");
-    }
+    this.apiService.get("User/emailVerification/" + this.mail).subscribe((data)=>{
+      if (data) {
+        this.sendData()
+      } else {
+        alert("El email ya está registrado")
+      }
+    });
 
   }
 
@@ -101,6 +85,32 @@ export class RegisterComponent {
     }
 
     return -1;
+
+  }
+
+  sendData() {
+
+    this.apiService.post("Users/post",{
+
+      id: "string",
+      email: this.mail,
+      nickname: this.nickname,
+      u_name: this.name,
+      birthday: this.birthdate + "T20:33:24.106Z",
+      nationality: this.country,
+      u_password: this.password,
+      u_status: "active",
+      avatar: "string",
+      ranking: 0,
+      coins: 0,
+      u_type: "admin"
+
+    }).subscribe(data =>{
+      localStorage.setItem("email", JSON.stringify(this.mail));
+      this.router.navigate(['/card-selection']);
+    });
+
+    alert("Registro completado");
 
   }
 
