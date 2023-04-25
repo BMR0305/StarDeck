@@ -36,6 +36,8 @@ export class CardSelectionComponent implements OnInit {
 
   ngOnInit(): void {
 
+    console.log(localStorage.getItem("email"));
+
     this.getCards()
 
   }
@@ -119,6 +121,22 @@ export class CardSelectionComponent implements OnInit {
     for (let i = 0; i < 3; i++) {
       this.cardsSelected.push(this.cardsPosible[i]);
     }
+
+  }
+
+  onSubmit(){
+
+    const mail = localStorage.getItem("email");
+    mail == null ? "" : mail
+
+    let url = "User_Card/post/" + mail;
+    url = url.replace(/"/g, "");
+
+    console.log(url);
+
+    this.apiService.post(url, this.cards).subscribe((data)=>{
+      console.log(data);
+    });
 
   }
 

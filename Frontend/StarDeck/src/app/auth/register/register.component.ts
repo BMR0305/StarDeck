@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ApiService } from '../../shared/api-module/api.service';
-
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -10,7 +10,7 @@ import { ApiService } from '../../shared/api-module/api.service';
 })
 export class RegisterComponent {
 
-  constructor(private apiService: ApiService) { }
+  constructor( private router: Router,private apiService: ApiService) { }
 
   maxCharsName = 30;
   maxCharsPassword = 8;
@@ -59,7 +59,8 @@ export class RegisterComponent {
         u_type: "admin"
 
       }).subscribe(data =>{
-        console.log("Usuario registrado")
+        localStorage.setItem("email", JSON.stringify(this.mail));
+        this.router.navigate(['/card-selection']);
       });
 
       alert("Registro completado");
