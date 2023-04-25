@@ -1,6 +1,3 @@
-
-
-
 <div style="display: flex; flex-wrap: wrap;" class="box">
 
     <div style="flex: 1 1 100%;">
@@ -116,4 +113,27 @@
 
 
 </div>
+
+<br>
+
+<div class = "box" >
+
+  <div>
+
+    <div style="flex: 1 1 100%;">
+      <h1>Todas las cartas</h1>
+    </div>
+
+
+    <mat-grid-list cols=5 rowHeight="2:3">
+      <mat-grid-tile *ngFor="let item of cards">
+        <img src= '{{item.c_image}}' style="object-fit: cover; object-position: center center; width:90%; height: 90%;">
+      </mat-grid-tile>
+    </mat-grid-list>
+
+
+  </div>
+
+</div>
+
 

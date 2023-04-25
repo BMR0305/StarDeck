@@ -42,7 +42,6 @@ export class CardSelectionComponent implements OnInit {
 
   getCards(){
 
-
     this.apiService.get("Card/getRandom/15?types=Basica").subscribe((data)=>{
       this.temp = data;
       for (let i = 0; i < this.temp.length; i++) {

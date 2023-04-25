@@ -22,6 +22,7 @@ h1{
   margin: auto;
   padding: 70px;
 
+
 }
 
 .monospace {
@@ -29,8 +30,8 @@ h1{
   font-size: 18px; /* Tamaño de letra deseado */
   font-weight: bold; /* Grosor de letra deseado */
   color: #FFFF; /* Color de letra deseado */
-  
-  
+
+
 }
 
 .cardForm{
@@ -40,7 +41,7 @@ h1{
     height: 25px;
     font-family: 'OCR A Std', sans-serif;
     font-size: 15px; /* Tamaño de letra deseado */
-    
+
 }
 
 .cardFormDescription{
@@ -52,8 +53,8 @@ h1{
     white-space: break-spaces; /* No permitir que el texto se divida en varias líneas */
     overflow: hidden; /* Ocultar cualquier texto que sobrepase el ancho del input */
     text-overflow: ellipsis;
-     
-    
+
+
 }
 
 .required{
@@ -71,9 +72,9 @@ h1{
     height: 10%;
     cursor: pointer;
   }
-  
+
   .file-input label {
-    
+
     width: 60%;
     display:grid;
     padding: 50px 30px;
@@ -88,4 +89,3 @@ h1{
     width: 200px;
     background-position: right center;
   }
-  
