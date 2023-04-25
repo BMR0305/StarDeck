@@ -84,6 +84,33 @@ namespace StarDeck_API.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("mail/{mail}")]
+        public dynamic Mail(string mail) {
+
+            List<Users> users = context.users.ToList();
+            bool ret;
+
+            if (users.Count > 0)
+            {
+                for (int i = 0; i <= users.Count; i++)
+                {
+                    if (users[i].email == mail)
+                    {
+                        ret = false;
+                        return ret;
+                    }
+                }
+                ret = true;
+                return ret;
+            } else
+            {
+                ret = true;
+                return ret;
+            }
+
+        }
+
     }
 }
 
