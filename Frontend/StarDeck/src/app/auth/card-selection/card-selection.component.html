@@ -1,17 +1,16 @@
-
 <div class = "box">
 
   <div>
 
-  <div style="flex: 1 1 100%;">
-    <h1>Gallery</h1>
-  </div>
+    <div style="flex: 1 1 100%;">
+      <h1>Gallery</h1>
+    </div>
 
-  <mat-grid-list cols="6"  rowHeight="2:3">
-    <mat-grid-tile *ngFor="let item of cards">
-      <img src= '{{item.image}}' style="object-fit: cover; object-position: center center; width:90%; height: 90%;">
-    </mat-grid-tile>
-  </mat-grid-list>
+    <mat-grid-list cols="6"  rowHeight="2:3">
+      <mat-grid-tile *ngFor="let item of cards">
+        <img src= '{{item.c_image}}' style="object-fit: cover; object-position: center center; width:90%; height: 90%;">
+      </mat-grid-tile>
+    </mat-grid-list>
 
   </div>
 
@@ -22,9 +21,9 @@
     </div>
 
     <div class="fila-imagenes" style="width: 80%;">
-      <img src='{{cardsPosible[0].image}}' class="imagen" (click)="cardSelection(0)">
-      <img src='{{cardsPosible[0].image}}' class="imagen" (click)="cardSelection(1)">
-      <img src='{{cardsPosible[0].image}}' class="imagen" (click)="cardSelection(2)">
+      <img src='{{cardsPosible[0].c_image}}' class="imagen" (click)="cardSelection(0)">
+      <img src='{{cardsPosible[1].c_image}}' class="imagen" (click)="cardSelection(1)">
+      <img src='{{cardsPosible[2].c_image}}' class="imagen" (click)="cardSelection(2)">
     </div>
 
   </div>
@@ -34,10 +33,10 @@
       <h1 class="box-title">Elegir segunda carta</h1>
     </div>
 
-    <div class="fila-imagenes">
-      <img src='{{cardsPosible[0].image}}' class="imagen" (click)="cardSelection(0)">
-      <img src='{{cardsPosible[0].image}}' class="imagen" (click)="cardSelection(1)">
-      <img src='{{cardsPosible[0].image}}' class="imagen" (click)="cardSelection(2)">
+    <div class="fila-imagenes" style="width: 80%;">
+      <img src='{{cardsPosible[0].c_image}}' class="imagen" (click)="cardSelection(0)">
+      <img src='{{cardsPosible[1].c_image}}' class="imagen" (click)="cardSelection(1)">
+      <img src='{{cardsPosible[2].c_image}}' class="imagen" (click)="cardSelection(2)">
     </div>
   </div>
 
@@ -46,10 +45,10 @@
       <h1 class="box-title">Elegir tercera carta</h1>
     </div>
 
-    <div class="fila-imagenes">
-      <img src='{{cardsPosible[0].image}}' class="imagen" (click)="cardSelection(0)">
-      <img src='{{cardsPosible[0].image}}' class="imagen" (click)="cardSelection(1)">
-      <img src='{{cardsPosible[0].image}}' class="imagen" (click)="cardSelection(2)">
+    <div class="fila-imagenes" style="width: 80%;">
+      <img src='{{cardsPosible[0].c_image}}' class="imagen" (click)="cardSelection(0)">
+      <img src='{{cardsPosible[1].c_image}}' class="imagen" (click)="cardSelection(1)">
+      <img src='{{cardsPosible[2].c_image}}' class="imagen" (click)="cardSelection(2)">
     </div>
   </div>
 
@@ -58,4 +57,3 @@
   </div>
 
 </div>
-

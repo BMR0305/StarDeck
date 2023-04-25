@@ -16,7 +16,7 @@ export class ApiService {
   }
 
   public get(controller: string) {
-    return this.http.get(this.url_base + controller+ "/get");
+    return this.http.get(this.url_base + controller);
   }
 
   public delete(controller: string) {
