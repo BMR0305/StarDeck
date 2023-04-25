@@ -146,5 +146,27 @@ namespace StarDeck_API.Controllers
             
         }
 
+        /*
+         * Function that allows to get all the cards created in the DB.
+         * return: if successful json with all the card items created, else a bad request error.
+        */
+        [HttpGet]
+        [Route("getAll")]
+
+        public dynamic GetAllCards()
+        {
+            try
+            {
+                List<Card> cards = context.cards.ToList();
+                string output = JsonConvert.SerializeObject(cards.ToArray(), Formatting.Indented);
+                return output;
+
+            } catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }
