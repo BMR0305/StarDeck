@@ -84,6 +84,11 @@ namespace StarDeck_API.Controllers
             }
         }
 
+        /*
+         * Function to verify if user's mail is already registered or not
+         * mail: Mail to verify
+         * return: Boolean verifying mail
+         */
         [HttpGet]
         [Route("mail/{mail}")]
         public dynamic Mail(string mail) {
@@ -93,7 +98,7 @@ namespace StarDeck_API.Controllers
 
             if (users.Count > 0)
             {
-                for (int i = 0; i <= users.Count; i++)
+                for (int i = 0; i < users.Count; i++)
                 {
                     if (users[i].email == mail)
                     {
