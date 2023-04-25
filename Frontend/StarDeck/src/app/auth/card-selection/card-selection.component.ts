@@ -34,13 +34,20 @@ export class CardSelectionComponent implements OnInit {
 
   constructor(private apiService: ApiService) { }
 
+  /**
+   * Get cards from API and save them in cards array
+   */
+
   ngOnInit(): void {
 
-    console.log(localStorage.getItem("email"));
 
     this.getCards()
 
   }
+
+  /**
+   * Get cards from API and save them in cards array
+   */
 
   getCards(){
 
@@ -123,6 +130,10 @@ export class CardSelectionComponent implements OnInit {
     }
 
   }
+
+  /**
+   * send the selected cards to the API
+   */
 
   onSubmit(){
 

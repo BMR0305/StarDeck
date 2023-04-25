@@ -25,12 +25,17 @@ export class RegisterComponent {
   checkboxButton : any;
 
   /**
-   * Show a alert
+   * Show a alert and send data to api
    */
 
   onSubmit() {
 
     let decission = this.verification();
+    let condition = true;
+
+    if (decission != -1) {
+      condition = false;
+    }
 
     if(decission == 0) {
       alert("Por favor, rellene todos los campos");
@@ -42,10 +47,10 @@ export class RegisterComponent {
       alert("Por favor, acepte los términos y condiciones");
     }
 
-    this.apiService.get("User/emailVerification/" + this.mail).subscribe((data)=>{
+    this.apiService.get("Users/mail/" + this.mail).subscribe((data)=>{
       if (data) {
         this.sendData()
-      } else {
+      } else if (condition) {
         alert("El email ya está registrado")
       }
     });
@@ -87,6 +92,10 @@ export class RegisterComponent {
     return -1;
 
   }
+
+  /**
+   * Send data to api
+   */
 
   sendData() {
 

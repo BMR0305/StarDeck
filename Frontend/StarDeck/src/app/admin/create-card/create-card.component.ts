@@ -52,6 +52,10 @@ typeoptions = ['Ultra-Rara', 'Muy Rara', 'Rara', 'Normal', 'Básica'];
 raceoptions = ['Opción A', 'Opción B', 'Opción C'];
 
 
+  /**
+   * Convert image to base64
+   * @param event
+   */
 
 onFileSelected(event: any) {
   if (event.target.files.length > 0) {
@@ -67,6 +71,9 @@ onFileSelected(event: any) {
   }
 }
 
+  /**
+   * Submit form to the API
+   */
 
 onSubmit() {
   if (this.cardForm.valid) {
@@ -109,11 +116,19 @@ onSubmit() {
   }
 }
 
+
+  /**
+   * Get all cards from the API
+   */
   ngOnInit(): void {
 
     this.getCards()
 
   }
+
+  /**
+   * Get all cards from the API and push them to the cards array
+   */
 
   getCards(){
 
