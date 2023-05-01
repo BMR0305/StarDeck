@@ -1,18 +1,7 @@
 import { Component, OnInit} from '@angular/core';
 import { MatGridList } from '@angular/material/grid-list';
 import { ApiService } from '../../shared/api-module/api.service';
-
-interface Cards {
-  id : string;
-  c_name: string;
-  battle_pts: string;
-  energy : string;
-  c_image: string;
-  c_type: string;
-  race : string;
-  c_status: string;
-  c_description: string;
-}
+import { Cards } from '../../shared/models/models-cards';
 
 @Component({
   selector: 'app-card-selection',
@@ -23,13 +12,13 @@ interface Cards {
 export class CardSelectionComponent implements OnInit {
 
   temp: any;
-  firstCard: boolean = true;
-  secondCard: boolean = false;
-  thirdCard: boolean = false;
   finish: boolean = false;
+  loading: boolean = false;
+  message: string = "Selecciona 3 cartas para tu mazo";
+  cardPosition: number = 0;
+
 
   cards: Cards[] = [];
-  cardsSelected: Cards[] = [];
   cardsPosible: Cards[] = [];
 
   constructor(private apiService: ApiService) { }
@@ -39,7 +28,6 @@ export class CardSelectionComponent implements OnInit {
    */
 
   ngOnInit(): void {
-
 
     this.getCards()
 
@@ -68,33 +56,42 @@ export class CardSelectionComponent implements OnInit {
         this.cards.push(card);
       }
 
-      this.apiService.get("Card/getRandom/5?types=Rara&types=Normal").subscribe((data)=>{
-
-        this.temp = data;
-
-        for (let i = 0; i < this.temp.length; i++) {
-
-          const card : Cards = {
-            id : this.temp[i]["ID"],
-            c_name: this.temp[i]["c_name"],
-            battle_pts: this.temp[i]["battle_pts"],
-            energy : this.temp[i]["energy"],
-            c_image: this.temp[i]["c_image"],
-            c_type: this.temp[i]["c_type"],
-            race : this.temp[i]["race"],
-            c_status: this.temp[i]["c_status"],
-            c_description: this.temp[i]["c_description"]
-          }
-
-          this.cardsPosible.push(card);
-
-        }
-
-      });
+      this.requestPosibleCards();
 
     });
 
+  }
 
+  /**
+   * Get cards from API and save them in cards array
+   */
+
+  requestPosibleCards(){
+    this.apiService.get("Card/getRandom/9?types=Rara&types=Normal").subscribe((data)=>{
+
+      this.temp = data;
+
+      for (let i = 0; i < this.temp.length; i++) {
+
+        const card : Cards = {
+          id : this.temp[i]["ID"],
+          c_name: this.temp[i]["c_name"],
+          battle_pts: this.temp[i]["battle_pts"],
+          energy : this.temp[i]["energy"],
+          c_image: this.temp[i]["c_image"],
+          c_type: this.temp[i]["c_type"],
+          race : this.temp[i]["race"],
+          c_status: this.temp[i]["c_status"],
+          c_description: this.temp[i]["c_description"]
+        }
+
+        this.cardsPosible.push(card);
+
+      }
+
+      this.loading = true;
+
+    });
   }
 
   /**
@@ -104,29 +101,12 @@ export class CardSelectionComponent implements OnInit {
 
   cardSelection(int : number){
 
-    if(this.firstCard){
-      this.firstCard = false;
-      this.secondCard = true;
-    } else if(this.secondCard){
-      this.secondCard = false;
-      this.thirdCard = true;
-    } else {
-      this.thirdCard = false;
-      this.finish = true;
-    }
-
     this.cards.push(this.cardsPosible[int]);
 
-    const titleSelected = this.cardsPosible[int].c_name;
-
-    for (let i = 0; i < this.cardsPosible.length; i++) {
-      if(this.cardsPosible[i].c_name == titleSelected){
-        this.cardsPosible.splice(i, 1);
-      }
-    }
-
-    for (let i = 0; i < 3; i++) {
-      this.cardsSelected.push(this.cardsPosible[i]);
+    if(this.cardPosition != 6){
+      this.cardPosition += 3;
+    }else{
+      this.finish = true;
     }
 
   }

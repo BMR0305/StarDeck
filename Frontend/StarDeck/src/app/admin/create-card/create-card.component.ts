@@ -3,18 +3,7 @@ import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule, N
 import { AdminModule } from '../admin.module';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ApiService } from '../../shared/api-module/api.service';
-
-interface Cards {
-  id : any;
-  c_name: any;
-  battle_pts: any;
-  energy : any;
-  c_image: any;
-  c_type: any;
-  race : any;
-  c_status: any;
-  c_description: any;
-}
+import { Cards } from '../../shared/models/models-cards';
 
 @Component({
   selector: 'app-create-card',
@@ -23,7 +12,6 @@ interface Cards {
 })
 
 export class CreateCardComponent implements OnInit {
-
   constructor(private apiService: ApiService) {
   }
 
@@ -46,11 +34,9 @@ export class CreateCardComponent implements OnInit {
     description: new FormControl('', [Validators.required, Validators.maxLength(1000)]),
     image: new FormControl('', Validators.required),
     image64: new FormControl('')
-
 });
 typeoptions = ['Ultra-Rara', 'Muy Rara', 'Rara', 'Normal', 'Básica'];
 raceoptions = ['Opción A', 'Opción B', 'Opción C'];
-
 
   /**
    * Convert image to base64
@@ -67,7 +53,6 @@ onFileSelected(event: any) {
       this.base64Image = reader.result;
       this.cardForm.get('image64')?.setValue(this.base64Image);
     };
-
   }
 }
 

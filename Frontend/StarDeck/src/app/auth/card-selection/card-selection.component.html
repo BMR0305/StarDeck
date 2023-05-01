@@ -1,4 +1,4 @@
-<div class = "box">
+<div class = "box" *ngIf="loading">
 
   <div>
 
@@ -14,42 +14,19 @@
 
   </div>
 
-  <div *ngIf="firstCard">
+  <div *ngIf="!finish">
 
     <div style="flex: 1 1 100%;">
-      <h1 class="box-title">Elegir primer carta</h1>
+      <h1 class="box-title">{{message}}</h1>
     </div>
 
     <div class="fila-imagenes" style="width: 80%;">
-      <img src='{{cardsPosible[0].c_image}}' class="imagen" (click)="cardSelection(0)">
-      <img src='{{cardsPosible[1].c_image}}' class="imagen" (click)="cardSelection(1)">
-      <img src='{{cardsPosible[2].c_image}}' class="imagen" (click)="cardSelection(2)">
+
+      <img src='{{cardsPosible[cardPosition + 0].c_image}}' class="imagen" (click)="cardSelection(cardPosition + 0)">
+      <img src='{{cardsPosible[cardPosition + 1].c_image}}' class="imagen" (click)="cardSelection(cardPosition + 1)">
+      <img src='{{cardsPosible[cardPosition + 2].c_image}}' class="imagen" (click)="cardSelection(cardPosition + 2)">
     </div>
 
-  </div>
-
-  <div *ngIf="secondCard">
-    <div style="flex: 1 1 100%;">
-      <h1 class="box-title">Elegir segunda carta</h1>
-    </div>
-
-    <div class="fila-imagenes" style="width: 80%;">
-      <img src='{{cardsPosible[0].c_image}}' class="imagen" (click)="cardSelection(0)">
-      <img src='{{cardsPosible[1].c_image}}' class="imagen" (click)="cardSelection(1)">
-      <img src='{{cardsPosible[2].c_image}}' class="imagen" (click)="cardSelection(2)">
-    </div>
-  </div>
-
-  <div *ngIf="thirdCard">
-    <div style="flex: 1 1 100%;">
-      <h1 class="box-title">Elegir tercera carta</h1>
-    </div>
-
-    <div class="fila-imagenes" style="width: 80%;">
-      <img src='{{cardsPosible[0].c_image}}' class="imagen" (click)="cardSelection(0)">
-      <img src='{{cardsPosible[1].c_image}}' class="imagen" (click)="cardSelection(1)">
-      <img src='{{cardsPosible[2].c_image}}' class="imagen" (click)="cardSelection(2)">
-    </div>
   </div>
 
   <div *ngIf="finish">

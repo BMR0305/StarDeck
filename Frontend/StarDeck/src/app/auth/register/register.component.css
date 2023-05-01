@@ -1,3 +1,4 @@
+
 @import url('https://fonts.cdnfonts.com/css/ocr-a-std');
 
 h1{
@@ -5,112 +6,85 @@ h1{
   font-size: 30px; /* Tamaño de letra deseado */
   font-weight: bold; /* Grosor de letra deseado */
   color: #FFFF; /* Color de letra deseado */
+
 }
 
 .red-text {
-    color: red;
-    font-size: 13px;
-  }
-
-
-  .form-container {
-    background-color: #046e8f; /* Color de fondo deseado */
-    border-radius: 20px; /* Radio de los bordes */
-    padding: 20px; /* Espacio de relleno interno */
-    align-items: right;
-    width: 60%;
-    margin: auto;
-    padding: 70px;
-    height: auto
-    
-  }
-
-  .monospace {
-    font-family: 'OCR A Std', sans-serif;
-    font-size: 18px; /* Tamaño de letra deseado */
-    font-weight: bold; /* Grosor de letra deseado */
-    color: #FFFF; /* Color de letra deseado */
-  }
-
-  .userForm{
-    margin-top: 7px;
-    margin-bottom: 7px;
-    width: 100%;
-    height: 25px;
-    font-family: 'OCR A Std', sans-serif;
-    font-size: 15px; /* Tamaño de letra deseado */
-    color: #FFFF
+  color: red;
 }
 
-.inputstyle{
-  width: 100%;
+.box {
+  background-color: #046e8f; /* Color de fondo deseado */
+  border-radius: 20px; /* Radio de los bordes */
+  padding: 20px; /* Espacio de relleno interno */
+  align-items: center;
+  width: 60%;
+  margin: auto;
+  padding: 70px;
+
+}
+
+.monospace {
+  font-family: 'OCR A Std', sans-serif;
+  font-size: 18px; /* Tamaño de letra deseado */
+  font-weight: bold; /* Grosor de letra deseado */
+  color: #FFFF; /* Color de letra deseado */
+
+
+}
+
+.cardForm{
+  margin-top: 7px;
+  margin-bottom: 15px;
+  width: 50%;
   height: 25px;
-  box-sizing: border-box;
   font-family: 'OCR A Std', sans-serif;
   font-size: 15px; /* Tamaño de letra deseado */
 
 }
-  
 
-form {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 16px;
-  margin-top: 32px;
-  font-family: sans-serif;
+.cardFormDescription{
+  margin-top: 7px;
+  margin-bottom: 15px;
+  width: 85%;
+  font-family: 'OCR A Std', sans-serif;
+  font-size: 15px; /* Tamaño de letra deseado */
+  white-space: break-spaces; /* No permitir que el texto se divida en varias líneas */
+  overflow: hidden; /* Ocultar cualquier texto que sobrepase el ancho del input */
+  text-overflow: ellipsis;
+
+
 }
 
-label {
-  font-weight: bold;
+.required{
+  margin-bottom: 3px;
+  color: #022f40;
 }
 
-input-account {
-  width: 100%;
-  padding: 12px 20px;
-  margin: 8px 0;
-  box-sizing: border-box;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
+
+.file-input input[type="file"] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  width: 50%;
+  height: 10%;
+  cursor: pointer;
 }
 
-button {
-  background-color: #4caf50;
-  color: white;
-  padding: 8px 16px;
-  font-size: 16px;
-  border: none;
+.file-input label {
+
+  width: 60%;
+  display:grid;
+  padding: 50px 30px;
+  background-color: #38aecc;
+  color: #fff;
   border-radius: 4px;
   cursor: pointer;
-  margin-top: 16px;
 }
 
-button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
+img {
+  height: 130px;
+  width: 200px;
+  background-position: right center;
 }
-
-button:hover {
-  background-color: #3e8e41;
-}
-
-
-.sign-up-form {
-  display: flex;
-  flex-direction: column;
-}
-
-.sign-up-form label {
-  margin-bottom: 10px;
-}
-
-.sign-up-form input, .sign-up-form select {
-  margin-bottom: 20px;
-  width: 100%;
-}
-
-
-
-
-

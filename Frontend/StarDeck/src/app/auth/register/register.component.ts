@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ApiService } from '../../shared/api-module/api.service';
 import { Router } from '@angular/router';
+import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule, NgModel} from '@angular/forms';
 
 @Component({
   selector: 'app-register',
@@ -15,14 +15,17 @@ export class RegisterComponent {
   maxCharsName = 30;
   maxCharsPassword = 8;
 
-  mail : any;
-  name : any;
-  nickname : any;
-  country : any;
-  birthdate : any;
-  password : any;
-  passwordConfirm : any;
-  checkboxButton : any;
+
+  cardForm = new FormGroup({
+    mail: new FormControl('',[Validators.required, Validators.email]),
+    name: new FormControl('', [Validators.required, Validators.minLength(0), Validators.maxLength(30),]),
+    nickname: new FormControl('', [Validators.required, Validators.minLength(0), Validators.maxLength(30)]),
+    country: new FormControl('',[Validators.required]),
+    birthdate: new FormControl('',[Validators.required]),
+    password: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(8), Validators.pattern('^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]+$')]),
+    passwordConfirm: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(8), Validators.pattern('^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]+$')]),
+    checkboxButton: new FormControl(false, Validators.requiredTrue)
+  });
 
   /**
    * Show a alert and send data to api
@@ -30,68 +33,23 @@ export class RegisterComponent {
 
   onSubmit() {
 
-    let decission = this.verification();
     let condition = true;
 
-    if (decission != -1) {
-      condition = false;
-    }
-
-    if(decission == 0) {
-      alert("Por favor, rellene todos los campos");
-    } else if (decission == 1) {
+    if (this.cardForm.get('password')?.value != this.cardForm.get('passwordConfirm')?.value) {
       alert("Las contraseñas no coinciden");
-    } else if (decission == 2) {
-      alert("La contraseña debe tener al menos una letra y un número");
-    } else if(decission == 3) {
-      alert("Por favor, acepte los términos y condiciones");
+      condition = false;
+    } else {
+      this.apiService.get("Users/mail/" + this.cardForm.get('mail')?.value).subscribe((data)=>{
+        if (data) {
+          this.sendData()
+        } else if (condition) {
+          alert("El email ya está registrado")
+        }
+      });
     }
-
-    this.apiService.get("Users/mail/" + this.mail).subscribe((data)=>{
-      if (data) {
-        this.sendData()
-      } else if (condition) {
-        alert("El email ya está registrado")
-      }
-    });
 
   }
 
-  /**
-   * Check if all the fields are filled, if the passwords match, if the password has at least one letter and one number and if the checkbox is checked.
-   */
-
-  verification() {
-
-    let numbers = "0123456789";
-    let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-    let hasNumbers = false;
-    let hasLetters = false;
-    let passwordString = this.password.toString();
-
-    for(let i = 0; i < this.maxCharsPassword; i++) {
-      if(numbers.indexOf(passwordString[i]) != -1) {
-        hasNumbers = true;
-      }
-      if(letters.indexOf(passwordString[i]) != -1) {
-        hasLetters = true;
-      }
-    }
-
-    if(this.mail == null || this.name == null || this.nickname == null || this.country == null || this.birthdate == null || this.password == null || this.passwordConfirm == null) {
-      return 0;
-    } else if (this.password != this.passwordConfirm) {
-      return 1;
-    } else if(!hasNumbers || !hasLetters) {
-      return 2;
-    } else if(!this.checkboxButton) {
-      return 3;
-    }
-
-    return -1;
-
-  }
 
   /**
    * Send data to api
@@ -101,21 +59,21 @@ export class RegisterComponent {
 
     this.apiService.post("Users/post",{
 
-      id: "string",
-      email: this.mail,
-      nickname: this.nickname,
-      u_name: this.name,
-      birthday: this.birthdate + "T20:33:24.106Z",
-      nationality: this.country,
-      u_password: this.password,
+      id: "id",
+      email: this.cardForm.get('mail')?.value,
+      nickname: this.cardForm.get('nickname')?.value,
+      u_name: this.cardForm.get('name')?.value,
+      birthday: this.cardForm.get('birthdate')?.value + "T20:33:24.106Z",
+      nationality: this.cardForm.get('country')?.value,
+      u_password: this.cardForm.get('password')?.value,
       u_status: "active",
       avatar: "string",
       ranking: 0,
       coins: 0,
-      u_type: "admin"
+      u_type: "user"
 
     }).subscribe(data =>{
-      localStorage.setItem("email", JSON.stringify(this.mail));
+      localStorage.setItem("email", JSON.stringify(this.cardForm.get('mail')?.value));
       this.router.navigate(['/card-selection']);
     });
 
