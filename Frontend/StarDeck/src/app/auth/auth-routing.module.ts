@@ -2,12 +2,14 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { RegisterComponent } from './register/register.component';
 import { CardSelectionComponent } from './card-selection/card-selection.component';
+import { LoginComponent} from "./login/login.component";
 
 
 const routes: Routes = [
 
   {path : 'register', component: RegisterComponent},
-  {path : 'card-selection', component: CardSelectionComponent}
+  {path : 'card-selection', component: CardSelectionComponent},
+  {path : 'login', component: LoginComponent}
 
 ];
 
