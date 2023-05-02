@@ -15,6 +15,7 @@ export class CreateCardComponent implements OnInit {
   constructor(private apiService: ApiService) {
   }
 
+
   cards: Cards[] = [];
   temp: any;
   imageUrl: any;
