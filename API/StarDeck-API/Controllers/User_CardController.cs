@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace StarDeck_API.Controllers
 {
-    //Controller clase for the User_Card
+    //Controller class for the User_Card
     [Route("api/[controller]")]
     [ApiController]
     public class User_CardController : ControllerBase
