@@ -7,13 +7,15 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { CardSelectionComponent } from './card-selection/card-selection.component';
 import { MatGridListModule } from "@angular/material/grid-list";
 import { HttpClientModule } from "@angular/common/http";
+import { LoginComponent } from './login/login.component';
 
 
 
 @NgModule({
   declarations: [
     RegisterComponent,
-    CardSelectionComponent
+    CardSelectionComponent,
+    LoginComponent
   ],
   imports: [
     CommonModule,
