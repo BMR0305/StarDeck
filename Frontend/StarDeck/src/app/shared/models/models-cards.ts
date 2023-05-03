@@ -9,3 +9,10 @@ export interface Cards {
   c_status: any;
   c_description: any;
 }
+
+export interface Deck {
+  name : any;
+  code : any;
+  name_user : any;
+  cards : Cards[];
+}
