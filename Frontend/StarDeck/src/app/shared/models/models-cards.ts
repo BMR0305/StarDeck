@@ -10,9 +10,12 @@ export interface Cards {
   c_description: any;
 }
 
-export interface Deck {
-  name : any;
-  code : any;
-  name_user : any;
-  cards : Cards[];
+export interface Planet {
+  id : any;
+  p_name: any;
+  p_effect : any;
+  p_image: any;
+  p_type: any;
+  p_description: any;
 }
+
