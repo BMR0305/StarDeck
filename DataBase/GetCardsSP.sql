@@ -3,14 +3,14 @@ CREATE PROCEDURE GetRandomCards
 @ctypeList nvarchar(60)
 AS
 BEGIN
-    -- Crea una tabla temporal para almacenar los tipos de cartas separados
+    -- Declares temp table to save card types requested.
     DECLARE @ctypeTable TABLE (ctype nvarchar(30))
 
-    -- Divide la lista de tipos de cartas en valores individuales y los inserta en la tabla temporal
+    -- Divides the string provided with the card types to insert them to the temp table.
     INSERT INTO @ctypeTable
     SELECT value FROM STRING_SPLIT(@ctypeList, '#')
 
-    -- Selecciona cartas aleatorias de los tipos de cartas especificados en la tabla temporal
+    -- Selects random cards from the requested types in the temp table.
     SELECT TOP (@num) *
     FROM Cards
     WHERE c_type IN (SELECT ctype FROM @ctypeTable)

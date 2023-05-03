@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StarDeck_API.Models;
 using Newtonsoft.Json;
+using StarDeck_API.Support_Components;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -47,6 +48,50 @@ namespace StarDeck_API.Controllers
                     context.SaveChanges();
                 }
                 return Ok();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /*
+         * Function that allows to check if an user has cards
+         * email: email of the user to check if it has cards
+         * return: If success returns a flag, else returns an error  
+         */
+        [HttpGet]
+        [Route("HasCards/{email}")]
+        public dynamic HasCards(string email)
+        {
+            try
+            {
+                bool flag = DB_Procedures.GetInstance().HasCards(context,email);
+                return flag;
+            }
+
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.ToString());
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /*
+         * Function that allows to get all the cards of one user
+         * email: email of the user who owns the cards
+         * return: it returns Ok state if it succedes, and if it doesn't succed it returns the error  
+         */
+        [HttpGet]
+        [Route("GetAllCards/{email}")]
+        public dynamic GetAllCards(string email)
+        {
+            try
+            {
+                var cards = DB_Procedures.GetInstance().GetUserCards(context, email);
+                return cards;
             }
             catch (Exception ex)
             {
