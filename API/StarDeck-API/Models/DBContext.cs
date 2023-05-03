@@ -14,6 +14,8 @@ namespace StarDeck_API.Models
 
         public DbSet<Card> cards => Set<Card>();
 
+        public DbSet<JoinUserCards> joinUserCards => Set<JoinUserCards>();
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Users>().HasKey(x => x.ID);

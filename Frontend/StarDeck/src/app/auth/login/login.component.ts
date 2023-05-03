@@ -10,6 +10,8 @@ import {ApiService} from "../../shared/api-module/api.service";
 })
 export class LoginComponent {
 
+  email: any = "";
+  pass: any = "";
   cardForm = new FormGroup({
     mail: new FormControl('',[Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(8), Validators.pattern('^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]+$')]),
@@ -18,32 +20,23 @@ export class LoginComponent {
   constructor( private router: Router, private apiService: ApiService) { }
 
   onSubmit() {
-
-    this.apiService.get("Users/mail/" + this.cardForm.get('mail')?.value).subscribe((data)=>{
-      if (!data) {
-        this.verifyPassword();
-      } else {
-        alert("El email no está registrado")
-      }
-    });
-
-  }
-
-  verifyPassword() {
-
-    this.apiService.get("Users/mail/" + this.cardForm.get('mail')?.value).subscribe((data)=>{
-      if (data) {
+    
+    this.apiService.get(`Users/login?data=`+this.cardForm.get('mail')?.value+`&data=`+this.cardForm.get('password')?.value).subscribe((data)=>{
+      if (data == "User found") {
+        this.email = this.cardForm.get('mail')?.value;
+        localStorage.setItem('mail', this.email);
         this.haveCards();
       } else {
-        alert("Contraseña incorrecta")
+        alert(data)
       }
     });
 
   }
 
   haveCards() {
-    this.apiService.get("Users/mail/" + this.cardForm.get('mail')?.value).subscribe((data)=>{
+    this.apiService.get("User_Card/HasCards/" + this.cardForm.get('mail')?.value).subscribe((data)=>{
       if (data) {
+        alert("Tienes cartas, borrar esta alerta despues please");
         // route to home;
       } else {
         this.router.navigate(['/cards-selection'])
