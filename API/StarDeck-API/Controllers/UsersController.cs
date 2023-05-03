@@ -122,6 +122,27 @@ namespace StarDeck_API.Controllers
 
         }
 
+        /*
+         * Function that validates the user through the procedure ValidateUser in the DB
+         * Params: data, consists in an array that contains the mail and the password of the user
+         * Return: Ok state if it succedes, and if it doesn't succed it returns the error
+         */
+        [HttpGet]
+        [Route("login")]
+        public dynamic UserValidation([FromQuery] List<string> data)
+        {
+            try
+            {
+                string output = DB_Procedures.GetInstance().ValidateUser(context, data[0], data[1]);
+                return output;
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
 

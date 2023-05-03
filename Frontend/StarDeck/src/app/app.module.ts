@@ -8,7 +8,8 @@ import { AuthModule} from "./auth/auth.module";
 import { AuthRoutingModule} from "./auth/auth-routing.module";
 import { AdminRoutingModule } from './admin/admin-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
-
+import { PlayerRoutingModule} from "./player/player-routing.module";
+import { PlayerModule} from "./player/player.module";
 
 @NgModule({
   declarations: [
@@ -21,7 +22,9 @@ import { ReactiveFormsModule } from '@angular/forms';
     AuthRoutingModule,
     AuthModule,
     MatGridListModule,
-    AdminRoutingModule
+    AdminRoutingModule,
+    PlayerRoutingModule,
+    PlayerModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
