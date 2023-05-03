@@ -1,7 +1,7 @@
 
 import { Component, NgModule, OnInit} from '@angular/core';
 import {ApiService} from "../../shared/api-module/api.service";
-import { Cards } from '../../shared/models/models-cards';
+import { Cards, Deck } from '../../shared/models/models-cards';
 
 
 @Component({
@@ -11,10 +11,15 @@ import { Cards } from '../../shared/models/models-cards';
 })
 export class DeckComponent implements OnInit {
 
-  cardsDeck: Cards[] = [];
-  cardsAvailable: Cards[] = [];
-  temp: any;
-  nameDeck: string = "";
+  decks : Deck[] = []; //all decks
+  cardsDeck: Cards[] = []; //deck to save
+  cardsAvailable: Cards[] = []; //all cards per user
+  cardsEdit: Cards[] = []; //deck to edit
+  cardsCreate: Cards[] = []; //deck to create
+
+  temp: any; //temporal variable to save the cards from the api
+  nameDeck: string = ""; //name of the deck
+  mode: number = 0; //0 = view, 1 = edit, 2 = create
 
   constructor(private apiService: ApiService) {
   }
@@ -66,17 +71,61 @@ export class DeckComponent implements OnInit {
   saveDeck() {
 
     if(this.nameDeck != ""){
-      this.apiService.post("Deck/create", {
+
+      // create deck
+      const deck: Deck = {
         name: this.nameDeck,
+        code: "12345678",
+        name_user: "test",
         cards: this.cardsDeck
-      }).subscribe((data) => {
-        alert("Deck created");
-        this.cardsDeck = [];
-        this.cardsAvailable = [];
-        this.getCards();
-      });
+      }
+
+      this.decks.push(deck);
+
+      // save decks in localstorage
+      localStorage.setItem("decks", JSON.stringify(this.decks));
+
+
     } else {
       alert("You must enter a name for the deck");
     }
+  }
+
+  createDeck() {
+
+    this.mode = 1;
+    this.cardsDeck = [];
+    this.cardsCreate = this.cardsAvailable;
+
+  }
+
+  deleteDeck(item: Deck) {
+
+  }
+
+  editDeck(item: Deck) {
+
+    this.mode = 2;
+    this.cardsDeck = item.cards;
+    this.cardsEdit = this.cardsAvailable;
+
+    for(let i = 0; i < this.cardsDeck.length; i++){
+      for (let j = 0; j < this.cardsEdit.length; j++) {
+        if(this.cardsDeck[i].id == this.cardsEdit[j].id){
+          this.cardsEdit.splice(j, 1);
+        }
+      }
+    }
+
+  }
+
+
+  backToView() {
+
+    this.mode = 0;
+    this.cardsDeck = [];
+    this.cardsEdit = [];
+    this.nameDeck = "";
+
   }
 }
