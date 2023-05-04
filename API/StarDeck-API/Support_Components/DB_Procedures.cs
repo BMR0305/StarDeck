@@ -90,6 +90,21 @@ namespace StarDeck_API.Support_Components
                 return false;
             }
         }
+        /**
+         * Function that allows to get the information of a planet from the DB
+         * Params: context - context of the DB, name - name of the planet to get
+         * Return: string with the information of the planet in json format or a message indicating that the planet was not found
+         */
+        public string GetPlanet(DBContext context, string name)
+        {
+            var planetInfo = context.planet.FromSqlRaw("EXEC GetPlanet @planet = {0}", name).ToList();
+            if (planetInfo.Count == 0)
+            {
+                return "Planet not found";
+            }
+            string output = JsonConvert.SerializeObject(planetInfo.ToArray(), Formatting.Indented);
+            return output;
+        }
 
         /*
          * Private constructor for the DB_Procedures class

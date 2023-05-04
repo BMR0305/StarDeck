@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {Cards, Planet} from "../../shared/models/models-cards";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {ApiService} from "../../shared/api-module/api.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-create-planet',
@@ -8,6 +10,9 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
   styleUrls: ['./create-planet.component.css']
 })
 export class CreatePlanetComponent implements OnInit{
+
+
+  constructor( private router: Router, private apiService: ApiService) { }
 
   typeoptions = ['Popular', 'Raro'];
   raceoptions = ['Opción A', 'Opción B', 'Opción C'];
@@ -53,21 +58,43 @@ export class CreatePlanetComponent implements OnInit{
     }
   }
 
+  /**
+   * Send planet information to api to create a new planet on database when submit button is clicked
+   */
   onSubmit() {
 
-    console.log(this.cardForm.value);
+    this.apiService.post("Planet/post", {
 
-    const planet : Planet = {
       id: "id",
       p_name: this.cardForm.value.name,
+      p_image: this.cardForm.value.image64,
+      p_description: this.cardForm.value.description,
       p_effect: this.cardForm.value.efects,
       p_type: this.cardForm.value.type,
-      p_description: this.cardForm.value.description,
-      p_image: this.cardForm.value.image64
-    }
+      p_status: "a"
 
-    this.planets.push(planet);
-
-
+    }).subscribe((data) => {
+      console.log(data);
+      this.cardForm.reset();
+    });
   }
+
+  getAllPlanets() {
+    this.apiService.get("Planet/getAll").subscribe((data) => {
+      this.temp = data;
+      for (let i = 0; i < this.temp.length; i++) {
+        const planet : Planet = {
+          id: this.temp[i].id,
+          p_name: this.temp[i].p_name,
+          p_image: this.temp[i].p_image,
+          p_description: this.temp[i].p_description,
+          p_effect: this.temp[i].p_effect,
+          p_type: this.temp[i].p_type,
+          p_status: this.temp[i].p_status
+        }
+        this.planets.push(planet);
+      }
+    });
+  }
+
 }

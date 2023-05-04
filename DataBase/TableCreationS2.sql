@@ -8,7 +8,8 @@ CREATE TABLE Planet(
 	p_description VARCHAR(1000),
 	p_effect VARCHAR(500),
 	p_type VARCHAR(30), --Raro, Basico, Popular
-	p_status VARCHAR(10) --Activo (default), Desactivado
+	p_status VARCHAR(10), --Activo (default), Desactivado
+	UNIQUE(p_name)
 
 );
 
