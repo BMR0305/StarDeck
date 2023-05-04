@@ -14,6 +14,8 @@ namespace StarDeck_API.Models
 
         public DbSet<Card> cards => Set<Card>();
 
+        public DbSet<Deck> deck => Set<Deck>();
+
         public DbSet<Planet> planet => Set<Planet>();
 
         public DbSet<JoinUserCards> joinUserCards => Set<JoinUserCards>();
@@ -29,6 +31,8 @@ namespace StarDeck_API.Models
             modelBuilder.Entity<Card>().HasKey(x => x.ID);
 
             modelBuilder.Entity<Planet>().HasKey(x => x.ID);
+
+            modelBuilder.Entity<Deck>().HasKey(x => new { x.Deck_ID, x.Player_ID, x.Card_ID, x.d_name });
         }
     }
 }
