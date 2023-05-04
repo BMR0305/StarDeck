@@ -79,6 +79,9 @@ export class CreatePlanetComponent implements OnInit{
     });
   }
 
+  /**
+   * Get all planets from database
+   */
   getAllPlanets() {
     this.apiService.get("Planet/getAll").subscribe((data) => {
       this.temp = data;
