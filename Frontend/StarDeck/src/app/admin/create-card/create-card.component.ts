@@ -1,7 +1,7 @@
 import { Component, NgModule, OnInit} from '@angular/core';
 import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule, NgModel} from '@angular/forms';
 import { AdminModule } from '../admin.module';
-import { NgSelectModule } from '@ng-select/ng-select';
+import { NgSelectModule } from  '@ng-select/ng-select';
 import { ApiService } from '../../shared/api-module/api.service';
 import { Cards } from '../../shared/models/models-cards';
 

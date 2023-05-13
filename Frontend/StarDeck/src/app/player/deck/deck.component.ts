@@ -77,7 +77,7 @@ export class DeckComponent implements OnInit {
         name: this.nameDeck,
         code: "12345678",
         name_user: "test",
-        cards: this.cardsDeck
+        cards: this.cardsDeck,
       }
 
       this.decks.push(deck);
@@ -99,9 +99,7 @@ export class DeckComponent implements OnInit {
 
   }
 
-  deleteDeck(item: Deck) {
-
-  }
+  deleteDeck(item: Deck) {}
 
   editDeck(item: Deck) {
 

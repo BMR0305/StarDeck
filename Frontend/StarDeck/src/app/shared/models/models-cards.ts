@@ -19,3 +19,12 @@ export interface Planet {
   p_description: any;
 }
 
+export interface Deck {
+  name: any;
+  code: any;
+  name_user: any;
+  cards: any;
+  
+
+}
+

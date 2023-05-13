@@ -1,0 +1,51 @@
+
+<!DOCTYPE html>
+<html>
+<body class="box">
+	<header>
+		<img src = '{{img_src}}' style="width: 100px; height: 100px;">
+		<h1>Nombre del oponente</h1>
+	</header>
+    
+    <section>
+        <img src="{{planet1}}" style="width: 100px; height: 100px; padding: 120px;">
+        <img src="{{planet2}}" style="width: 100px; height: 100px; padding: 120px;">
+        <img src="{{planet3}}" style="width: 100px; height: 100px; padding: 120px;">
+    </section>
+    
+    <footer style="padding-top: 20px;">
+        <div class="section20">
+            <h1> {{seconds}}</h1>
+        </div>
+        
+        <div class="hand">
+            <mat-grid-list class="mat-grid-list" cols="4" rowHeight="100px" >
+                <mat-grid-tile *ngFor="let item of hand_cards ">
+                  <img src= '{{item.c_image}}' class="hand_img">
+                </mat-grid-tile>
+              </mat-grid-list>
+        </div>
+
+        <div class="deck">
+            <h2> {{lenghtdeck}}</h2>
+            <img src="{{deck}}" class= "hand_img" style="width: 100px; height: 100px;">
+        </div>
+    </footer>
+
+    <footer style="padding-top: 20px;">
+        <div class="section20">
+            <button class="button">Retirarse</button>
+        </div>
+        
+        <div class="hand">
+            <h1> {{energy}}</h1>
+        </div>
+
+        <div class="section20">
+            <button class="button">Terminar turno</button>
+        </div>
+
+    </footer>
+
+</body>
+</html>

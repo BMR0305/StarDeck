@@ -6,9 +6,11 @@ import { MatGridListModule } from "@angular/material/grid-list";
 import { HttpClientModule } from "@angular/common/http";
 import { DeckComponent } from './deck/deck.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { GameComponent } from './game/game.component';
 @NgModule({
   declarations: [
-    DeckComponent
+    DeckComponent,
+    GameComponent
   ],
   imports: [
     CommonModule,
