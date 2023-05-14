@@ -9,16 +9,16 @@ namespace StarDeck_API.Support_Components
     /*
      * Singleton class that grants access the stored procedures of the DB
      */ 
-    public class DB_Procedures
+    public class CardsLogin_DB
     {
         //Instance of the class
-        private static DB_Procedures Instance = null;
-        public static DB_Procedures GetInstance()
+        private static CardsLogin_DB Instance = null;
+        public static CardsLogin_DB GetInstance()
         {
 
             if (Instance == null)
             {                
-                Instance = new DB_Procedures();
+                Instance = new CardsLogin_DB();
             }
 
             return Instance;
@@ -94,6 +94,6 @@ namespace StarDeck_API.Support_Components
         /*
          * Private constructor for the DB_Procedures class
          */
-        private DB_Procedures() { }
+        private CardsLogin_DB() { }
     }
 }
