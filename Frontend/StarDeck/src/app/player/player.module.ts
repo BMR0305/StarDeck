@@ -7,10 +7,12 @@ import { HttpClientModule } from "@angular/common/http";
 import { DeckComponent } from './deck/deck.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { GameComponent } from './game/game.component';
+import { MatchmakingComponent } from './matchmaking/matchmaking.component';
 @NgModule({
   declarations: [
     DeckComponent,
-    GameComponent
+    GameComponent,
+    MatchmakingComponent
   ],
   imports: [
     CommonModule,
