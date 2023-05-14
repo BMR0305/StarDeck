@@ -27,6 +27,32 @@ export class DeckComponent implements OnInit {
   ngOnInit(): void {
 
     this.getCards();
+    this.getDecks();
+
+  }
+
+  getDecks() {
+    const mail = localStorage.getItem("email");
+    mail == null ? "" : mail
+
+    let url = "Deck/get/" + mail;
+    url = url.replace(/"/g, "");
+
+    this.apiService.get(url).subscribe((data) => {
+      console.log(data);
+      this.temp = data;
+      for (let i = 0; i < this.temp.length; i++) {
+        const deck: Deck = {
+          name: undefined,
+          code: undefined,
+          email_user: undefined,
+          cards: undefined
+        }
+        this.decks.push(deck);
+      }
+
+    });
+
 
   }
 
