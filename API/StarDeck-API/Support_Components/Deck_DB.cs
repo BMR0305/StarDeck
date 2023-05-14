@@ -103,6 +103,40 @@ namespace StarDeck_API.Support_Components
             }
         }
 
+        public string GetPlayerDecks(DBContext context, string email)
+        {
+            try
+            {
+                var decks_aux = new List<Deck_Aux>();
+
+                var player_decks = context.deckIDTable.FromSqlRaw("EXEC GetPlayerDecks @email = {0}", email).ToList();
+
+                for (int i = 0; i < player_decks.Count; i++)
+                {
+                    var user_id = new SqlParameter("@PlayerID", SqlDbType.NVarChar, -1);
+                    user_id.Direction = ParameterDirection.Output;
+                    var d_name = new SqlParameter("@d_name", SqlDbType.NVarChar, -1);
+                    d_name.Direction = ParameterDirection.Output;
+                    List<Card> deck_cards = context.cards.FromSqlRaw("EXEC GetDeckCards @deckID, @PlayerID OUTPUT, @d_name OUTPUT",
+                                                                      new SqlParameter("@deckID", player_decks[i].Deck_ID),
+                                                                      user_id, d_name).ToList();
+                    Deck_Aux deck = new Deck_Aux();
+                    deck.name = d_name.Value.ToString();
+                    deck.code = player_decks[i].Deck_ID;
+                    deck.name_user = user_id.Value.ToString();
+                    deck.cards = deck_cards;
+                    decks_aux.Add(deck);
+                }
+
+                string output = JsonConvert.SerializeObject(decks_aux, Formatting.Indented);
+                return output;
+            }
+            catch (Exception e)
+            {
+                return e.Message;
+            }
+        }
+
         private Deck_DB() { }
     }
 }

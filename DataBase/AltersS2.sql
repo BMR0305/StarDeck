@@ -1,6 +1,6 @@
 ALTER TABLE Deck
 ADD CONSTRAINT PK_Deck
-PRIMARY KEY (Deck_ID,Player_ID,Card_ID);
+PRIMARY KEY (Deck_ID,Player_ID,Card_ID,d_name);
 
 ALTER TABLE Deck
 ADD CONSTRAINT FK_UserDeck

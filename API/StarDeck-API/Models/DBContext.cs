@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace StarDeck_API.Models
 {
@@ -19,6 +20,8 @@ namespace StarDeck_API.Models
         public DbSet<Planet> planet => Set<Planet>();
 
         public DbSet<JoinUserCards> joinUserCards => Set<JoinUserCards>();
+
+        public DbSet<DeckIDTable> deckIDTable => Set<DeckIDTable>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
