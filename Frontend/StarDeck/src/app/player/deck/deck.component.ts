@@ -32,7 +32,13 @@ export class DeckComponent implements OnInit {
 
   getCards() {
 
-    this.apiService.get("Card/getAll").subscribe((data) => {
+    const mail = localStorage.getItem("email");
+    mail == null ? "" : mail
+
+    let url = "User_Card/GetAllCards/" + mail;
+    url = url.replace(/"/g, "");
+
+    this.apiService.get(url).subscribe((data) => {
       this.temp = data;
       for (let i = 0; i < this.temp.length; i++) {
         const card: Cards = {
