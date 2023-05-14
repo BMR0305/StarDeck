@@ -34,7 +34,7 @@ export class LoginComponent {
   haveCards() {
     this.apiService.get("User_Card/HasCards/" + this.cardForm.get('mail')?.value).subscribe((data)=>{
       if (data) {
-        alert("Tienes cartas, borrar esta alerta despues please");
+        this.router.navigate(['/deck'])
         // route to home;
       } else {
         this.router.navigate(['/cards-selection'])

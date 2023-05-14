@@ -62,7 +62,7 @@
 
 
   <div *ngIf="cardsDeck.length == 18">
-    <label>Nombre deck<span class="red-text">* </span>
+    <label class = 'monospace' > Nombre deck<span class="red-text">* </span>
       <div>
         <input class="cardForm" type="text" [(ngModel)]="nameDeck" [ngModelOptions] = "{standalone: true}" [attr.maxlength]="30">
       </div>

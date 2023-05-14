@@ -12,8 +12,10 @@ namespace StarDeck_API.Controllers
     {
         //KeyGen object to generate the card keys
         private KeyGen KeyGenerator = KeyGen.GetInstance();
+
         //Context of the DB
         private readonly DBContext context;
+
         //Constructor of the class
         public PlanetController(DBContext context)
         {
