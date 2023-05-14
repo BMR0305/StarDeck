@@ -76,7 +76,7 @@ export class DeckComponent implements OnInit {
       const deck: Deck = {
         name: this.nameDeck,
         code: "12345678",
-        name_user: "test",
+        email_user: "test",
         cards: this.cardsDeck,
       }
 

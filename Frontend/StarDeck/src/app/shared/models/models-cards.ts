@@ -22,7 +22,7 @@ export interface Planet {
 export interface Deck {
   name: any;
   code: any;
-  name_user: any;
+  email_user: any;
   cards: any;
   
 
