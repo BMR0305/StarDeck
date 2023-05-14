@@ -95,7 +95,7 @@ namespace StarDeck_API.Controllers
         {
             try
             {
-                string output = DB_Procedures.GetInstance().GetPlanet(context,name);
+                string output = CardsLogin_DB.GetInstance().GetPlanet(context,name);
                 return output;
             }
 

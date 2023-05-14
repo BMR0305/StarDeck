@@ -96,7 +96,7 @@ namespace StarDeck_API.Controllers
             try
             {
                 
-                string output = DB_Procedures.GetInstance().GetRandomCardsSP(context, num, types);
+                string output = CardsLogin_DB.GetInstance().GetRandomCardsSP(context, num, types);
                 return output;
                 
             }

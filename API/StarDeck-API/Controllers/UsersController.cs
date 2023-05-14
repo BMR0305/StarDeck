@@ -133,7 +133,7 @@ namespace StarDeck_API.Controllers
         {
             try
             {
-                string output = DB_Procedures.GetInstance().ValidateUser(context, data[0], data[1]);
+                string output = CardsLogin_DB.GetInstance().ValidateUser(context, data[0], data[1]);
                 return output;
             }
 
