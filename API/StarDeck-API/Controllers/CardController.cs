@@ -34,7 +34,6 @@ namespace StarDeck_API.Controllers
             {
                
                 c.c_status = "a";
-                //string chars = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
                 List<Card> cards = context.cards.ToList();
                 string id = "";
                 bool flag = true;
@@ -95,10 +94,8 @@ namespace StarDeck_API.Controllers
         {
             try
             {
-                
                 string output = DB_Procedures.GetInstance().GetRandomCardsSP(context, num, types);
-                return output;
-                
+                return output;               
             }
 
             catch (Exception ex)
