@@ -39,14 +39,15 @@ export class DeckComponent implements OnInit {
     url = url.replace(/"/g, "");
 
     this.apiService.get(url).subscribe((data) => {
+      console.log(data);
       this.temp = data;
       for (let i = 0; i < this.temp.length; i++) {
         const card: Cards = {
-          id: this.temp[i]["ID"],
-          c_name: this.temp[i]["c_name"],
+          id: this.temp[i]["Card_Key"],
+          c_name: this.temp[i]["Card_Name"],
           battle_pts: this.temp[i]["battle_pts"],
           energy: this.temp[i]["energy"],
-          c_image: this.temp[i]["c_image"],
+          c_image: this.temp[i]["Card_Image"],
           c_type: this.temp[i]["c_type"],
           race: this.temp[i]["race"],
           c_status: this.temp[i]["c_status"],
@@ -78,18 +79,23 @@ export class DeckComponent implements OnInit {
 
     if(this.nameDeck != ""){
 
+      let email = localStorage.getItem("email") + "";
+      email = email.replace(/"/g, "");
+
       // create deck
       const deck: Deck = {
         name: this.nameDeck,
-        code: "12345678",
-        email_user: "test",
+        code: "",
+        email_user: email,
         cards: this.cardsDeck
       }
 
       this.decks.push(deck);
+      console.log(deck);
 
-      // save decks in localstorage
-      localStorage.setItem("decks", JSON.stringify(this.decks));
+      this.apiService.post("Deck/post", deck).subscribe((data) => {
+        console.log(data);
+      });
 
 
     } else {
