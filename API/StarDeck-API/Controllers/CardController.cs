@@ -94,8 +94,10 @@ namespace StarDeck_API.Controllers
         {
             try
             {
+
                 string output = CardsLogin_DB.GetInstance().GetRandomCardsSP(context, num, types);
                 return output;               
+
             }
 
             catch (Exception ex)

@@ -68,7 +68,9 @@ namespace StarDeck_API.Support_Components
          */
         public string GetUserCards(DBContext context, string mail)
         {
+
             var cards = context.cards.FromSqlRaw("EXEC GetCards @email = {0}", mail).ToList();
+
             string output = JsonConvert.SerializeObject(cards.ToArray(), Formatting.Indented);
             return output;
         }
@@ -105,6 +107,7 @@ namespace StarDeck_API.Support_Components
             string output = JsonConvert.SerializeObject(planetInfo.ToArray(), Formatting.Indented);
             return output;
         }
+
 
         /*
          * Private constructor for the DB_Procedures class
