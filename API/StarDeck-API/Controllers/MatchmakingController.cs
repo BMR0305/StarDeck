@@ -19,12 +19,12 @@ namespace StarDeck_API.Controllers
 
         [HttpGet]
         [Route("lookForGame/{email}")]
-        public dynamic LookForGame(string email)
+        public async Task<IActionResult> LookForGame(string email)
         {
             try
             {
-                string output = Matchmaking.GetInstance().LookForGame(context, email);
-                return output;
+                string output = await  Matchmaking.GetInstance().LookForGame(context, email);
+                return Ok(output);
             }
             catch (System.Exception e)
             {

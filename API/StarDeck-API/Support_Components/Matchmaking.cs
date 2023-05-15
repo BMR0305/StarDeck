@@ -3,12 +3,13 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using StarDeck_API.Models;
 using System.Data;
+using System.Diagnostics;
 
 namespace StarDeck_API.Support_Components
 {
     public class Matchmaking
     {
-        public static Matchmaking instance = null;
+        private static Matchmaking instance = null;
 
         public static Matchmaking GetInstance()
         {
@@ -19,7 +20,7 @@ namespace StarDeck_API.Support_Components
             return instance;
         }
         
-        public string LookForGame(DBContext context, string email)
+        public async Task<string> LookForGame(DBContext context, string email)
         {
             try
             {
@@ -29,12 +30,12 @@ namespace StarDeck_API.Support_Components
                 {
                     for (int i = 0; i < PlayersWaiting.Count; i++)
                     {
-                        if (PlayersWaiting[i].u_status == "BP")
+                        if (PlayersWaiting[i].u_status == "BP" && PlayersWaiting[i].email != email)
                         {
                             Users current_user = context.users.FromSqlRaw("EXEC GetPlayer @email = {0}", email).ToList()[0];
-                            context.Database.ExecuteSqlRaw("EXEC UpdateUserStatus @email = {0}, @status = {1}",email, "EP");
-                            context.Database.ExecuteSqlRaw("EXEC UpdateUserStatus @email = {0}, @status = {1}", PlayersWaiting[i].email, "EP");
-                            var planets = context.planet.FromSqlRaw("EXEC GetGamePlanets").ToList();
+                            await context.Database.ExecuteSqlRawAsync("EXEC UpdateUserStatus @email = {0}, @status = {1}",email, "EP");
+                            await context.Database.ExecuteSqlRawAsync("EXEC UpdateUserStatus @email = {0}, @status = {1}", PlayersWaiting[i].email, "EP");
+                            var planets = await context.planet.FromSqlRaw("EXEC GetGamePlanets").ToListAsync();
 
                             Partida partida = new Partida();
                             partida.ID = KeyGen.GetInstance().CreatePattern("P-");
@@ -45,7 +46,7 @@ namespace StarDeck_API.Support_Components
                             partida.Planet3 = planets[2].ID;
                             partida.p_status = "EC";
                             context.partida.Add(partida);
-                            context.SaveChanges();
+                            await context.SaveChangesAsync();
 
                             //Crear aux para enviar al front end la lista de los planetas y jugadores como modelo en si?
 
@@ -56,7 +57,7 @@ namespace StarDeck_API.Support_Components
                     }
                 }
                 context.Database.ExecuteSqlRaw("EXEC UpdateUserStatus @email = {0}, @status = {1}", email, "BP");
-                string output = WaitingGame(context, email);
+                string output = await WaitingGame(context, email);
                 return output;
 
             }
@@ -66,28 +67,34 @@ namespace StarDeck_API.Support_Components
             }
         }
 
-        public string WaitingGame(DBContext context,string email)
+        public async Task<string> WaitingGame(DBContext context,string email)
         {
-            Users user = context.users.FromSqlRaw("EXEC GetPlayer @email = {0}", email).ToList()[0];
-            bool flag = true;
-            while (flag)
+
+            Users user = context.users.FromSqlRaw("EXEC GetPlayer @Email = {0}", email).ToList()[0];
+
+            // Time limit to wait for a match to be found (in seconds)
+            int timeout = 20;
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            while (user.u_status == "BP" && stopwatch.Elapsed.TotalSeconds < timeout)
             {
-                if (user.u_status != "BP")
-                {
-                    flag = false;
-                }
-                Thread.Sleep(500);
+                await Task.Delay(500);
+                user = context.users.FromSqlRaw("EXEC GetPlayer @Email = {0}", email).ToList()[0];
             }
+
             if (user.u_status == "EP")
             {
-                var partida = context.partida.FromSqlRaw("EXEC GetUserMatch @email = {0}", email).ToList()[0];
+                var partida = context.partida.FromSqlRaw("EXEC GetUserMatch @Email = {0}", email).ToList()[0];
                 string json_partida = JsonConvert.SerializeObject(partida);
                 return json_partida;
             }
             else
-            {               
-                return "Matchmaking canceled";
+            {
+                context.Database.ExecuteSqlRaw("EXEC UpdateUserStatus @email = {0}, @status = {1}", email, "A");
+                return "Timeout reached";
             }
+
         }
 
         public string CancelMM(DBContext context, string email)
@@ -103,6 +110,9 @@ namespace StarDeck_API.Support_Components
             }
         }
 
-        public Matchmaking() { }
+        public Matchmaking()
+        {
+            
+        }
     }
 }
