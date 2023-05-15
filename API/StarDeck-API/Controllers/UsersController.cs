@@ -41,7 +41,7 @@ namespace StarDeck_API.Controllers
                 u.avatar = UserDefaultAvatar;
                 u.ranking = InitialRanking;
                 u.coins = InitialCoins;
-                u.u_status = "a";
+                u.u_status = "A";
                 bool flag = true;
                 List<Users> users = context.users.ToList();
                 string id = "";

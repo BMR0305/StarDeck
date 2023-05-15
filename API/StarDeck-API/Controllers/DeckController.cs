@@ -49,5 +49,20 @@ namespace StarDeck_API.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        [HttpGet]
+        [Route("getPlayerDecks/{email}")]
+        public dynamic GetPlayerDecks(string email)
+        {
+            try
+            {
+                string decks = Deck_DB.GetInstance().GetPlayerDecks(context, email);
+                return decks;
+            }
+            catch (System.Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }

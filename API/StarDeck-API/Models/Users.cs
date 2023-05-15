@@ -9,11 +9,10 @@
         public DateTime birthday { get; set; }
         public string nationality { get; set; }
         public string u_password { get; set; }
-        public string u_status { get; set; }
+        public string u_status { get; set; } //A: Activo, BP: Buscando Partida, EP: En partida, D: desconectado
         public string avatar { get; set; }
         public int ranking { get; set; }
         public int coins { get; set; }
-
         public string u_type { get; set; }
 
     }
