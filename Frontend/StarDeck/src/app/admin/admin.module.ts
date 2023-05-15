@@ -6,13 +6,13 @@ import { AdminRoutingModule } from './admin-routing.module';
 import { CreateCardComponent } from './create-card/create-card.component';
 import { HttpClientModule }  from "@angular/common/http";
 import {MatGridListModule} from "@angular/material/grid-list";
-import { CreatePlanetComponent } from './create-planet/create-planet.component';
+//import { CreatePlanetComponent } from './create-planet/create-planet.component';
 
 
 @NgModule({
   declarations: [
     CreateCardComponent,
-    CreatePlanetComponent
+    //CreatePlanetComponent
   ],
   imports: [
     CommonModule,

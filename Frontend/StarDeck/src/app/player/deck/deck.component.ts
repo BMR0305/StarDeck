@@ -111,6 +111,7 @@ export class DeckComponent implements OnInit {
       // create deck
       const deck: Deck = {
         name: this.nameDeck,
+
         code: "",
         email_user: email,
         cards: this.cardsDeck
@@ -137,9 +138,7 @@ export class DeckComponent implements OnInit {
 
   }
 
-  deleteDeck(item: Deck) {
-
-  }
+  deleteDeck(item: Deck) {}
 
   editDeck(item: Deck) {
 

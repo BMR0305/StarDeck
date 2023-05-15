@@ -27,3 +27,12 @@ export interface Deck {
   cards: any;
 }
 
+export interface Deck {
+  name: any;
+  code: any;
+  email_user: any;
+  cards: any;
+  
+
+}
+
