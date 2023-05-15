@@ -1,0 +1,109 @@
+<div style="display: flex; flex-wrap: wrap;" class="box">
+
+  <div style="flex: 1 1 100%;">
+    <h1>Crear Planeta </h1>
+  </div>
+
+
+
+
+  <div style="flex: 1 1 50%;">
+    <form [formGroup]="cardForm" (ngSubmit)="onSubmit()" class="monospace">
+      <label>
+        Nombre <span class="red-text">* </span> <br>
+        <input class="cardForm" type="name" formControlName="name" [attr.maxlength]="maxCharsName">
+        <div class = "required" *ngIf="cardForm.get('name')?.hasError('required') && cardForm.get('name')?.touched">
+          El nombre es requerido.
+        </div>
+        <div class = "required" *ngIf="cardForm.get('name')?.hasError('minlength') && cardForm.get('name')?.touched">
+          Largo menor a 5
+        </div>
+      </label>
+
+      <br>
+
+      <label> Efecto de planeta <span class="red-text">* </span> </label> <br>
+      <select  class="cardForm" formControlName="efects">
+        <option value="Efecto 1">Efecto 1</option>
+        <option value="Efecto 2">Efecto 2</option>
+        <option value="Efecto 3">Efecto 3</option>
+        <option value="Efecto 4">Efecto 4</option>
+        <option value="Efecto 5">Efecto 5</option>
+      </select>
+      <div class = "required" *ngIf="cardForm.get('type')?.hasError('required') && cardForm.get('type')?.touched">
+        El efecto de planeta es requerido
+      </div>
+
+
+
+    </form>
+
+  </div>
+
+  <div style="flex: 1 1 50%;" class="file-input">
+
+    <form [formGroup]="cardForm" style="margin-top: 0px; margin-bottom: 0px;" (ngSubmit)="onSubmit()" class="monospace">
+      <label>
+        Imagen<span class="red-text">* </span>
+        <input type="file" id="file" name="file" formControlName="image" (change)="onFileSelected($event)">
+        <img [src]="imageUrl" *ngIf="imageUrl">
+      </label>
+    </form>
+  </div>
+
+  <div style="flex: 1 1 100%;">
+
+    <form [formGroup]="cardForm" (ngSubmit)="onSubmit()" class="monospace">
+
+      <br>
+
+      <label>Tipo de planeta<span class="red-text">* </span> </label> <br>
+      <select class="cardForm" formControlName="type">
+        <option value="Raro">Raro</option>
+        <option value="Popular">Popular</option>
+        <option value="Basico">Basico</option>
+      </select>
+      <div class = "required" *ngIf="cardForm.get('race')?.hasError('required') && cardForm.get('race')?.touched">
+        El tipo de planeta es requerido
+      </div>
+
+      <br>
+
+      <label>
+        Descripcion<span class="red-text">* </span>  <br>
+        <input class="cardFormDescription" style = "height: 80px;" type="description" formControlName="description" [attr.maxlength]="maxCharsDesccrip">
+        <div class = "required" *ngIf="cardForm.get('description')?.hasError('required') && cardForm.get('description')?.touched">
+          La descripcion es requerida.
+        </div>
+      </label> <br>
+      <button class="cardForm" type="submit" [disabled]="cardForm.invalid">Crear Planeta</button>
+
+    </form>
+  </div>
+
+
+</div>
+
+<br>
+
+<div class = "box" >
+
+  <div>
+
+    <div style="flex: 1 1 100%;">
+      <h1>Todos los planetas</h1>
+    </div>
+
+
+    <mat-grid-list cols=5 rowHeight="2:3">
+      <mat-grid-tile *ngFor="let item of planets">
+        <img src= '{{item.p_image}}' style="object-fit: cover; object-position: center center; width:90%; height: 90%;">
+      </mat-grid-tile>
+    </mat-grid-list>
+
+
+  </div>
+
+</div>
+
+

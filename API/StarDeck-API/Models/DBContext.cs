@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace StarDeck_API.Models
 {
@@ -14,7 +15,13 @@ namespace StarDeck_API.Models
 
         public DbSet<Card> cards => Set<Card>();
 
+        public DbSet<Deck> deck => Set<Deck>();
+
+        public DbSet<Planet> planet => Set<Planet>();
+
         public DbSet<JoinUserCards> joinUserCards => Set<JoinUserCards>();
+
+        public DbSet<DeckIDTable> deckIDTable => Set<DeckIDTable>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -25,6 +32,10 @@ namespace StarDeck_API.Models
             modelBuilder.Entity<User_Card>().HasKey(x => new { x.user_key, x.card_key });
 
             modelBuilder.Entity<Card>().HasKey(x => x.ID);
+
+            modelBuilder.Entity<Planet>().HasKey(x => x.ID);
+
+            modelBuilder.Entity<Deck>().HasKey(x => new { x.Deck_ID, x.Player_ID, x.Card_ID, x.d_name });
         }
     }
 }

@@ -8,7 +8,8 @@ CREATE TABLE Planet(
 	p_description VARCHAR(1000),
 	p_effect VARCHAR(500),
 	p_type VARCHAR(30), --Raro, Basico, Popular
-	p_status VARCHAR(10) --Activo (default), Desactivado
+	p_status VARCHAR(10), --Activo (default), Desactivado
+	UNIQUE(p_name)
 
 );
 
@@ -17,6 +18,7 @@ CREATE TABLE Deck(
 	Deck_ID VARCHAR(15) NOT NULL,
 	Player_ID VARCHAR(15) NOT NULL,
 	Card_ID VARCHAR(15) NOT NULL,
-	d_name VARCHAR(50) NOT NULL
+	d_name VARCHAR(50) NOT NULL,
+	UNIQUE (d_name)
 
 );

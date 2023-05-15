@@ -67,7 +67,7 @@ namespace StarDeck_API.Controllers
         {
             try
             {
-                bool flag = DB_Procedures.GetInstance().HasCards(context,email);
+                bool flag = CardsLogin_DB.GetInstance().HasCards(context,email);
                 return flag;
             }
 
@@ -90,7 +90,7 @@ namespace StarDeck_API.Controllers
         {
             try
             {
-                var cards = DB_Procedures.GetInstance().GetUserCards(context, email);
+                var cards = CardsLogin_DB.GetInstance().GetUserCards(context, email);
                 return cards;
             }
             catch (Exception ex)
