@@ -36,7 +36,7 @@ export class CreatePlanetComponent implements OnInit{
 
   ngOnInit() {
 
-
+    this.getAllPlanets();
 
   }
 
