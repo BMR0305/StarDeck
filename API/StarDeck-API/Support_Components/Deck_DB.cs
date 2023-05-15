@@ -109,7 +109,7 @@ namespace StarDeck_API.Support_Components
             {
                 var decks_aux = new List<Deck_Aux>();
 
-                var player_decks = context.deckIDTable.FromSqlRaw("EXEC GetPlayerDecks @email = {0}", email).ToList();
+                var player_decks = context.deckIDTable.FromSqlRaw("EXEC GetPlayerDecks @player_email = {0}", email).ToList();
 
                 for (int i = 0; i < player_decks.Count; i++)
                 {
@@ -123,7 +123,7 @@ namespace StarDeck_API.Support_Components
                     Deck_Aux deck = new Deck_Aux();
                     deck.name = d_name.Value.ToString();
                     deck.code = player_decks[i].Deck_ID;
-                    deck.name_user = user_id.Value.ToString();
+                    deck.name_user = email;
                     deck.cards = deck_cards;
                     decks_aux.Add(deck);
                 }
