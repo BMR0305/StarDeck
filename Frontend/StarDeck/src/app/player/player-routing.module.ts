@@ -9,11 +9,11 @@ import { StartComponent} from "./start/start.component";
 const routes: Routes = [
   {path : 'playerview', component : PlayerComponent, children : [
       {path : 'deck', component: DeckComponent},
-      {path : 'game', component: GameComponent},
       {path : 'match', component: MatchmakingComponent},
       {path : 'start', component: StartComponent},
     ]
-  }
+  },
+  {path : 'game', component : GameComponent},
 ];
 
 
