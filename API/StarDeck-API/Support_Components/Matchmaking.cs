@@ -48,9 +48,16 @@ namespace StarDeck_API.Support_Components
                             context.partida.Add(partida);
                             await context.SaveChangesAsync();
 
-                            //Crear aux para enviar al front end la lista de los planetas y jugadores como modelo en si?
+                            //Crear aux para enviar al front end la lista de los planetas y jugadores como objetos completos.
+                            PartidaAux enviar_partida = new PartidaAux();
+                            enviar_partida.ID = partida.ID;
+                            enviar_partida.Players = new List<Users>();
+                            enviar_partida.Players.Add(current_user);
+                            enviar_partida.Players.Add(PlayersWaiting[i]);
+                            enviar_partida.Planets = planets;
+                            enviar_partida.p_status = "EC";
 
-                            string json_partida = JsonConvert.SerializeObject(partida);
+                            string json_partida = JsonConvert.SerializeObject(enviar_partida);
 
                             return json_partida;
                         }
@@ -86,7 +93,19 @@ namespace StarDeck_API.Support_Components
             if (user.u_status == "EP")
             {
                 var partida = context.partida.FromSqlRaw("EXEC GetUserMatch @Email = {0}", email).ToList()[0];
-                string json_partida = JsonConvert.SerializeObject(partida);
+
+                PartidaAux partidaAux = new PartidaAux();
+                partidaAux.ID = partida.ID;
+                partidaAux.Players = new List<Users>();
+                partidaAux.Players.Add(context.users.FromSqlRaw("EXEC GetUserWithID @ID = {0}", partida.Player1).ToList()[0]);
+                partidaAux.Players.Add(user);
+                partidaAux.Planets = new List<Planet>();
+                partidaAux.Planets.Add(context.planet.FromSqlRaw("EXEC GetPlanetByID @ID = {0}", partida.Planet1).ToList()[0]);
+                partidaAux.Planets.Add(context.planet.FromSqlRaw("EXEC GetPlanetByID @ID = {0}", partida.Planet2).ToList()[0]);
+                partidaAux.Planets.Add(context.planet.FromSqlRaw("EXEC GetPlanetByID @ID = {0}", partida.Planet3).ToList()[0]);
+                partidaAux.p_status = partida.p_status;
+
+                string json_partida = JsonConvert.SerializeObject(partidaAux);
                 return json_partida;
             }
             else

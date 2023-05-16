@@ -1,0 +1,9 @@
+CREATE PROCEDURE GetUserWithID
+@ID nvarchar(15)
+AS
+BEGIN
+	SELECT *
+	FROM Users
+	WHERE ID = @ID
+END
+GO
