@@ -17,6 +17,10 @@ export class LoginComponent {
 
   constructor( private router: Router, private apiService: ApiService) { }
 
+  /**
+   * Submit form and check if user exists
+   */
+
   onSubmit() {
 
     this.apiService.get(`Users/login?data=`+this.cardForm.get('mail')?.value+`&data=`+this.cardForm.get('password')?.value).subscribe((data)=>{
@@ -31,16 +35,24 @@ export class LoginComponent {
 
   }
 
+  /**
+   * Check if user has cards
+   */
+
   haveCards() {
     this.apiService.get("User_Card/HasCards/" + this.cardForm.get('mail')?.value).subscribe((data)=>{
       if (data) {
-        this.router.navigate(['/deck'])
+        this.router.navigate(['/playerview/start'])
         // route to home;
       } else {
         this.router.navigate(['/cards-selection'])
       }
     });
   }
+
+  /**
+   * Redirect to register page
+   */
 
   redirecToRegister() {
     this.router.navigate(['/register']);

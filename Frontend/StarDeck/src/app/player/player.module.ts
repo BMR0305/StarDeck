@@ -8,11 +8,17 @@ import { DeckComponent } from './deck/deck.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { GameComponent } from './game/game.component';
 import { MatchmakingComponent } from './matchmaking/matchmaking.component';
+import { StartComponent } from './start/start.component';
+import { SidebarComponent } from './sidebar/sidebar.component';
+import { PlayerComponent } from './player.component';
 @NgModule({
   declarations: [
     DeckComponent,
     GameComponent,
-    MatchmakingComponent
+    MatchmakingComponent,
+    StartComponent,
+    SidebarComponent,
+    PlayerComponent
   ],
   imports: [
     CommonModule,

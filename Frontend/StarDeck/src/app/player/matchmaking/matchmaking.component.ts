@@ -13,7 +13,7 @@ export class MatchmakingComponent implements OnInit{
   temp: any; //temporal variable to save the cards from the api
   user = 'Usuario';
   myDeck!: Deck;
-  
+
   deck: Deck = {
     name: 'Deck1',
     code: undefined,
@@ -21,10 +21,10 @@ export class MatchmakingComponent implements OnInit{
     cards: undefined
   }
 
-  
+
 
   deckList: Deck[] = [];
-  
+
 
   matchClick() {
     console.log('Matchmaking');
@@ -45,11 +45,14 @@ export class MatchmakingComponent implements OnInit{
     this.user = this.user.replace(/"/g, "");
 
     this.getDecks();
-    
+
 
   }
 
 
+  /**
+   *  Get decks from API
+   */
 
   getDecks() {
 
@@ -74,9 +77,9 @@ export class MatchmakingComponent implements OnInit{
 
     });
 
-    
+
   }
-  
+
 
 }
 
