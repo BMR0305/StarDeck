@@ -34,7 +34,7 @@ export class LoginComponent {
   haveCards() {
     this.apiService.get("User_Card/HasCards/" + this.cardForm.get('mail')?.value).subscribe((data)=>{
       if (data) {
-        this.router.navigate(['/deck'])
+        this.router.navigate(['/playerview/start'])
         // route to home;
       } else {
         this.router.navigate(['/cards-selection'])
