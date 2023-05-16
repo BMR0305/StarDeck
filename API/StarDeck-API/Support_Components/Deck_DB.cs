@@ -56,7 +56,7 @@ namespace StarDeck_API.Support_Components
                     id = KeyGenerator.CreatePattern("D-");
                 }
 
-                var user = context.users.FromSqlRaw("EXEC GetPlayer @email = {0}",d.name_user).ToList();
+                var user = context.users.FromSqlRaw("EXEC GetPlayer @email = {0}",d.email_user).ToList();
 
                 for (int i = 0; i < d.cards.Count; i++)
                 {
@@ -91,7 +91,7 @@ namespace StarDeck_API.Support_Components
                 Deck_Aux deck = new Deck_Aux();
                 deck.name = d_name.Value.ToString();
                 deck.code = Deck_ID;
-                deck.name_user = user_id.Value.ToString();
+                deck.email_user = user_id.Value.ToString();
                 deck.cards = deck_cards;
                 string output = JsonConvert.SerializeObject(deck, Formatting.Indented);
                 return output;
@@ -123,7 +123,7 @@ namespace StarDeck_API.Support_Components
                     Deck_Aux deck = new Deck_Aux();
                     deck.name = d_name.Value.ToString();
                     deck.code = player_decks[i].Deck_ID;
-                    deck.name_user = email;
+                    deck.email_user = email;
                     deck.cards = deck_cards;
                     decks_aux.Add(deck);
                 }

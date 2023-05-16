@@ -39,7 +39,7 @@ namespace StarDeck_API.Controllers
             try
             {
                 string output = Matchmaking.GetInstance().CancelMM(context, email);
-                return output;
+                return Ok(output);
             }
             catch (System.Exception e)
             {
