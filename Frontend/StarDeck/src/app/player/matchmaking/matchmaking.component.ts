@@ -1,13 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/shared/api-module/api.service';
 import { Deck } from 'src/app/shared/models/models-cards';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-matchmaking',
   templateUrl: './matchmaking.component.html',
-  styleUrls: ['./matchmaking.component.css']
+  styleUrls: ['./matchmaking.component.css',
+]
 })
 export class MatchmakingComponent implements OnInit{
+
+  constructor( private router: Router, private apiService: ApiService) {  }
 
   img_src = 'https://previews.123rf.com/images/ylivdesign/ylivdesign1609/ylivdesign160903327/62577801-icono-de-alien-en-estilo-monocromo-negro-sobre-una-ilustraci%C3%B3n-de-vector-de-fondo-blanco.jpg';
   temp: any; //temporal variable to save the cards from the api
@@ -31,9 +35,13 @@ export class MatchmakingComponent implements OnInit{
     url = url.replace(/"/g, "");
 
     this.apiService.get(url).subscribe((data) => {
+      console.log(data);
       this.temp = data;
        if (this.temp["message"] = 'Timeout reached'){
-        this.cancelClick();
+        this.msg = "";
+       }
+       else{
+        this.router.navigate(['/game']);
        }
 
 
@@ -61,8 +69,7 @@ export class MatchmakingComponent implements OnInit{
   }
 
 
-  constructor(private apiService: ApiService) {
-  }
+  
 
   ngOnInit(): void {
 
