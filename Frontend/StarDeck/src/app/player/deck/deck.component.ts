@@ -35,18 +35,17 @@ export class DeckComponent implements OnInit {
     const mail = localStorage.getItem("email");
     mail == null ? "" : mail
 
-    let url = "Deck/get/" + mail;
+    let url = "Deck/getPlayerDecks/" + mail;
     url = url.replace(/"/g, "");
 
     this.apiService.get(url).subscribe((data) => {
-      console.log(data);
       this.temp = data;
       for (let i = 0; i < this.temp.length; i++) {
         const deck: Deck = {
-          name: undefined,
-          code: undefined,
-          email_user: undefined,
-          cards: undefined
+          name: this.temp[i]["name"],
+          code: this.temp[i]["code"],
+          email_user: this.temp[i]["email_user"],
+          cards: this.temp[i]["cards"]
         }
         this.decks.push(deck);
       }
@@ -69,11 +68,11 @@ export class DeckComponent implements OnInit {
       this.temp = data;
       for (let i = 0; i < this.temp.length; i++) {
         const card: Cards = {
-          id: this.temp[i]["Card_Key"],
-          c_name: this.temp[i]["Card_Name"],
+          id: this.temp[i]["ID"],
+          c_name: this.temp[i]["c_name"],
           battle_pts: this.temp[i]["battle_pts"],
           energy: this.temp[i]["energy"],
-          c_image: this.temp[i]["Card_Image"],
+          c_image: this.temp[i]["c_image"],
           c_type: this.temp[i]["c_type"],
           race: this.temp[i]["race"],
           c_status: this.temp[i]["c_status"],
