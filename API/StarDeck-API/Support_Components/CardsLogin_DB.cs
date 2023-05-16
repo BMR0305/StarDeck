@@ -82,7 +82,7 @@ namespace StarDeck_API.Support_Components
          */
         public bool HasCards(DBContext context, string mail)
         {
-            var cards = context.joinUserCards.FromSqlRaw("EXEC GetCards @email = {0}", mail).ToList();
+            var cards = context.cards.FromSqlRaw("EXEC GetCards @email = {0}", mail).ToList();
             if (cards.Count > 0)
             {
                 return true;

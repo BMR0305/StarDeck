@@ -88,6 +88,10 @@ namespace StarDeck_API.Support_Components
             {
                 await Task.Delay(500);
                 user = context.users.FromSqlRaw("EXEC GetPlayer @Email = {0}", email).ToList()[0];
+                if (user.u_status == "EP")
+                {
+                    break;
+                }
             }
 
             if (user.u_status == "EP")

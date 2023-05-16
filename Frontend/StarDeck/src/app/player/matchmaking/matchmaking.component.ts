@@ -18,11 +18,11 @@ export class MatchmakingComponent implements OnInit{
   user = 'Usuario';
   msg = "";
   myDeck!: Deck;
-  
-  
+
+
 
   deckList: Deck[] = [];
-  
+
 
   matchClick() {
 
@@ -76,7 +76,7 @@ export class MatchmakingComponent implements OnInit{
     this.user = localStorage.getItem('email')+"";
     this.user = this.user.replace(/"/g, "");
 
-    this.getDecks();   
+    this.getDecks();
 
   }
 
@@ -103,11 +103,11 @@ export class MatchmakingComponent implements OnInit{
       }
 
     });
-    
 
-    
+
+
   }
-  
+
 
 }
 
