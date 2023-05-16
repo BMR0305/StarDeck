@@ -31,6 +31,10 @@ export class DeckComponent implements OnInit {
 
   }
 
+  /**
+   * Get decks from API and save them in decks array
+   */
+
   getDecks() {
     const mail = localStorage.getItem("email");
     mail == null ? "" : mail
@@ -53,8 +57,11 @@ export class DeckComponent implements OnInit {
 
     });
 
-
   }
+
+  /**
+   * Get cards from API and save them in cards array
+   */
 
   getCards() {
 
@@ -86,6 +93,11 @@ export class DeckComponent implements OnInit {
 
   }
 
+  /**
+   * Add card to the deck
+   * @param card
+   */
+
   addCard(card: Cards) {
 
     if(this.cardsDeck.length == 18){
@@ -96,10 +108,19 @@ export class DeckComponent implements OnInit {
     }
   }
 
+  /**
+   * Delete card from the deck
+   * @param card
+   */
+
   deleteCard(card: Cards) {
     this.cardsAvailable.push(card);
     this.cardsDeck.splice(this.cardsDeck.indexOf(card), 1);
   }
+
+  /**
+   * Save deck in the database
+   */
 
   saveDeck() {
 
@@ -130,6 +151,10 @@ export class DeckComponent implements OnInit {
     }
   }
 
+  /**
+   * Update deck in the database
+   */
+
   createDeck() {
 
     this.mode = 1;
@@ -139,6 +164,12 @@ export class DeckComponent implements OnInit {
   }
 
   deleteDeck(item: Deck) {}
+
+
+  /**
+   * Update deck in the database
+   * @param item
+   */
 
   editDeck(item: Deck) {
 
@@ -156,6 +187,9 @@ export class DeckComponent implements OnInit {
 
   }
 
+  /**
+   * Update deck in the database
+   */
 
   backToView() {
 
