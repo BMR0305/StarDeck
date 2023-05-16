@@ -14,11 +14,11 @@ export class MatchmakingComponent implements OnInit{
   user = 'Usuario';
   msg = "";
   myDeck!: Deck;
-  
-  
+
+
 
   deckList: Deck[] = [];
-  
+
 
   matchClick() {
 
@@ -33,7 +33,7 @@ export class MatchmakingComponent implements OnInit{
     this.apiService.get(url).subscribe((data) => {
       this.temp = data;
        if (this.temp["message"] = 'Timeout reached'){
-        this.cancelClick();
+        this.msg= " ";
        }
 
 
@@ -69,7 +69,7 @@ export class MatchmakingComponent implements OnInit{
     this.user = localStorage.getItem('email')+"";
     this.user = this.user.replace(/"/g, "");
 
-    this.getDecks();   
+    this.getDecks();
 
   }
 
@@ -96,11 +96,11 @@ export class MatchmakingComponent implements OnInit{
       }
 
     });
-    
 
-    
+
+
   }
-  
+
 
 }
 
