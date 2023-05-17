@@ -2,6 +2,7 @@ import { Component, OnInit} from '@angular/core';
 import { MatGridList } from '@angular/material/grid-list';
 import { ApiService } from '../../shared/api-module/api.service';
 import { Cards } from '../../shared/models/models-cards';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-card-selection',
@@ -21,7 +22,7 @@ export class CardSelectionComponent implements OnInit {
   cards: Cards[] = [];
   cardsPosible: Cards[] = [];
 
-  constructor(private apiService: ApiService) { }
+  constructor(private router: Router,private apiService: ApiService) { }
 
   /**
    * Get cards from API and save them in cards array
@@ -127,6 +128,7 @@ export class CardSelectionComponent implements OnInit {
 
     this.apiService.post(url, this.cards).subscribe((data)=>{
       console.log(data);
+      this.router.navigate(['/playerview/start'])
     });
 
   }

@@ -22,6 +22,7 @@ export class MatchmakingComponent implements OnInit{
 
 
 
+
   deckList: Deck[] = [];
 
 
@@ -131,9 +132,13 @@ export class MatchmakingComponent implements OnInit{
 
     this.getDecks();
 
+
   }
 
 
+  /**
+   *  Get decks from API
+   */
 
   getDecks() {
 
@@ -156,7 +161,6 @@ export class MatchmakingComponent implements OnInit{
       }
 
     });
-
 
 
   }

@@ -1,1 +1,124 @@
 /* You can add global styles to this file, and also import other style files */
+
+@import url('https://fonts.cdnfonts.com/css/ocr-a-std');
+
+h1{
+  font-family: 'OCR A Std', sans-serif;
+  font-size: 30px; /* Tamaño de letra deseado */
+  font-weight: bold; /* Grosor de letra deseado */
+  color: #FFFF; /* Color de letra deseado */
+
+}
+
+.red-text {
+  color: red;
+}
+
+.box {
+  background-color: #046e8f; /* Color de fondo deseado */
+  border-radius: 20px; /* Radio de los bordes */
+  padding: 20px; /* Espacio de relleno interno */
+  align-items: center;
+  width: 80%;
+  margin: auto;
+  padding: 70px;
+
+
+}
+
+.monospace {
+  font-family: 'OCR A Std', sans-serif;
+  font-size: 18px; /* Tamaño de letra deseado */
+  font-weight: bold; /* Grosor de letra deseado */
+  color: #FFFF; /* Color de letra deseado */
+
+
+}
+
+.cardForm{
+  margin-top: 7px;
+  margin-bottom: 15px;
+  width: 100%;
+  height: 25px;
+  font-family: 'OCR A Std', sans-serif;
+  font-size: 15px; /* Tamaño de letra deseado */
+
+}
+
+.cardFormDescription{
+  margin-top: 7px;
+  margin-bottom: 15px;
+  width: 85%;
+  font-family: 'OCR A Std', sans-serif;
+  font-size: 15px; /* Tamaño de letra deseado */
+  white-space: break-spaces; /* No permitir que el texto se divida en varias líneas */
+  overflow: hidden; /* Ocultar cualquier texto que sobrepase el ancho del input */
+  text-overflow: ellipsis;
+
+
+}
+
+.required{
+  margin-bottom: 3px;
+  color: #022f40;
+}
+
+
+.file-input input[type="file"] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  width: 50%;
+  height: 10%;
+  cursor: pointer;
+}
+
+.file-input label {
+
+  width: 60%;
+  display:grid;
+  padding: 50px 30px;
+  background-color: #38aecc;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+
+
+.deck-item label {
+  position: absolute; /* establece el label como absoluto */
+  top: 0; /* posiciona el label en la parte superior */
+  left: 0; /* posiciona el label a la izquierda */
+  width: 100%; /* establece el ancho del label al 100% */
+  padding: 5px; /* agrega un padding para dar espacio alrededor del label */
+  color: white; /* establece el color del texto del label como blanco */
+  font-weight: bold; /* establece el grosor del texto del label como negrita */
+  text-align: center; /* centra el texto del label horizontalmente */
+  z-index: 1; /* establece la capa z del label para que quede encima de la imagen */
+}
+
+.deck-item button {
+
+  top: 0; /* posiciona el label en la parte superior */
+  left: 0; /* posiciona el label a la izquierda */
+  width: 100%; /* establece el ancho del label al 100% */
+  padding: 5px; /* agrega un padding para dar espacio alrededor del label */
+  color: black; /* establece el color del texto del label como blanco */
+  font-weight: bold; /* establece el grosor del texto del label como negrita */
+  text-align: center; /* centra el texto del label horizontalmente */
+  z-index: 1; /* establece la capa z del label para que quede encima de la imagen */
+}
+
+
+.deck-item img {
+  width: 100%; /* establece el ancho de la imagen al 100% */
+  height: 100%; /* establece la altura de la imagen al 100% */
+  object-fit: cover; /* establece cómo la imagen debe rellenar el contenedor */
+  object-position: center center; /* establece la posición de la imagen dentro del contenedor */
+  z-index: 0; /* establece la capa z de la imagen para que quede detrás del label */
+}
+
+
+
