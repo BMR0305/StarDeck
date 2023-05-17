@@ -28,7 +28,7 @@ namespace StarDeck_API.Controllers
             }
             catch (System.Exception e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(new { message = e.Message });
             }
         }
 

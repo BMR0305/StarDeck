@@ -45,7 +45,7 @@ namespace StarDeck_API.Support_Components
                             partida.Planet2 = planets[1].ID;
                             partida.Planet3 = planets[2].ID;
                             partida.p_status = "EC";
-                            context.partida.Add(partida);
+                            await context.partida.AddAsync(partida);
                             await context.SaveChangesAsync();
 
                             //Crear aux para enviar al front end la lista de los planetas y jugadores como objetos completos.
@@ -88,10 +88,6 @@ namespace StarDeck_API.Support_Components
             {
                 await Task.Delay(500);
                 user = context.users.FromSqlRaw("EXEC GetPlayer @Email = {0}", email).ToList()[0];
-                if (user.u_status == "EP")
-                {
-                    break;
-                }
             }
 
             if (user.u_status == "EP")

@@ -27,11 +27,11 @@ namespace StarDeck_API.Controllers
             try
             {
                 string Message = Deck_DB.GetInstance().PostDeck(d,context);
-                return Message;
+                return Ok(new { message = Message});
             }
             catch (System.Exception e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(new { message = e.Message });
             }
         }
 
@@ -46,7 +46,7 @@ namespace StarDeck_API.Controllers
             }
             catch (System.Exception e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(new { message = e.Message });
             }
         }
 
@@ -61,7 +61,7 @@ namespace StarDeck_API.Controllers
             }
             catch (System.Exception e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(new { message = e.Message });
             }
         }
     }
