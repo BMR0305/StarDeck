@@ -52,7 +52,6 @@ export class GameComponent {
 
   ngOnInit(): void {
 
-    console.log(localStorage.getItem('oponent'));
 
     this.getOponente(localStorage.getItem('oponent')+"");
 

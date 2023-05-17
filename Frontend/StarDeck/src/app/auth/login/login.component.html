@@ -5,12 +5,12 @@
   </div>
 
 
-  <div style="flex: 1 1 50%;">
-    <form class="form-container" [formGroup]="cardForm"  class = "monospace">
+  <div style="flex: 1 1 ;">
+    <form [formGroup]="cardForm"  class = "monospace">
 
       <label>Correo<span class="red-text">* </span>
         <div>
-          <input class="cardForm" type="email" formControlName="mail">
+          <input  type="email" formControlName="mail">
           <div class = "required" *ngIf="cardForm.get('mail')?.hasError('email') && cardForm.get('mail')?.touched">
             El correo no es válido
           </div>
@@ -21,7 +21,7 @@
 
       <label>Contraseña<span class="red-text">* </span>
         <div>
-          <input class="cardForm" type="password" formControlName="password" [attr.maxlength]="8">
+          <input style="width: 100%;" type="password" formControlName="password" [attr.maxlength]="8">
           <div class = "required" *ngIf="cardForm.get('password')?.hasError('pattern') && cardForm.get('password')?.touched">
             La contraseña debe contener al menos un número y una letra.
           </div>
