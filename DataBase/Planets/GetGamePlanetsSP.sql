@@ -24,7 +24,7 @@ BEGIN
 		WHERE p_type =
 			CASE
 				WHEN @rand <= 0.50 THEN 'Popular'
-				WHEN @rand > 0.5 AND @rand <= 0.75 THEN 'Basico'
+				WHEN @rand > 0.5 AND @rand <= 0.85 THEN 'Basico'
 				ELSE 'Raro'
 			END
 			AND ID NOT IN (SELECT ID FROM @temp_planets);
