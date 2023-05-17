@@ -33,7 +33,7 @@ namespace StarDeck_API.Support_Components
                         if (PlayersWaiting[i].u_status == "BP" && PlayersWaiting[i].email != email)
                         {
                             Users current_user = context.users.FromSqlRaw("EXEC GetPlayer @email = {0}", email).ToList()[0];
-                            await context.Database.ExecuteSqlRawAsync("EXEC UpdateUserStatus @email = {0}, @status = {1}",email, "EP");
+                            await context.Database.ExecuteSqlRawAsync("EXEC UpdateUserStatus @email = {0}, @status = {1}", email, "EP");
                             await context.Database.ExecuteSqlRawAsync("EXEC UpdateUserStatus @email = {0}, @status = {1}", PlayersWaiting[i].email, "EP");
                             var planets = await context.planet.FromSqlRaw("EXEC GetGamePlanets").ToListAsync();
 
@@ -77,23 +77,29 @@ namespace StarDeck_API.Support_Components
         public async Task<string> WaitingGame(DBContext context,string email)
         {
 
-            Users user = context.users.FromSqlRaw("EXEC GetPlayer @Email = {0}", email).ToList()[0];
+            Users user;
 
             // Time limit to wait for a match to be found (in seconds)
             int timeout = 20;
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-
+            user = context.users.FromSqlRaw("EXEC GetPlayer @email = {0}", email).ToList()[0];
             while (user.u_status == "BP" && stopwatch.Elapsed.TotalSeconds < timeout)
             {
-                await Task.Delay(500);
-                user = context.users.FromSqlRaw("EXEC GetPlayer @Email = {0}", email).ToList()[0];
+                await Task.Delay(2000);
+                user = context.users.FromSqlRaw("EXEC GetPlayer @email = {0}", email).ToList()[0];
+                if (user.u_status != "BP")
+                {
+                    //stopwatch.Stop();
+                    break;
+                }
             }
 
-            if (user.u_status == "EP")
-            {
-                var partida = context.partida.FromSqlRaw("EXEC GetUserMatch @Email = {0}", email).ToList()[0];
+            var partidaList = context.partida.FromSqlRaw("EXEC GetUserMatch @email = {0}", email).ToList();
 
+            if (partidaList.Count > 0)
+            {
+                Partida partida = partidaList[0];
                 PartidaAux partidaAux = new PartidaAux();
                 partidaAux.ID = partida.ID;
                 partidaAux.Players = new List<Users>();
@@ -108,11 +114,12 @@ namespace StarDeck_API.Support_Components
                 string json_partida = JsonConvert.SerializeObject(partidaAux);
                 return json_partida;
             }
-            else
-            {
-                context.Database.ExecuteSqlRaw("EXEC UpdateUserStatus @email = {0}, @status = {1}", email, "A");
-                return "Timeout reached";
-            }
+            context.Database.ExecuteSqlRaw("EXEC UpdateUserStatus @email = {0}, @status = {1}", email, "A");
+            Message mess = new Message();
+            mess.message = "Timeout reached";
+            string output = JsonConvert.SerializeObject(mess);
+
+            return output;
 
         }
 

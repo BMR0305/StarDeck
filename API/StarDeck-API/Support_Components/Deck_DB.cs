@@ -137,6 +137,31 @@ namespace StarDeck_API.Support_Components
             }
         }
 
+        /*
+         * Function that sets the user's deck
+         * Params: context - DBContext, id - deck id, email - user email
+         * Return: Message - message with the result of the operation
+         */
+        public string SetUserDeck(DBContext context, string id, string email)
+        {
+            Message m = new Message();
+            string output = "";
+            try
+            {
+                context.Database.ExecuteSqlRaw("EXEC SetDeck @deck_id = {0}, @email = {1}", id, email);
+                m.message = "Deck set";
+                output = JsonConvert.SerializeObject(m, Formatting.Indented);
+                return output;
+
+            }
+            catch (Exception e)
+            {
+                m.message = e.Message;
+                output = JsonConvert.SerializeObject(m, Formatting.Indented);
+                return output;
+            }
+        }
+
         private Deck_DB() { }
     }
 }

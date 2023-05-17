@@ -92,22 +92,26 @@ namespace StarDeck_API.Support_Components
                 return false;
             }
         }
-        /**
-         * Function that allows to get the information of a planet from the DB
-         * Params: context - context of the DB, name - name of the planet to get
-         * Return: string with the information of the planet in json format or a message indicating that the planet was not found
-         */
-        public string GetPlanet(DBContext context, string name)
+
+        /* 
+        * Function that allows to get the information of a user from the DB
+        * Params: context - context of the DB, mail - mail of the user to get
+        * Return: string with the information of the user in json format or a Message indicating that the user was not found
+        */
+        public string GetUser(DBContext context, string mail)
         {
-            var planetInfo = context.planet.FromSqlRaw("EXEC GetPlanet @planet = {0}", name).ToList();
-            if (planetInfo.Count == 0)
+            var userInfo = context.users.FromSqlRaw("EXEC GetPlayer @email = {0}", mail).ToList();
+            string output = "";
+            if (userInfo.Count == 0)
             {
-                return "Planet not found";
+                Message m = new Message();
+                m.message = "User not found";
+                output = JsonConvert.SerializeObject(m, Formatting.Indented);
+                return output;
             }
-            string output = JsonConvert.SerializeObject(planetInfo.ToArray(), Formatting.Indented);
+            output = JsonConvert.SerializeObject(userInfo.ToArray(), Formatting.Indented);
             return output;
         }
-
 
         /*
          * Private constructor for the DB_Procedures class

@@ -14,6 +14,7 @@
         public int ranking { get; set; }
         public int coins { get; set; }
         public string u_type { get; set; }
+        public string current_deck { get; set; }
 
     }
 }

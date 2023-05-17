@@ -91,13 +91,18 @@ namespace StarDeck_API.Controllers
             }
         }
 
+        /*
+         * Function that allows to get a planet by its name
+         * name: name of the planet
+         * return: it returns Ok state if it succeds, and if it doesn't succed it returns bad request error  
+         */
         [HttpGet]
         [Route("get/{name}")]
         public dynamic GetPlanet(string name)
         {
             try
             {
-                string output = CardsLogin_DB.GetInstance().GetPlanet(context,name);
+                string output = Planet_DB.GetInstance().GetPlanet(context,name);
                 return output;
             }
 

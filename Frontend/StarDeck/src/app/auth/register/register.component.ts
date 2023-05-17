@@ -70,7 +70,8 @@ export class RegisterComponent {
       avatar: "string",
       ranking: 0,
       coins: 0,
-      u_type: "user"
+      u_type: "user",
+      current_deck: "",
 
     }).subscribe(data =>{
       localStorage.setItem("email", JSON.stringify(this.cardForm.get('mail')?.value));

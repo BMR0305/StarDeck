@@ -26,12 +26,16 @@ namespace StarDeck_API.Support_Components
          */
         public string GetPlanet(DBContext context, string name)
         {
-            var planetInfo = context.planet.FromSqlRaw("EXEC GetPlanet @planet = {0}", name).ToList();
+            string output = "";
+            Message m = new Message();
+            var planetInfo = context.planet.FromSqlRaw("EXEC GetPlanet @name = {0}", name).ToList();
             if (planetInfo.Count == 0)
             {
-                return "Planet not found";
+                m.message = "Planet not found";
+                output = JsonConvert.SerializeObject(m, Formatting.Indented);
+                return output;
             }
-            string output = JsonConvert.SerializeObject(planetInfo.ToArray(), Formatting.Indented);
+            output = JsonConvert.SerializeObject(planetInfo.ToArray(), Formatting.Indented);
             return output;
         }
 
