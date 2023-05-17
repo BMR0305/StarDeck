@@ -49,46 +49,79 @@ namespace StarDeck_APITests.Support_Components
             Deck_DB deck_instance = Deck_DB.GetInstance();
             //crea un arreglo de Card
             List<Card> cards = new List<Card>();
+
+            Card cards0 = new Card();
+            cards0.ID = "C-89Pz8QGhwzNr";
+            cards.Add(cards0);
             
-            cards.Add(new Card());
+            Card cards1 = new Card();
+            cards1.ID = "C-BfqKgiGf1W3e";
+            cards.Add(cards1);
             
-            cards[0] = new Card();
-            cards[0].ID = "C-89Pz8QGhwzNr";
-            cards[1] = new Card();
-            cards[1].ID = "C-BfqKgiGf1W3e";
-            cards[2] = new Card();
-            cards[2].ID = "C-CPpaD4h6cw0h";
-            cards[3] = new Card();
-            cards[3].ID = "C-Cr0thsJJexB8";
-            cards[4] = new Card();
-            cards[4].ID = "C-CuKea5Cs8qg0";
-            cards[5] = new Card();
-            cards[5].ID = "C-FQyGteAd2hfF";
-            cards[6] = new Card();
-            cards[6].ID = "C-hVT2M7mYoRrE";
-            cards[7] = new Card();
-            cards[7].ID = "C-jdOQw084WYkb";
-            cards[8] = new Card();
-            cards[8].ID = "C-juPVXvL8l3tn";
-            cards[9] = new Card();
-            cards[9].ID = "C-m4YaVFUdPOpw";
-            cards[10] = new Card();
-            cards[10].ID = "C-MMAp3aHO32VD";
-            cards[11] = new Card();
-            cards[11].ID = "C-Q8cBHJ8xJEaC";
-            cards[12] = new Card();
-            cards[12].ID = "C-Rh8C0osN9Utv";
-            cards[13] = new Card();
-            cards[13].ID = "C-rYQB6OMXSSQ0";
-            cards[14] = new Card();
-            cards[14].ID = "C-sHE6olr9zoly";
-            cards[15] = new Card();
-            cards[15].ID = "C-XO29iqnRZgY5";
-            cards[16] = new Card();
-            cards[16].ID = "C-yvkUaZUNOJMl";
-            cards[17] = new Card();
-            cards[17].ID = "C-ZC64gJ0PweRF";
+            Card cards2 = new Card();
+            cards2.ID = "C-CPpaD4h6cw0h";
+            cards.Add(cards2);
             
+            Card cards3 = new Card();
+            cards3.ID = "C-Cr0thsJJexB8";
+            cards.Add(cards3);
+            
+            Card cards4 = new Card();
+            cards4.ID = "C-CuKea5Cs8qg0";
+            cards.Add(cards4);
+            
+            Card cards5 = new Card();
+            cards5.ID = "C-FQyGteAd2hfF";
+            cards.Add(cards5);
+            
+            Card cards6 = new Card();
+            cards6.ID = "C-hVT2M7mYoRrE";
+            cards.Add(cards6);
+            
+            Card cards7 = new Card();
+            cards7.ID = "C-jdOQw084WYkb";
+            cards.Add(cards7);
+            
+            Card cards8 = new Card();
+            cards8.ID = "C-juPVXvL8l3tn";
+            cards.Add(cards8);
+            
+            Card cards9 = new Card();
+            cards9.ID = "C-m4YaVFUdPOpw";
+            cards.Add(cards9);
+            
+            Card cards10 = new Card();
+            cards10.ID = "C-MMAp3aHO32VD";
+            cards.Add(cards10);
+            
+            Card cards11 = new Card();
+            cards11.ID = "C-Q8cBHJ8xJEaC";
+            cards.Add(cards11);
+            
+            Card cards12 = new Card();
+            cards12.ID = "C-Rh8C0osN9Utv";
+            cards.Add(cards12);
+            
+            Card cards13 = new Card();
+            cards13.ID = "C-rYQB6OMXSSQ0";
+            cards.Add(cards13);
+            
+            Card cards14 = new Card();
+            cards14.ID = "C-sHE6olr9zoly";
+            cards.Add(cards14);
+            
+            Card cards15 = new Card();
+            cards15.ID = "C-XO29iqnRZgY5";
+            cards.Add(cards15);
+            
+            Card cards16 = new Card();
+            cards16.ID = "C-yvkUaZUNOJMl";
+            cards.Add(cards16);
+            
+            Card cards17 = new Card();
+            cards17.ID = "C-z0Q8ZQ8xJEaC";
+            cards.Add(cards17);
+
             Deck_Aux deck_aux = new Deck_Aux();
             deck_aux.name = "holaprofe";
             deck_aux.cards = cards;
@@ -109,9 +142,10 @@ namespace StarDeck_APITests.Support_Components
             
             String deck_string = deck_instance.GetPlayerDecks(_dbContext, "U-3eykX6P25gvt");
             
-            Assert.AreEqual(deck_string, "<<Query root of type 'FromSqlQueryRootExpression' wasn't handled by provider code. This issue happens when using a provider specific method on a different provider where it is not supported.>>");
-
+            Assert.IsTrue(deck_string.Contains("D-"));
         }
+        
+
 
     }
 }
