@@ -97,7 +97,7 @@ export class GameComponent {
 
   setDeck(){
 
-    localStorage.setItem("deck","D-NksO5zXsHP3i")
+  
 
     let url = "Deck/get/" + localStorage.getItem("deck");
     url = url.replace(/"/g, "");
