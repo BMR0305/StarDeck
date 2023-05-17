@@ -27,11 +27,11 @@ namespace StarDeck_API.Controllers
             try
             {
                 string Message = Deck_DB.GetInstance().PostDeck(d,context);
-                return Message;
+                return Ok(new { message = Message});
             }
             catch (System.Exception e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(new { message = e.Message });
             }
         }
 
@@ -46,7 +46,22 @@ namespace StarDeck_API.Controllers
             }
             catch (System.Exception e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(new { message = e.Message });
+            }
+        }
+
+        [HttpGet]
+        [Route("getPlayerDecks/{email}")]
+        public dynamic GetPlayerDecks(string email)
+        {
+            try
+            {
+                string decks = Deck_DB.GetInstance().GetPlayerDecks(context, email);
+                return decks;
+            }
+            catch (System.Exception e)
+            {
+                return BadRequest(new { message = e.Message });
             }
         }
     }

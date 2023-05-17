@@ -56,7 +56,7 @@ namespace StarDeck_API.Support_Components
                     id = KeyGenerator.CreatePattern("D-");
                 }
 
-                var user = context.users.FromSqlRaw("EXEC GetPlayer @email = {0}",d.name_user).ToList();
+                var user = context.users.FromSqlRaw("EXEC GetPlayer @email = {0}",d.email_user).ToList();
 
                 for (int i = 0; i < d.cards.Count; i++)
                 {
@@ -91,7 +91,7 @@ namespace StarDeck_API.Support_Components
                 Deck_Aux deck = new Deck_Aux();
                 deck.name = d_name.Value.ToString();
                 deck.code = Deck_ID;
-                deck.name_user = user_id.Value.ToString();
+                deck.email_user = user_id.Value.ToString();
                 deck.cards = deck_cards;
                 string output = JsonConvert.SerializeObject(deck, Formatting.Indented);
                 return output;
@@ -109,7 +109,7 @@ namespace StarDeck_API.Support_Components
             {
                 var decks_aux = new List<Deck_Aux>();
 
-                var player_decks = context.deckIDTable.FromSqlRaw("EXEC GetPlayerDecks @email = {0}", email).ToList();
+                var player_decks = context.deckIDTable.FromSqlRaw("EXEC GetPlayerDecks @player_email = {0}", email).ToList();
 
                 for (int i = 0; i < player_decks.Count; i++)
                 {
@@ -123,7 +123,7 @@ namespace StarDeck_API.Support_Components
                     Deck_Aux deck = new Deck_Aux();
                     deck.name = d_name.Value.ToString();
                     deck.code = player_decks[i].Deck_ID;
-                    deck.name_user = user_id.Value.ToString();
+                    deck.email_user = email;
                     deck.cards = deck_cards;
                     decks_aux.Add(deck);
                 }
@@ -134,6 +134,31 @@ namespace StarDeck_API.Support_Components
             catch (Exception e)
             {
                 return e.Message;
+            }
+        }
+
+        /*
+         * Function that sets the user's deck
+         * Params: context - DBContext, id - deck id, email - user email
+         * Return: Message - message with the result of the operation
+         */
+        public string SetUserDeck(DBContext context, string id, string email)
+        {
+            Message m = new Message();
+            string output = "";
+            try
+            {
+                context.Database.ExecuteSqlRaw("EXEC SetDeck @deck_id = {0}, @email = {1}", id, email);
+                m.message = "Deck set";
+                output = JsonConvert.SerializeObject(m, Formatting.Indented);
+                return output;
+
+            }
+            catch (Exception e)
+            {
+                m.message = e.Message;
+                output = JsonConvert.SerializeObject(m, Formatting.Indented);
+                return output;
             }
         }
 

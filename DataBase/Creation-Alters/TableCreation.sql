@@ -8,7 +8,7 @@ CREATE TABLE Users(
 	birthday DATE,
 	nationality VARCHAR(50),
 	u_password VARCHAR(8),
-	u_status VARCHAR(10),
+	u_status VARCHAR(10), --A: Activo, BP: Buscando Partida, EP: En partida, D: desconectado
 	avatar VARCHAR(MAX),
 	ranking INT,
 	coins INT,

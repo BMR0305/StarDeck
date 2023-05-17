@@ -27,12 +27,18 @@ export interface Deck {
   cards: any;
 }
 
-export interface Deck {
-  name: any;
-  code: any;
-  email_user: any;
-  cards: any;
-  
-
+export interface Player {
+  ID: any;
+  avatar: any;
+  birthday: any;
+  coins: any;
+  email: any;
+  nationality: any;
+  nickname: any;
+  ranking: any;
+  u_name: any;
+  u_password: any;
+  u_status: any;
+  u_type: any;
 }
 

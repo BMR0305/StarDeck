@@ -23,6 +23,8 @@ namespace StarDeck_API.Models
 
         public DbSet<DeckIDTable> deckIDTable => Set<DeckIDTable>();
 
+        public DbSet<Partida> partida => Set<Partida>();
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Users>().HasKey(x => x.ID);
@@ -36,6 +38,8 @@ namespace StarDeck_API.Models
             modelBuilder.Entity<Planet>().HasKey(x => x.ID);
 
             modelBuilder.Entity<Deck>().HasKey(x => new { x.Deck_ID, x.Player_ID, x.Card_ID, x.d_name });
+
+            modelBuilder.Entity<Partida>().HasKey(x => x.ID);
         }
     }
 }

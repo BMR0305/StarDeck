@@ -41,10 +41,11 @@ namespace StarDeck_API.Controllers
                 u.avatar = UserDefaultAvatar;
                 u.ranking = InitialRanking;
                 u.coins = InitialCoins;
-                u.u_status = "a";
+                u.u_status = "A";
                 bool flag = true;
                 List<Users> users = context.users.ToList();
                 string id = "";
+                u.current_deck = "";
 
                 if (users.Count > 0) {
 
@@ -137,6 +138,50 @@ namespace StarDeck_API.Controllers
                 return output;
             }
 
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /*
+        * Function that allows to get a user by its email
+        * Params: email, consists in the email of the user
+        * Return: User associated to the email if it succedes, and if it doesn't succed it returns the error
+        */
+
+        [HttpGet]
+        [Route("get/{email}")]
+        public dynamic GetUser(string email)
+        {
+            try
+            {
+                string output = CardsLogin_DB.GetInstance().GetUser(context, email);
+                return output;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /*
+         * Function that sets game deck to a user
+         * Params: --id, consists in the id of the deck, --email, consists in the email of the user
+         * Return Message if it succedes, and if it doesn't succed it returns the error
+         */
+
+        [HttpGet]
+        [Route("setDeck/{id}/{email}")]
+        public dynamic SetID(string id, string email)
+        {
+            try
+            {
+                string output = Deck_DB.GetInstance().SetUserDeck(context, id, email);
+                return output;
+            }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());

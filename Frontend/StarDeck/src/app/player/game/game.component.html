@@ -4,7 +4,7 @@
 <body class="box">
 	<header>
 		<img src = '{{img_src}}' style="width: 100px; height: 100px;">
-		<h1>Nombre del oponente</h1>
+		<h1>{{oponente}}</h1>
 	</header>
     
     <section>
@@ -19,7 +19,7 @@
         </div>
         
         <div class="hand">
-            <mat-grid-list class="mat-grid-list" cols="4" rowHeight="100px" >
+            <mat-grid-list class="mat-grid-list" cols="4" rowHeight="130px" >
                 <mat-grid-tile *ngFor="let item of hand_cards ">
                   <img src= '{{item.c_image}}' class="hand_img">
                 </mat-grid-tile>

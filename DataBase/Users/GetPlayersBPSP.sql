@@ -1,0 +1,8 @@
+CREATE PROCEDURE GetPlayersBP
+AS
+BEGIN
+	SELECT *
+	FROM Users
+	WHERE u_status = 'BP';
+END
+GO
