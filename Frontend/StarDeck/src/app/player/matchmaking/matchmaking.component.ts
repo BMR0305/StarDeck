@@ -43,7 +43,7 @@ export class MatchmakingComponent implements OnInit{
         this.msg = "";
        }
        else if (this.temp["message"] == 'Matchmaking canceled'){
-        this.msg = "";        
+        this.msg = "";
        }
        else{
 
@@ -94,7 +94,7 @@ export class MatchmakingComponent implements OnInit{
       }
     }
 
-    
+
   }
 
   cancelClick(){
@@ -112,7 +112,7 @@ export class MatchmakingComponent implements OnInit{
   }
 
 
-  
+
 
   ngOnInit(): void {
 

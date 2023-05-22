@@ -26,7 +26,7 @@ namespace StarDeck_API.Controllers
         {
             try
             {
-                string Message = Deck_DB.GetInstance().PostDeck(d,context);
+                string Message = Deck_Logic.GetInstance().PostDeck(d,context);
                 return Ok(new { message = Message});
             }
             catch (System.Exception e)
@@ -41,7 +41,7 @@ namespace StarDeck_API.Controllers
         {
             try
             {
-                string deck = Deck_DB.GetInstance().GetDeck(context, id);
+                string deck = Deck_Logic.GetInstance().GetDeck(context, id);
                 return Ok(deck);
             }
             catch (System.Exception e)
@@ -56,7 +56,7 @@ namespace StarDeck_API.Controllers
         {
             try
             {
-                string decks = Deck_DB.GetInstance().GetPlayerDecks(context, email);
+                string decks = Deck_Logic.GetInstance().GetPlayerDecks(context, email);
                 return decks;
             }
             catch (System.Exception e)

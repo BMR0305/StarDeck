@@ -102,7 +102,7 @@ namespace StarDeck_API.Controllers
         {
             try
             {
-                string output = Planet_DB.GetInstance().GetPlanet(context,name);
+                string output = Planet_Logic.GetInstance().GetPlanet(context,name);
                 return output;
             }
 

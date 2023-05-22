@@ -6,18 +6,18 @@ using System.Data;
 
 namespace StarDeck_API.Support_Components
 {
-    public class Deck_DB
+    public class Deck_Logic
     {
-        public static Deck_DB instance = null;
+        public static Deck_Logic instance = null;
 
         private KeyGen KeyGenerator = KeyGen.GetInstance();
 
-        public static Deck_DB GetInstance()
+        public static Deck_Logic GetInstance()
         {
 
             if (instance == null)
             {
-                instance = new Deck_DB();
+                instance = new Deck_Logic();
             }
             return instance;
 
@@ -162,6 +162,6 @@ namespace StarDeck_API.Support_Components
             }
         }
 
-        private Deck_DB() { }
+        private Deck_Logic() { }
     }
 }

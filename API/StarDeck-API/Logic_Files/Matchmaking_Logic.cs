@@ -7,15 +7,15 @@ using System.Diagnostics;
 
 namespace StarDeck_API.Support_Components
 {
-    public class Matchmaking
+    public class Matchmaking_Logic
     {
-        private static Matchmaking instance = null;
+        private static Matchmaking_Logic instance = null;
 
-        public static Matchmaking GetInstance()
+        public static Matchmaking_Logic GetInstance()
         {
             if (instance == null)
             {
-                instance = new Matchmaking();
+                instance = new Matchmaking_Logic();
             }
             return instance;
         }
@@ -136,7 +136,7 @@ namespace StarDeck_API.Support_Components
             }
         }
 
-        public Matchmaking()
+        public Matchmaking_Logic()
         {
             
         }

@@ -36,7 +36,7 @@ namespace StarDeck_APITests.Support_Components
         public void GetPlanetTest()
         {
             //DBContext context;
-            Planet_DB planet = Planet_DB.GetInstance();
+            Planet_Logic planet = Planet_Logic.GetInstance();
             String planet_string = planet.GetPlanet(_dbContext, "Europa");
             Assert.IsTrue(planet_string.Contains("Europa"));
         } 
@@ -45,7 +45,7 @@ namespace StarDeck_APITests.Support_Components
         public void GetAllPlanetsTest()
         {
             //DBContext context;
-            Planet_DB planet = Planet_DB.GetInstance();
+            Planet_Logic planet = Planet_Logic.GetInstance();
             String planet_string = planet.GetAllPlanets(_dbContext);
             Assert.AreEqual(planet_string,"[]");
         }
@@ -54,7 +54,7 @@ namespace StarDeck_APITests.Support_Components
         public void GetGamePlanetsTest()
         {
             //DBContext context;
-            Planet_DB planet = Planet_DB.GetInstance();
+            Planet_Logic planet = Planet_Logic.GetInstance();
             String planet_string = planet.GetGamePlanets(_dbContext);
             Assert.AreEqual(planet_string,"[]");
         }

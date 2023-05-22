@@ -36,7 +36,7 @@ namespace StarDeck_APITests.Support_Components
         public void GetDeckTest()
         {
             //DBContext context;
-            Deck_DB deck = Deck_DB.GetInstance();
+            Deck_Logic deck = Deck_Logic.GetInstance();
             String deck_string = deck.GetDeck(_dbContext, "D-bieeEbhPVVQR");
             Assert.IsTrue(deck_string.Contains("D-bieeEbhPVVQR"));
             
@@ -46,7 +46,7 @@ namespace StarDeck_APITests.Support_Components
         public void PostDeckTest()
         {
             //DBContext context;
-            Deck_DB deck_instance = Deck_DB.GetInstance();
+            Deck_Logic deck_instance = Deck_Logic.GetInstance();
             //crea un arreglo de Card
             List<Card> cards = new List<Card>();
 
@@ -138,7 +138,7 @@ namespace StarDeck_APITests.Support_Components
         public void GetPlayerDecks()
         {
             //DBContext context;
-            Deck_DB deck_instance = Deck_DB.GetInstance();
+            Deck_Logic deck_instance = Deck_Logic.GetInstance();
             
             String deck_string = deck_instance.GetPlayerDecks(_dbContext, "U-3eykX6P25gvt");
             

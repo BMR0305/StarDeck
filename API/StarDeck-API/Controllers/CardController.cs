@@ -95,7 +95,7 @@ namespace StarDeck_API.Controllers
             try
             {
 
-                string output = CardsLogin_DB.GetInstance().GetRandomCardsSP(context, num, types);
+                string output = CardsUsers_Logic.GetInstance().GetRandomCardsSP(num, types);
                 return output;               
 
             }
@@ -118,7 +118,7 @@ namespace StarDeck_API.Controllers
         {
             try
             {
-                List<Card> cards = context.cards.ToList();
+                List<Card> cards = context.cards.ToList(); //cambiar aca, que sea atraves de la clase de DB
                 string output = JsonConvert.SerializeObject(cards.ToArray(), Formatting.Indented);
                 return output;
 

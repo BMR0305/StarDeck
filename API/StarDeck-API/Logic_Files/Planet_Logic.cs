@@ -6,15 +6,15 @@ using System.Data;
 
 namespace StarDeck_API.Support_Components
 {
-    public class Planet_DB
+    public class Planet_Logic
     {
-        public static Planet_DB instance = null;
+        public static Planet_Logic instance = null;
 
-        public static Planet_DB GetInstance()
+        public static Planet_Logic GetInstance()
         {
             if (instance == null)
             {
-                instance = new Planet_DB();
+                instance = new Planet_Logic();
             }
             return instance;
         }
@@ -63,6 +63,6 @@ namespace StarDeck_API.Support_Components
             return output;
         }
 
-        private Planet_DB() { }
+        private Planet_Logic() { }
     }
 }

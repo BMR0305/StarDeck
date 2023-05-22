@@ -23,7 +23,7 @@ namespace StarDeck_API.Controllers
         {
             try
             {
-                string output = await  Matchmaking.GetInstance().LookForGame(context, email);
+                string output = await  Matchmaking_Logic.GetInstance().LookForGame(context, email);
                 return Ok(output);
             }
             catch (System.Exception e)
@@ -38,7 +38,7 @@ namespace StarDeck_API.Controllers
         {
             try
             {
-                string output = Matchmaking.GetInstance().CancelMM(context, email);
+                string output = Matchmaking_Logic.GetInstance().CancelMM(context, email);
                 return Ok(new { message = output });
             }
             catch (System.Exception e)
