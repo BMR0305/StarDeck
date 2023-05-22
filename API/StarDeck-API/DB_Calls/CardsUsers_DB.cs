@@ -91,6 +91,20 @@ namespace StarDeck_API.DB_Calls
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        public dynamic PostCard(Card card)
+        {
+            try
+            {
+                context.cards.Add(card);
+                context.SaveChanges();
+                return "Saved";
+            }
+            catch (SqlException ex)
+            {
+                return ex;
+            }
+        }
+
         /*
          * Method that allows to get a random number of cards with different types from the procedure on the DB.
          * Params: num - number of cards to get, types - list of types of cards to get.
@@ -104,6 +118,11 @@ namespace StarDeck_API.DB_Calls
             return RandomCards;
         }
 
+        /*
+         * Method that allows to check if a user has cards.
+         * Params: email - email of the user to check if it has cards.
+         * Return: Count of cards.
+         */
         public int HasCardsSP(string email)
         {
             var count = new SqlParameter("@card_count", SqlDbType.Int, -1);
@@ -114,11 +133,33 @@ namespace StarDeck_API.DB_Calls
             return cardCount;
         }
 
+        /*
+         * Method that allows to get the user's cards from the DB.
+         * Params: email - email of the user to get the cards.
+         * Return: List of cards.
+         */
         public dynamic GetUserCards(string email)
         {
             try
             {
                 List<Card> cards = context.cards.FromSqlRaw("EXEC GetCards @email = {0}", email).ToList();
+                return cards;
+            }
+            catch (SqlException ex)
+            {
+                return ex;
+            }
+        }
+
+        /*
+         * Method that allows to get all the cards from the DB.
+         * Return: List of all cards.
+         */
+        public dynamic GetAllCards()
+        {
+            try
+            {
+                List<Card> cards = context.cards.ToList();
                 return cards;
             }
             catch (SqlException ex)

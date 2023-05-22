@@ -177,6 +177,55 @@ namespace StarDeck_API.Support_Components
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        public void PostCard(Card c)
+        {
+            c.c_status = "a";
+            List<Card> cards = CallDB.GetAllCards();
+            string id = "";
+            bool flag = true;
+
+            if (cards.Count > 0)
+            {
+                while (flag)
+                {
+                    //Random rnd = new Random();
+                    id = KeyGenerator.CreatePattern("C-");
+
+                    for (int i = 0; i < cards.Count; i++)
+                    {
+                        if (cards[i].ID == id)
+                        {
+                            flag = true;
+                            break;
+                        }
+                        else
+                        {
+                            flag = false;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                id = KeyGenerator.CreatePattern("C-");
+            }
+
+
+            c.ID = id;
+            bool ret = CallDB.PostCard(c);
+
+            if (!ret)
+            {
+                throw new Exception("Error saving card, something happened");
+            }
+        }
+        public string GetAllCards()
+        {
+            List<Card> cards = CallDB.GetAllCards();
+            string output = JsonConvert.SerializeObject(cards.ToArray(), Formatting.Indented);
+            return output;
+        }
+
         /*
          * Method that allows to get a random number of cards with different types from the procedure on the DB.
          * Params: num - number of cards to get, types - list of types of cards to get.

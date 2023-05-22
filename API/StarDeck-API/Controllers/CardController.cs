@@ -12,8 +12,6 @@ namespace StarDeck_API.Controllers
     [ApiController]
     public class CardController : ControllerBase
     {
-        //KeyGen object to generate the card keys
-        private KeyGen KeyGenerator = KeyGen.GetInstance();
         //Context of the DB
         private readonly DBContext context;
         //Constructor of the class
@@ -33,51 +31,15 @@ namespace StarDeck_API.Controllers
             try
             {
                
-                c.c_status = "a";
-                List<Card> cards = context.cards.ToList();
-                string id = "";
-                bool flag = true;
-
-                if (cards.Count > 0) {
-
-                    while (flag)
-                    {
-                        //Random rnd = new Random();
-                        id = KeyGenerator.CreatePattern("C-");
-
-                        for (int i = 0; i < cards.Count; i++)
-                        {
-                            if (cards[i].ID == id)
-                            {
-                                flag = true;
-                                break;
-                            }
-
-                            else
-                            {
-                                flag = false;
-                            }
-
-                        }
-
-                    }
-
-                } else
-                {
-                    id = KeyGenerator.CreatePattern("C-");
-                }
-
-
-                c.ID = id;
-
-                context.cards.Add(c);
-                context.SaveChanges();
+                CardsUsers_Logic.GetInstance().PostCard(c);
                 return Ok();
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
-                return BadRequest(ex.Message);
+                Message m = new Message();
+                m.message = ex.Message;
+                string output = JsonConvert.SerializeObject(m, Formatting.Indented);
+                return output;
             }
         }
 
@@ -102,8 +64,10 @@ namespace StarDeck_API.Controllers
 
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
-                return BadRequest(ex.Message);
+                Message m = new Message();
+                m.message = ex.Message;
+                string output = JsonConvert.SerializeObject(m, Formatting.Indented);
+                return output;
             }
         }
 
@@ -118,14 +82,15 @@ namespace StarDeck_API.Controllers
         {
             try
             {
-                List<Card> cards = context.cards.ToList(); //cambiar aca, que sea atraves de la clase de DB
-                string output = JsonConvert.SerializeObject(cards.ToArray(), Formatting.Indented);
+                string output = CardsUsers_Logic.GetInstance().GetAllCards();
                 return output;
 
             } catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
-                return BadRequest(ex.Message);
+                Message m = new Message();
+                m.message = ex.Message;
+                string output = JsonConvert.SerializeObject(m, Formatting.Indented);
+                return output;
             }
         }
 
