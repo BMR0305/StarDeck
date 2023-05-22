@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using StarDeck_API.Support_Components;
+using StarDeck_API.Logic_Files;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace StarDeck_API.Support_Components.Tests
+namespace StarDeck_API.Logic_Files.Tests
 {
     [TestClass()]
     public class KeyGenTests

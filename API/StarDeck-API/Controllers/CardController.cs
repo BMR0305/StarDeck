@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StarDeck_API.Models;
 using Newtonsoft.Json;
-using StarDeck_API.Support_Components;
-using Microsoft.EntityFrameworkCore;
+using StarDeck_API.DB_Calls;
+using StarDeck_API.Logic_Files;
+using StarDeck_API.Models;
+using System.Data;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -18,6 +20,7 @@ namespace StarDeck_API.Controllers
         public CardController(DBContext context)
         {
             this.context = context;
+            CardsUsers_DB.GetInstance().SetContext(context);
         }
         /*
          * Function that allows to post a new card

@@ -5,7 +5,7 @@ using StarDeck_API.Models;
 using System.Data;
 using System.Diagnostics;
 
-namespace StarDeck_API.Support_Components
+namespace StarDeck_API.Logic_Files
 {
     public class Matchmaking_Logic
     {

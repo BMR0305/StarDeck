@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StarDeck_API.Models;
 using Newtonsoft.Json;
-using StarDeck_API.Support_Components;
+using StarDeck_API.Logic_Files;
 using Microsoft.EntityFrameworkCore;
 
 namespace StarDeck_API.Controllers

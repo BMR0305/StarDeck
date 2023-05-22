@@ -6,7 +6,7 @@ using StarDeck_API.DB_Calls;
 using StarDeck_API.Models;
 using System.Data;
 
-namespace StarDeck_API.Support_Components
+namespace StarDeck_API.Logic_Files
 {
     /*
      * Singleton class that manages logic operations for the Cards & Users tables.

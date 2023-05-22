@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using StarDeck_API.Support_Components;
+using StarDeck_API.Logic_Files;
 using StarDeck_API.Models;
 
 namespace StarDeck_APITests.Support_Components
