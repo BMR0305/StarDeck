@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using StarDeck_API.Models;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 
 namespace StarDeck_API.DB_Calls
 {
@@ -125,12 +126,12 @@ namespace StarDeck_API.DB_Calls
          */
         public int HasCardsSP(string email)
         {
-            var count = new SqlParameter("@card_count", SqlDbType.Int, -1);
+            SqlParameter count = new SqlParameter("@card_count", SqlDbType.Int);
             count.Direction = ParameterDirection.Output;
-            context.Database.ExecuteSqlRaw("EXEC HasCards @email, @card_count", new SqlParameter("@email", email), count);
-            int cardCount = (int)count.Value;
-
-            return cardCount;
+            SqlParameter user_email = new SqlParameter("@email", email);
+            context.Database.ExecuteSqlRaw("EXEC HasCards @email, @card_count OUTPUT", user_email, count);
+            int card_count = Convert.ToInt32(count.Value);
+            return card_count;
         }
 
         /*

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StarDeck_API.Models;
+using StarDeck_API.DB_Calls;
 using Newtonsoft.Json;
 using StarDeck_API.Logic_Files;
 
@@ -18,6 +19,7 @@ namespace StarDeck_API.Controllers
         public User_CardController(DBContext context)
         {
             this.context = context;
+            CardsUsers_DB.GetInstance().SetContext(context);
         }
         /*
          * Function that allows to post a list of cards of one user

@@ -3,7 +3,6 @@ using StarDeck_API.Models;
 using Newtonsoft.Json;
 using StarDeck_API.DB_Calls;
 using StarDeck_API.Logic_Files;
-using StarDeck_API.Models;
 using System.Data;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860

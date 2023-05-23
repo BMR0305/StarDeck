@@ -118,9 +118,9 @@ namespace StarDeck_API.Logic_Files
          * Params: context - context of the DB, mail - email from the user to check if it has cards.
          * Return: boolean that indicates if the user has cards or not.
          */
-        public bool HasCards(string mail)
+        public bool HasCards(string email)
         {
-            int cardCount = CallDB.HasCardsSP(mail);
+            int cardCount = CallDB.HasCardsSP(email);
             if (cardCount > 0)
             {
                 return true;
