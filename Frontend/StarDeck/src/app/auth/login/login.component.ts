@@ -31,7 +31,7 @@ export class LoginComponent {
         localStorage.setItem("email", JSON.stringify(this.cardForm.get('mail')?.value));
         this.haveCards();
       } else {
-        alert(data)
+        alert("Usario o contraseña incorrectos")
       }
     });
 

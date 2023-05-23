@@ -6,7 +6,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 export class ApiService {
 
   //url_base : string = "https://stardeckapi2.azurewebsites.net/api/";
-  url_base : string = "https://localhost:7026/api/";
+  //url_base : string = "https://localhost:7026/api/";
+  url_base : string = "https://localhost:44373/api/";
 
   constructor(private http: HttpClient) {
   }

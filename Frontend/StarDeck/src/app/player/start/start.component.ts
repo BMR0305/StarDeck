@@ -11,7 +11,7 @@ export class StartComponent {
   constructor(private router: Router) { }
 
   logout() {
-
+    this.router.navigate(['/login'])
   }
 
   play() {

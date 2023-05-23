@@ -21,6 +21,9 @@ export class DeckComponent implements OnInit {
   nameDeck: string = ""; //name of the deck
   mode: number = 0; //0 = view, 1 = edit, 2 = create
 
+  //System variables
+  cardsLimit: number = 18; //limit of cards per deck
+
   constructor(private apiService: ApiService) {
   }
 
@@ -99,7 +102,7 @@ export class DeckComponent implements OnInit {
 
   addCard(card: Cards) {
 
-    if(this.cardsDeck.length == 18){
+    if(this.cardsDeck.length == this.cardsLimit){
       alert("You can't add more than 18 cards");
     } else {
       this.cardsDeck.push(card);
