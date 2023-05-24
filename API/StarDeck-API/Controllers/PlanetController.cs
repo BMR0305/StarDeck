@@ -3,6 +3,7 @@ using StarDeck_API.Models;
 using Newtonsoft.Json;
 using StarDeck_API.Logic_Files;
 using Microsoft.EntityFrameworkCore;
+using StarDeck_API.DB_Calls;
 
 namespace StarDeck_API.Controllers
 {
@@ -20,6 +21,7 @@ namespace StarDeck_API.Controllers
         public PlanetController(DBContext context)
         {
             this.context = context;
+            Planet_DB.GetInstance().SetContext(context);
         }
         /*
          * Function that allows to post a new planet
@@ -66,9 +68,12 @@ namespace StarDeck_API.Controllers
                 context.SaveChanges();
                 return Ok();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                return BadRequest(e.Message);
+                Message m = new Message();
+                m.message = ex.Message;
+                string output = JsonConvert.SerializeObject(m, Formatting.Indented);
+                return output;
             }
         }
         /*
@@ -85,9 +90,12 @@ namespace StarDeck_API.Controllers
                 string output = JsonConvert.SerializeObject(planets.ToArray(), Formatting.Indented);
                 return output;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                return BadRequest(e.Message);
+                Message m = new Message();
+                m.message = ex.Message;
+                string output = JsonConvert.SerializeObject(m, Formatting.Indented);
+                return output;
             }
         }
 
@@ -106,9 +114,30 @@ namespace StarDeck_API.Controllers
                 return output;
             }
 
-            catch (Exception e)
+            catch (Exception ex)
             {
-                return BadRequest(e.Message);
+                Message m = new Message();
+                m.message = ex.Message;
+                string output = JsonConvert.SerializeObject(m, Formatting.Indented);
+                return output;
+            }
+        }
+
+        [HttpGet]
+        [Route("getTypes")]
+        public dynamic GetTypes()
+        {
+            try
+            {
+                string output = Planet_Logic.GetInstance().GetTypes();
+                return output;
+            }
+            catch (Exception ex)
+            {
+                Message m = new Message();
+                m.message = ex.Message;
+                string output = JsonConvert.SerializeObject(m, Formatting.Indented);
+                return output;
             }
         }
     }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using StarDeck_API.DB_Calls;
 using StarDeck_API.Models;
 using System.Data;
 
@@ -8,7 +9,8 @@ namespace StarDeck_API.Logic_Files
 {
     public class Planet_Logic
     {
-        public static Planet_Logic instance = null;
+        private static Planet_Logic instance = null;
+        private Planet_DB CallDB = Planet_DB.GetInstance();
 
         public static Planet_Logic GetInstance()
         {
@@ -60,6 +62,14 @@ namespace StarDeck_API.Logic_Files
         {
             var Planets = context.planet.FromSqlRaw("EXEC GetGamePlanets").ToList();
             string output = JsonConvert.SerializeObject(Planets.ToArray(), Formatting.Indented);
+            return output;
+        }
+
+        public string GetTypes()
+        {
+            string types = CallDB.GetTypes();
+            string[] typesList = types.Split('#');
+            string output = JsonConvert.SerializeObject(typesList.ToArray(), Formatting.Indented);
             return output;
         }
 
