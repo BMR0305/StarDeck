@@ -22,7 +22,7 @@ namespace StarDeck_API.Controllers
 
         [HttpPost]
         [Route("post")]
-        public dynamic PostDeck([FromBody] Deck_Aux d)
+        public dynamic PostDeck([FromBody] Deck_DTO d)
         {
             try
             {

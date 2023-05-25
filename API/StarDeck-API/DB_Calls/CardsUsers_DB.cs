@@ -75,14 +75,44 @@ namespace StarDeck_API.DB_Calls
             try
             {
                 var userInfo = context.users.FromSqlRaw("EXEC GetPlayer @email = {0}", email).ToList();
+                if (userInfo.Count == 0)
+                {
+                    throw new Exception("User not found");
+                }
                 return userInfo;
             }
             catch (SqlException ex)
             {
-                return ex;
+                throw ex;
             }
         }
 
+        /*
+         * Method that gets the user's information from the DB according to the ID provided.
+         * Params: ID - ID of the user to get the information.
+         * Return: user's information or exception.
+         */
+        public dynamic GetUserByID(string ID)
+        {
+            try
+            {
+                var userInfo = context.users.FromSqlRaw("EXEC GetUserWithID @ID = {0}", ID).ToList();
+                if (userInfo.Count == 0)
+                {
+                    throw new Exception("User not found");
+                }
+                return userInfo;
+            }
+            catch (SqlException ex)
+            {
+                throw ex;
+            }
+        }
+
+        /*
+         * Method that allows to get all the users from the DB.
+         * Return: List of users.
+         */
         public List<Users> GetAllUsers()
         {
             List<Users> users = context.users.ToList();

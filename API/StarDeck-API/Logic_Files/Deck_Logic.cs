@@ -23,7 +23,7 @@ namespace StarDeck_API.Logic_Files
 
         }
 
-        public string PostDeck(Deck_Aux d, DBContext context)
+        public string PostDeck(Deck_DTO d, DBContext context)
         {
             try
             {
@@ -88,7 +88,7 @@ namespace StarDeck_API.Logic_Files
                 List<Card> deck_cards = context.cards.FromSqlRaw("EXEC GetDeckCards @deckID, @PlayerID OUTPUT, @d_name OUTPUT",
                                                                 new SqlParameter("@deckID",Deck_ID),
                                                                 user_id, d_name).ToList();
-                Deck_Aux deck = new Deck_Aux();
+                Deck_DTO deck = new Deck_DTO();
                 deck.name = d_name.Value.ToString();
                 deck.code = Deck_ID;
                 deck.email_user = user_id.Value.ToString();
@@ -107,7 +107,7 @@ namespace StarDeck_API.Logic_Files
         {
             try
             {
-                var decks_aux = new List<Deck_Aux>();
+                var decks_aux = new List<Deck_DTO>();
 
                 var player_decks = context.deckIDTable.FromSqlRaw("EXEC GetPlayerDecks @player_email = {0}", email).ToList();
 
@@ -120,7 +120,7 @@ namespace StarDeck_API.Logic_Files
                     List<Card> deck_cards = context.cards.FromSqlRaw("EXEC GetDeckCards @deckID, @PlayerID OUTPUT, @d_name OUTPUT",
                                                                       new SqlParameter("@deckID", player_decks[i].Deck_ID),
                                                                       user_id, d_name).ToList();
-                    Deck_Aux deck = new Deck_Aux();
+                    Deck_DTO deck = new Deck_DTO();
                     deck.name = d_name.Value.ToString();
                     deck.code = player_decks[i].Deck_ID;
                     deck.email_user = email;

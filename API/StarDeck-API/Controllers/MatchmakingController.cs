@@ -3,6 +3,7 @@ using StarDeck_API.Models;
 using Newtonsoft.Json;
 using StarDeck_API.Logic_Files;
 using Microsoft.EntityFrameworkCore;
+using StarDeck_API.DB_Calls;
 
 namespace StarDeck_API.Controllers
 {
@@ -15,6 +16,7 @@ namespace StarDeck_API.Controllers
         public MatchmakingController(DBContext context)
         {
             this.context = context;
+            Matchmaking_DB.GetInstance().SetContext(context);
         }
 
         [HttpGet]
@@ -26,9 +28,12 @@ namespace StarDeck_API.Controllers
                 string output = await  Matchmaking_Logic.GetInstance().LookForGame(context, email);
                 return Ok(output);
             }
-            catch (System.Exception e)
+            catch (Exception ex)
             {
-                return BadRequest(new { message = e.Message });
+                Message m = new Message();
+                m.message = ex.Message;
+                string output = JsonConvert.SerializeObject(m, Formatting.Indented);
+                return StatusCode(500,output);
             }
         }
 
@@ -41,9 +46,12 @@ namespace StarDeck_API.Controllers
                 string output = Matchmaking_Logic.GetInstance().CancelMM(context, email);
                 return Ok(new { message = output });
             }
-            catch (System.Exception e)
+            catch (Exception ex)
             {
-                return BadRequest(e.Message);
+                Message m = new Message();
+                m.message = ex.Message;
+                string output = JsonConvert.SerializeObject(m, Formatting.Indented);
+                return output;
             }
         }
 

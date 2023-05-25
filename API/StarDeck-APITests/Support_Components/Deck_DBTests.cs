@@ -122,7 +122,7 @@ namespace StarDeck_APITests.Support_Components
             cards17.ID = "C-z0Q8ZQ8xJEaC";
             cards.Add(cards17);
 
-            Deck_Aux deck_aux = new Deck_Aux();
+            Deck_DTO deck_aux = new Deck_DTO();
             deck_aux.name = "holaprofe";
             deck_aux.cards = cards;
             deck_aux.code = "";

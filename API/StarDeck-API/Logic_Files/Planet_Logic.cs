@@ -10,6 +10,7 @@ namespace StarDeck_API.Logic_Files
     public class Planet_Logic
     {
         private static Planet_Logic instance = null;
+        private KeyGen KeyGenerator = KeyGen.GetInstance();
         private Planet_DB CallDB = Planet_DB.GetInstance();
 
         public static Planet_Logic GetInstance()
@@ -21,23 +22,48 @@ namespace StarDeck_API.Logic_Files
             return instance;
         }
 
+        public void PostPlanet(Planet planet)
+        {
+            planet.p_status = "a";
+            List<Planet> planets = CallDB.GetAll();
+            string id = "";
+            bool flag = true;
+            if (planets.Count > 0)
+            {
+                while (flag)
+                {
+                    //Random rnd = new Random();
+                    id = KeyGenerator.CreatePattern("P-");
+                    for (int i = 0; i < planets.Count; i++)
+                    {
+                        if (planets[i].ID == id)
+                        {
+                            flag = true;
+                            break;
+                        }
+                        else
+                        {
+                            flag = false;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                id = KeyGenerator.CreatePattern("P-");
+            }
+            planet.ID = id;
+        }
+
         /**
          * Function that allows to get the information of a planet from the DB
-         * Params: context - context of the DB, name - name of the planet to get
+         * Params: name - name of the planet to get
          * Return: string with the information of the planet in json format or a message indicating that the planet was not found
          */
-        public string GetPlanet(DBContext context, string name)
+        public string GetPlanet(string name)
         {
-            string output = "";
-            Message m = new Message();
-            var planetInfo = context.planet.FromSqlRaw("EXEC GetPlanet @name = {0}", name).ToList();
-            if (planetInfo.Count == 0)
-            {
-                m.message = "Planet not found";
-                output = JsonConvert.SerializeObject(m, Formatting.Indented);
-                return output;
-            }
-            output = JsonConvert.SerializeObject(planetInfo.ToArray(), Formatting.Indented);
+            var planetInfo = CallDB.GetPlanetByName(name);
+            string output = JsonConvert.SerializeObject(planetInfo.ToArray(), Formatting.Indented);
             return output;
         }
 
@@ -46,9 +72,9 @@ namespace StarDeck_API.Logic_Files
          * Params: context - context of the DB
          * Return: string with the information of all the planets in json format
          */
-        public string GetAllPlanets(DBContext context)
+        public string GetAllPlanets()
         {
-            var Planets = context.planet.ToList();
+            var Planets = CallDB.GetAll();
             string output = JsonConvert.SerializeObject(Planets.ToArray(), Formatting.Indented);
             return output;
         }
@@ -65,6 +91,10 @@ namespace StarDeck_API.Logic_Files
             return output;
         }
 
+        /**
+         * Function that  returns the types of planets that are in the DB as a string separated by #
+         * Return: string with the types of planets in json format.
+         */
         public string GetTypes()
         {
             string types = CallDB.GetTypes();
@@ -73,6 +103,9 @@ namespace StarDeck_API.Logic_Files
             return output;
         }
 
+        /*
+         * Private constructor to avoid multiple instances of the class
+         */
         private Planet_Logic() { }
     }
 }

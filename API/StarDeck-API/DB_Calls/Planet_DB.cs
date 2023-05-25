@@ -18,11 +18,43 @@ namespace StarDeck_API.DB_Calls
             return instance;
         }
 
-        public List<Planet> GetPlanetByName(string name)
+        public void PostPlanet(Planet p)
         {
-            return context.planet.FromSqlRaw("EXEC GetPlanet @name = {0}", name).ToList();
+            try
+            {
+                context.planet.Add(p);
+                context.SaveChanges();
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception("SqlException: "+ex.Message);
+            }
         }
 
+        public List<Planet> GetAll()
+        {
+            List<Planet> planets = context.planet.ToList();
+            if (planets.Count == 0)
+            {
+                throw new Exception("No planets found");
+            }
+            return planets;
+        }
+
+        public List<Planet> GetPlanetByName(string name)
+        {
+            List<Planet> planet = context.planet.FromSqlRaw("EXEC GetPlanet @name = {0}", name).ToList();
+            if (planet.Count == 0)
+            {
+                throw new Exception("No planet found");
+            }
+            return planet;
+        }
+
+        /*
+         * Function that obtains from a procedure in the DB the types of the planets as a string separated by '#'
+         * Return: string with the types of the planets separated by '#'
+         */
         public string GetTypes()
         {
             try
@@ -42,10 +74,38 @@ namespace StarDeck_API.DB_Calls
             }
         }
 
+        public List<Planet> GetPlanetByID(string ID)
+        {
+            List<Planet> planet = context.planet.FromSqlRaw("EXEC GetPlanetByID @ID = {0}", ID).ToList();
+            if (planet.Count == 0)
+            {
+                throw new Exception("No planet found");
+            }
+            return planet;
+        }
+
+        public List<Planet> GetGamePlanets()
+        {
+            List<Planet> planets = context.planet.FromSqlRaw("EXEC GetGamePlanets").ToList();
+            if (planets.Count == 0)
+            {
+                throw new Exception("No planets found");
+            }
+            return planets;
+        }
+
+        /*
+         * Function that sets the context of the DB to the class instance.
+         * Params: context - context of the DB
+         */
         public void SetContext(DBContext context)
         {
             this.context = context;
         }
+
+        /*
+         * Private constructor to avoid multiple instances of the class
+         */
         private Planet_DB() { }
     }
 }
