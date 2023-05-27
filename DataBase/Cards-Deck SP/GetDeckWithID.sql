@@ -1,0 +1,9 @@
+CREATE PROCEDURE GetDeckWithID
+@Deck_ID nvarchar(15)
+AS
+BEGIN
+	SELECT *
+	FROM Deck
+	WHERE Deck_ID = @Deck_ID
+END
+GO

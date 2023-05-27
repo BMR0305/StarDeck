@@ -1,165 +1,114 @@
-﻿using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using StarDeck_API.DB_Calls;
 using StarDeck_API.Models;
-using System.Data;
+using System.Xml.Linq;
 
 namespace StarDeck_API.Logic_Files
 {
     public class Deck_Logic
     {
-        public static Deck_Logic instance = null;
-
+        private static Deck_Logic instance = null;
         private KeyGen KeyGenerator = KeyGen.GetInstance();
+        private DBContext context;
+        private Deck_DB CallDB = Deck_DB.GetInstance();
 
         public static Deck_Logic GetInstance()
         {
-
             if (instance == null)
             {
                 instance = new Deck_Logic();
             }
             return instance;
-
         }
 
-        public string PostDeck(Deck_DTO d, DBContext context)
+        public void PostDeck(Deck_DTO deck)
         {
-            try
+            List<Deck> decks = CallDB.GetDecks();
+            string id = "";
+            bool flag = true;
+
+            if (decks.Count > 0)
             {
-                List<Deck> decks = context.deck.ToList();
-                string id = "";
-                bool flag = true;
-
-                if (decks.Count > 0)
+                while (flag)
                 {
-                    while (flag)
-                    {
-                        id = KeyGenerator.CreatePattern("D-");
+                    id = KeyGenerator.CreatePattern("D-");
 
-                        for (int i = 0; i < decks.Count; i++)
+                    for (int i = 0; i < decks.Count; i++)
+                    {
+                        if (decks[i].Deck_ID == id)
                         {
-                            if (decks[i].Deck_ID == id)
-                            {
-                                flag = true;
-                                break;
-                            }
-                            else
-                            {
-                                flag = false;
-                            }
+                            flag = true;
+                            break;
+                        }
+                        else
+                        {
+                            flag = false;
                         }
                     }
                 }
-                else
-                {
-                    id = KeyGenerator.CreatePattern("D-");
-                }
-
-                var user = context.users.FromSqlRaw("EXEC GetPlayer @email = {0}",d.email_user).ToList();
-
-                for (int i = 0; i < d.cards.Count; i++)
-                {
-                    Deck deck = new Deck();
-                    deck.Deck_ID = id;
-                    deck.Player_ID = user[0].ID;
-                    deck.Card_ID = d.cards[i].ID;
-                    deck.d_name = d.name;
-                    context.deck.Add(deck);
-                }
-
-                context.SaveChanges();
-                return "Saved Deck";
             }
-            catch (Exception e)
+            else
             {
-                return e.Message;
+                id = KeyGenerator.CreatePattern("D-");
             }
+            Users user = CardsUsers_DB.GetInstance().GetUser(deck.email_user);
+
+            Deck deck_toSave = new Deck();
+            deck_toSave.Deck_ID = id;
+            deck_toSave.d_name = deck.name;
+            deck_toSave.Player_ID = user.ID;
+
+            List<Deck_Card> cards = new List<Deck_Card>();
+            for (int i = 0; i < deck.cards.Count; i++)
+            {
+                Deck_Card temp_card = new Deck_Card(); 
+                temp_card.Deck_ID = id;
+                temp_card.Card_ID = deck.cards[i].ID;
+                cards.Add(temp_card);
+            }
+
+            CallDB.PostDeck(deck_toSave, cards);
         }
 
-        public string GetDeck(DBContext context,string Deck_ID)
+        public string GetDeck(string Deck_ID)
         {
-            try
-            {
-                var user_id = new SqlParameter("@PlayerID", SqlDbType.NVarChar, -1);
-                user_id.Direction = ParameterDirection.Output;
-                var d_name = new SqlParameter("@d_name", SqlDbType.NVarChar, -1);
-                d_name.Direction = ParameterDirection.Output;
-                List<Card> deck_cards = context.cards.FromSqlRaw("EXEC GetDeckCards @deckID, @PlayerID OUTPUT, @d_name OUTPUT",
-                                                                new SqlParameter("@deckID",Deck_ID),
-                                                                user_id, d_name).ToList();
-                Deck_DTO deck = new Deck_DTO();
-                deck.name = d_name.Value.ToString();
-                deck.code = Deck_ID;
-                deck.email_user = user_id.Value.ToString();
-                deck.cards = deck_cards;
-                string output = JsonConvert.SerializeObject(deck, Formatting.Indented);
-                return output;
-                
-            }
-            catch (Exception e)
-            {
-                return e.Message;
-            }
+            List<Card> cards = CallDB.GetDeckCards(Deck_ID);
+            Deck deck = CallDB.GetDeck(Deck_ID);
+
+            Deck_DTO deckDTO = new Deck_DTO();
+            deckDTO.name = deck.d_name;
+            deckDTO.code = Deck_ID;
+            deckDTO.email_user = deck.Player_ID;
+            deckDTO.cards = cards;
+            string output = JsonConvert.SerializeObject(deckDTO, Formatting.Indented);
+            return output;
         }
 
-        public string GetPlayerDecks(DBContext context, string email)
+        public string GetPlayerDecks(string email)
         {
-            try
+            List<Deck_DTO> deck_DTOs = new List<Deck_DTO>();
+            List<Deck> decks = CallDB.GetPlayerDecks(email);
+
+            for (int i = 0; i < decks.Count; i++)
             {
-                var decks_aux = new List<Deck_DTO>();
-
-                var player_decks = context.deckIDTable.FromSqlRaw("EXEC GetPlayerDecks @player_email = {0}", email).ToList();
-
-                for (int i = 0; i < player_decks.Count; i++)
-                {
-                    var user_id = new SqlParameter("@PlayerID", SqlDbType.NVarChar, -1);
-                    user_id.Direction = ParameterDirection.Output;
-                    var d_name = new SqlParameter("@d_name", SqlDbType.NVarChar, -1);
-                    d_name.Direction = ParameterDirection.Output;
-                    List<Card> deck_cards = context.cards.FromSqlRaw("EXEC GetDeckCards @deckID, @PlayerID OUTPUT, @d_name OUTPUT",
-                                                                      new SqlParameter("@deckID", player_decks[i].Deck_ID),
-                                                                      user_id, d_name).ToList();
-                    Deck_DTO deck = new Deck_DTO();
-                    deck.name = d_name.Value.ToString();
-                    deck.code = player_decks[i].Deck_ID;
-                    deck.email_user = email;
-                    deck.cards = deck_cards;
-                    decks_aux.Add(deck);
-                }
-
-                string output = JsonConvert.SerializeObject(decks_aux, Formatting.Indented);
-                return output;
+                Deck_DTO deck_DTO = new Deck_DTO();
+                deck_DTO.name = decks[i].d_name;
+                deck_DTO.code = decks[i].Deck_ID;
+                deck_DTO.email_user = decks[i].Player_ID;
+                deck_DTOs.Add(deck_DTO);
             }
-            catch (Exception e)
-            {
-                return e.Message;
-            }
+
+            string output = JsonConvert.SerializeObject(deck_DTOs, Formatting.Indented);
+            return output;
         }
 
         /*
          * Function that sets the user's deck
          * Params: context - DBContext, id - deck id, email - user email
-         * Return: Message - message with the result of the operation
          */
-        public string SetUserDeck(DBContext context, string id, string email)
+        public void SetUserDeck(string id, string email)
         {
-            Message m = new Message();
-            string output = "";
-            try
-            {
-                context.Database.ExecuteSqlRaw("EXEC SetDeck @deck_id = {0}, @email = {1}", id, email);
-                m.message = "Deck set";
-                output = JsonConvert.SerializeObject(m, Formatting.Indented);
-                return output;
-
-            }
-            catch (Exception e)
-            {
-                m.message = e.Message;
-                output = JsonConvert.SerializeObject(m, Formatting.Indented);
-                return output;
-            }
+            CallDB.SetUserDeck(id, email);
         }
 
         private Deck_Logic() { }

@@ -15,15 +15,15 @@ namespace StarDeck_API.Models
 
         public DbSet<Card> cards => Set<Card>();
 
-        public DbSet<Deck> deck => Set<Deck>();
-
         public DbSet<Planet> planet => Set<Planet>();
 
         public DbSet<JoinUserCards> joinUserCards => Set<JoinUserCards>();
 
-        public DbSet<DeckIDTable> deckIDTable => Set<DeckIDTable>();
-
         public DbSet<Partida> partida => Set<Partida>();
+
+        public DbSet<Deck> deck => Set<Deck>();
+
+        public DbSet<Deck_Card> deck_card => Set<Deck_Card>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -37,9 +37,11 @@ namespace StarDeck_API.Models
 
             modelBuilder.Entity<Planet>().HasKey(x => x.ID);
 
-            modelBuilder.Entity<Deck>().HasKey(x => new { x.Deck_ID, x.Player_ID, x.Card_ID, x.d_name });
-
             modelBuilder.Entity<Partida>().HasKey(x => x.ID);
+
+            modelBuilder.Entity<Deck>().HasKey(x => x.Deck_ID);
+
+            modelBuilder.Entity<Deck_Card>().HasKey(x => new { x.Deck_ID, x.Card_ID });
         }
     }
 }

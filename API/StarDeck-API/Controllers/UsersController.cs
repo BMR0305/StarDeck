@@ -136,8 +136,8 @@ namespace StarDeck_API.Controllers
         {
             try
             {
-                string output = Deck_Logic.GetInstance().SetUserDeck(context, id, email);
-                return output;
+                Deck_Logic.GetInstance().SetUserDeck(id, email);
+                return Ok();
             }
             catch (Exception ex)
             {
