@@ -35,7 +35,7 @@ namespace StarDeck_API.Controllers
             try
             {
                 string ret = CardsUsers_Logic.GetInstance().PostUser(u);
-                if (ret == "saved")
+                if (ret == "Saved")
                 {
                     return Ok();
                 }
