@@ -12,12 +12,3 @@ CREATE TABLE Planet(
 	UNIQUE(p_name)
 
 );
-
-CREATE TABLE Deck(
-
-	Deck_ID VARCHAR(15) NOT NULL,
-	Player_ID VARCHAR(15) NOT NULL,
-	Card_ID VARCHAR(15) NOT NULL,
-	d_name VARCHAR(50) NOT NULL
-
-);

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using StarDeck_API.Support_Components;
+using StarDeck_API.Logic_Files;
 using StarDeck_API.Models;
 
 namespace StarDeck_APITests.Support_Components
@@ -36,7 +36,7 @@ namespace StarDeck_APITests.Support_Components
         public void GetDeckTest()
         {
             //DBContext context;
-            Deck_DB deck = Deck_DB.GetInstance();
+            Deck_Logic deck = Deck_Logic.GetInstance();
             String deck_string = deck.GetDeck(_dbContext, "D-bieeEbhPVVQR");
             Assert.IsTrue(deck_string.Contains("D-bieeEbhPVVQR"));
             
@@ -46,7 +46,7 @@ namespace StarDeck_APITests.Support_Components
         public void PostDeckTest()
         {
             //DBContext context;
-            Deck_DB deck_instance = Deck_DB.GetInstance();
+            Deck_Logic deck_instance = Deck_Logic.GetInstance();
             //crea un arreglo de Card
             List<Card> cards = new List<Card>();
 
@@ -122,7 +122,7 @@ namespace StarDeck_APITests.Support_Components
             cards17.ID = "C-z0Q8ZQ8xJEaC";
             cards.Add(cards17);
 
-            Deck_Aux deck_aux = new Deck_Aux();
+            Deck_DTO deck_aux = new Deck_DTO();
             deck_aux.name = "holaprofe";
             deck_aux.cards = cards;
             deck_aux.code = "";
@@ -138,7 +138,7 @@ namespace StarDeck_APITests.Support_Components
         public void GetPlayerDecks()
         {
             //DBContext context;
-            Deck_DB deck_instance = Deck_DB.GetInstance();
+            Deck_Logic deck_instance = Deck_Logic.GetInstance();
             
             String deck_string = deck_instance.GetPlayerDecks(_dbContext, "U-3eykX6P25gvt");
             

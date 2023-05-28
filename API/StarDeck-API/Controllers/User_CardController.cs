@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StarDeck_API.Models;
+using StarDeck_API.DB_Calls;
 using Newtonsoft.Json;
-using StarDeck_API.Support_Components;
+using StarDeck_API.Logic_Files;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -18,6 +19,7 @@ namespace StarDeck_API.Controllers
         public User_CardController(DBContext context)
         {
             this.context = context;
+            CardsUsers_DB.GetInstance().SetContext(context);
         }
         /*
          * Function that allows to post a list of cards of one user
@@ -31,28 +33,15 @@ namespace StarDeck_API.Controllers
         {
             try
             {
-                User_Card u_c = new User_Card();
-
-                var user = context.users.FirstOrDefault(x => x.email == email);
-                if (user == null)
-                {
-                    return "UserNotFound";
-                }
-
-                for (int i = 0; i < cards.Count; i++)
-                {
-                    u_c.user_key = user.ID;
-                    u_c.card_key = cards[i].ID;
-
-                    context.user_card.Add(u_c);
-                    context.SaveChanges();
-                }
+                CardsUsers_Logic.GetInstance().PostUserCard(email, cards);
                 return Ok();
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
-                return BadRequest(ex.Message);
+                Message m = new Message();
+                m.message = ex.Message;
+                string output = JsonConvert.SerializeObject(m, Formatting.Indented);
+                return output;
             }
         }
 
@@ -67,15 +56,16 @@ namespace StarDeck_API.Controllers
         {
             try
             {
-                bool flag = CardsLogin_DB.GetInstance().HasCards(context,email);
+                bool flag = CardsUsers_Logic.GetInstance().HasCards(email);
                 return flag;
             }
 
             catch (Exception ex)
             {
-
-                Console.WriteLine(ex.ToString());
-                return BadRequest(ex.Message);
+                Message m = new Message();
+                m.message = ex.Message;
+                string output = JsonConvert.SerializeObject(m, Formatting.Indented);
+                return output;
             }
         }
 
@@ -90,13 +80,15 @@ namespace StarDeck_API.Controllers
         {
             try
             {
-                var cards = CardsLogin_DB.GetInstance().GetUserCards(context, email);
+                var cards = CardsUsers_Logic.GetInstance().GetUserCards(email);
                 return cards;
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
-                return BadRequest(ex.Message);
+                Message m = new Message();
+                m.message = ex.Message;
+                string output = JsonConvert.SerializeObject(m, Formatting.Indented);
+                return output;
             }
         }
 

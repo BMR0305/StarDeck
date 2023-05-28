@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StarDeck_API.Models;
 using Newtonsoft.Json;
-using StarDeck_API.Support_Components;
-using Microsoft.EntityFrameworkCore;
+using StarDeck_API.DB_Calls;
+using StarDeck_API.Logic_Files;
+using System.Data;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -12,14 +13,13 @@ namespace StarDeck_API.Controllers
     [ApiController]
     public class CardController : ControllerBase
     {
-        //KeyGen object to generate the card keys
-        private KeyGen KeyGenerator = KeyGen.GetInstance();
         //Context of the DB
         private readonly DBContext context;
         //Constructor of the class
         public CardController(DBContext context)
         {
             this.context = context;
+            CardsUsers_DB.GetInstance().SetContext(context);
         }
         /*
          * Function that allows to post a new card
@@ -33,51 +33,15 @@ namespace StarDeck_API.Controllers
             try
             {
                
-                c.c_status = "a";
-                List<Card> cards = context.cards.ToList();
-                string id = "";
-                bool flag = true;
-
-                if (cards.Count > 0) {
-
-                    while (flag)
-                    {
-                        //Random rnd = new Random();
-                        id = KeyGenerator.CreatePattern("C-");
-
-                        for (int i = 0; i < cards.Count; i++)
-                        {
-                            if (cards[i].ID == id)
-                            {
-                                flag = true;
-                                break;
-                            }
-
-                            else
-                            {
-                                flag = false;
-                            }
-
-                        }
-
-                    }
-
-                } else
-                {
-                    id = KeyGenerator.CreatePattern("C-");
-                }
-
-
-                c.ID = id;
-
-                context.cards.Add(c);
-                context.SaveChanges();
+                CardsUsers_Logic.GetInstance().PostCard(c);
                 return Ok();
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
-                return BadRequest(ex.Message);
+                Message m = new Message();
+                m.message = ex.Message;
+                string output = JsonConvert.SerializeObject(m, Formatting.Indented);
+                return output;
             }
         }
 
@@ -95,15 +59,17 @@ namespace StarDeck_API.Controllers
             try
             {
 
-                string output = CardsLogin_DB.GetInstance().GetRandomCardsSP(context, num, types);
+                string output = CardsUsers_Logic.GetInstance().GetRandomCardsSP(num, types);
                 return output;               
 
             }
 
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
-                return BadRequest(ex.Message);
+                Message m = new Message();
+                m.message = ex.Message;
+                string output = JsonConvert.SerializeObject(m, Formatting.Indented);
+                return output;
             }
         }
 
@@ -118,14 +84,15 @@ namespace StarDeck_API.Controllers
         {
             try
             {
-                List<Card> cards = context.cards.ToList();
-                string output = JsonConvert.SerializeObject(cards.ToArray(), Formatting.Indented);
+                string output = CardsUsers_Logic.GetInstance().GetAllCards();
                 return output;
 
             } catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
-                return BadRequest(ex.Message);
+                Message m = new Message();
+                m.message = ex.Message;
+                string output = JsonConvert.SerializeObject(m, Formatting.Indented);
+                return output;
             }
         }
 

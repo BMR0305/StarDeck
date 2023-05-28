@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using StarDeck_API.Support_Components;
+using StarDeck_API.Logic_Files;
 using StarDeck_API.Models;
 
 namespace StarDeck_APITests.Support_Components
@@ -35,7 +35,7 @@ namespace StarDeck_APITests.Support_Components
         [TestMethod()]
         public void GetRandomCardsSPTest()
         {
-            CardsLogin_DB cardsLogin = CardsLogin_DB.GetInstance();
+            CardsUsers_Logic cardsLogin = CardsUsers_Logic.GetInstance();
             String cards_string = cardsLogin.GetRandomCardsSP(_dbContext, 5, new List<string> { "Rara", "Normal" });
             Assert.IsTrue(cards_string.Contains("Rara"));
         }
@@ -43,7 +43,7 @@ namespace StarDeck_APITests.Support_Components
         [TestMethod()]
         public void ValidateUserTest()
         {
-            CardsLogin_DB cardsLogin = CardsLogin_DB.GetInstance();
+            CardsUsers_Logic cardsLogin = CardsUsers_Logic.GetInstance();
             String cards_string = cardsLogin.ValidateUser(_dbContext, "qwer", "qwer1234");
             Assert.AreEqual(cards_string,"true");
         }
@@ -51,7 +51,7 @@ namespace StarDeck_APITests.Support_Components
         [TestMethod()]
         public void GetUserCardsTest()
         {
-            CardsLogin_DB cardsLogin = CardsLogin_DB.GetInstance();
+            CardsUsers_Logic cardsLogin = CardsUsers_Logic.GetInstance();
             String cards_string = cardsLogin.GetUserCards(_dbContext, "prueba@44.com");
             Assert.AreEqual(cards_string,"false");
         }
@@ -59,7 +59,7 @@ namespace StarDeck_APITests.Support_Components
         [TestMethod()]
         public void HasCards()
         {
-            CardsLogin_DB cardsLogin = CardsLogin_DB.GetInstance();
+            CardsUsers_Logic cardsLogin = CardsUsers_Logic.GetInstance();
             Boolean cards_boolen = cardsLogin.HasCards(_dbContext, "prueba@44.com");
             Assert.IsTrue(cards_boolen);
         }

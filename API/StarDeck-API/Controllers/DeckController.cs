@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StarDeck_API.Models;
 using Newtonsoft.Json;
-using StarDeck_API.Support_Components;
+using StarDeck_API.Logic_Files;
 using Microsoft.EntityFrameworkCore;
+using StarDeck_API.DB_Calls;
 
 namespace StarDeck_API.Controllers
 {
@@ -18,20 +19,24 @@ namespace StarDeck_API.Controllers
         public DeckController(DBContext context)
         {
             this.context = context;
+            Deck_DB.GetInstance().SetContext(context);
         }
 
         [HttpPost]
         [Route("post")]
-        public dynamic PostDeck([FromBody] Deck_Aux d)
+        public dynamic PostDeck([FromBody] Deck_DTO d)
         {
             try
             {
-                string Message = Deck_DB.GetInstance().PostDeck(d,context);
-                return Ok(new { message = Message});
+                Deck_Logic.GetInstance().PostDeck(d);
+                return Ok();
             }
             catch (System.Exception e)
             {
-                return BadRequest(new { message = e.Message });
+                Message m = new Message();
+                m.message = e.Message;
+                string output = JsonConvert.SerializeObject(m, Formatting.Indented);
+                return output;
             }
         }
 
@@ -41,12 +46,15 @@ namespace StarDeck_API.Controllers
         {
             try
             {
-                string deck = Deck_DB.GetInstance().GetDeck(context, id);
+                string deck = Deck_Logic.GetInstance().GetDeck(id);
                 return Ok(deck);
             }
             catch (System.Exception e)
             {
-                return BadRequest(new { message = e.Message });
+                Message m = new Message();
+                m.message = e.Message;
+                string output = JsonConvert.SerializeObject(m, Formatting.Indented);
+                return output;
             }
         }
 
@@ -56,12 +64,15 @@ namespace StarDeck_API.Controllers
         {
             try
             {
-                string decks = Deck_DB.GetInstance().GetPlayerDecks(context, email);
+                string decks = Deck_Logic.GetInstance().GetPlayerDecks(email);
                 return decks;
             }
             catch (System.Exception e)
             {
-                return BadRequest(new { message = e.Message });
+                Message m = new Message();
+                m.message = e.Message;
+                string output = JsonConvert.SerializeObject(m, Formatting.Indented);
+                return output;
             }
         }
     }

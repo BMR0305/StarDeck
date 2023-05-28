@@ -24,11 +24,7 @@
 
       <label> Efecto de planeta <span class="red-text">* </span> </label> <br>
       <select  class="cardForm" formControlName="efects">
-        <option value="Efecto 1">Efecto 1</option>
-        <option value="Efecto 2">Efecto 2</option>
-        <option value="Efecto 3">Efecto 3</option>
-        <option value="Efecto 4">Efecto 4</option>
-        <option value="Efecto 5">Efecto 5</option>
+        <option *ngFor="let item of raceoptions" [value]="item">{{ item }}</option>
       </select>
       <div class = "required" *ngIf="cardForm.get('type')?.hasError('required') && cardForm.get('type')?.touched">
         El efecto de planeta es requerido
@@ -59,9 +55,7 @@
 
       <label>Tipo de planeta<span class="red-text">* </span> </label> <br>
       <select class="cardForm" formControlName="type">
-        <option value="Raro">Raro</option>
-        <option value="Popular">Popular</option>
-        <option value="Basico">Basico</option>
+        <option *ngFor="let item of typeoptions" [value]="item">{{ item }}</option>
       </select>
       <div class = "required" *ngIf="cardForm.get('race')?.hasError('required') && cardForm.get('race')?.touched">
         El tipo de planeta es requerido

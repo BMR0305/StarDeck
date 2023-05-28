@@ -1,7 +1,7 @@
 ﻿using StarDeck_API.Models;
 using System.Runtime.CompilerServices;
 
-namespace StarDeck_API.Support_Components
+namespace StarDeck_API.Logic_Files
 {
     /*
      *  Singleton class for generating a unique key for a new user
