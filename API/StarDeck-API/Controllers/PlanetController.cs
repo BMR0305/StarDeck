@@ -13,12 +13,13 @@ namespace StarDeck_API.Controllers
     {
         //Context of the DB
         private readonly DBContext context;
-
+        private readonly ILogger<PlanetController> logger;
         //Constructor of the class
-        public PlanetController(DBContext context)
+        public PlanetController(DBContext context, ILogger<PlanetController> logger)
         {
             this.context = context;
             Planet_DB.GetInstance().SetContext(context);
+            this.logger = logger;
         }
         /*
          * Function that allows to post a new planet

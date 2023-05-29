@@ -15,12 +15,14 @@ namespace StarDeck_API.Controllers
     {
         //Context of the DB
         private readonly DBContext context;
+        private readonly ILogger<UsersController> logger;
 
         //Constructor of the class
-        public UsersController(DBContext context)
+        public UsersController(DBContext context, ILogger<UsersController> logger)
         {
             this.context = context;
             CardsUsers_DB.GetInstance().SetContext(context);
+            this.logger = logger;
         }
 
         /*

@@ -12,10 +12,12 @@ namespace StarDeck_API.Controllers
     public class MatchmakingController : Controller
     {
         private readonly DBContext context;
+        private readonly ILogger<MatchmakingController> logger;
         
-        public MatchmakingController(DBContext context)
+        public MatchmakingController(DBContext context, ILogger<MatchmakingController> logger)
         {
             this.context = context;
+            this.logger = logger;
             Matchmaking_DB.GetInstance().SetContext(context);
         }
 

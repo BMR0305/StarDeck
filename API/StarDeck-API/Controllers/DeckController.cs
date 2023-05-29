@@ -12,13 +12,13 @@ namespace StarDeck_API.Controllers
 
     public class DeckController : ControllerBase
     {
-        private KeyGen KeyGenerator = KeyGen.GetInstance();
-
+        private readonly ILogger<DeckController> logger;
         //DB context
         private readonly DBContext context;
-        public DeckController(DBContext context)
+        public DeckController(DBContext context, ILogger<DeckController> logger)
         {
             this.context = context;
+            this.logger = logger;
             Deck_DB.GetInstance().SetContext(context);
         }
 

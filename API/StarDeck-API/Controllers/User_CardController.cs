@@ -16,9 +16,11 @@ namespace StarDeck_API.Controllers
         //Context of the DB
         private readonly DBContext context;
         //Constructor of the class
-        public User_CardController(DBContext context)
+        private readonly ILogger<User_CardController> logger;
+        public User_CardController(DBContext context, ILogger<User_CardController> logger)
         {
             this.context = context;
+            this.logger = logger;
             CardsUsers_DB.GetInstance().SetContext(context);
         }
         /*
