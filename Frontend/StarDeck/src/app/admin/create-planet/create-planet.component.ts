@@ -11,7 +11,6 @@ import {Router} from "@angular/router";
 })
 export class CreatePlanetComponent implements OnInit{
 
-
   constructor( private router: Router, private apiService: ApiService) { }
 
   typeoptions = ['Basico', 'Popular', 'Raro'];
@@ -62,7 +61,9 @@ export class CreatePlanetComponent implements OnInit{
    * Send planet information to api to create a new planet on database when submit button is clicked
    */
   onSubmit() {
-    
+
+    console.log(this.cardForm.value);
+
     this.apiService.post("Planet/post", {
 
       id: "id",
@@ -76,7 +77,7 @@ export class CreatePlanetComponent implements OnInit{
     }).subscribe((data) => {
       console.log(data);
       this.cardForm.reset();
-    }); 
+    });
   }
 
   /**
