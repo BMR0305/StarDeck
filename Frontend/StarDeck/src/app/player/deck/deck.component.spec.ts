@@ -58,7 +58,7 @@ describe('DeckComponent', () => {
 
   });
 
-  it('crete deck', () => {
+  it('generate deck', () => {
 
     let cards_test: Cards[] = [];
 

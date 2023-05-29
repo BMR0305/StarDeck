@@ -28,5 +28,37 @@ describe('CardSelectionComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('card added', () => {
+
+    // generate a list cards empty
+    let cards_test: Cards[] = [];
+
+    for(let i = 0; i < 9; i++){
+
+      let card: Cards = {
+        id: i,
+        c_name: "test" + i.toString(),
+        battle_pts: 0,
+        energy: 0,
+        c_image: "test" + i.toString(),
+        c_type: "test" + i.toString(),
+        race: "test",
+        c_status: "test",
+        c_description: "test"
+      }
+
+      cards_test.push(card);
+
+    }
+
+    component.cardsPosible = cards_test;
+
+    component.cardSelection(0);
+
+    expect(component.cardPosition).toEqual(3);
+    expect(component.cards.length).toEqual(1);
+
+
+  });
 
 });

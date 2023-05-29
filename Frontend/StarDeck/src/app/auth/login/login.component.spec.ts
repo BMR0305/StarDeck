@@ -26,4 +26,15 @@ describe('LoginComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  //verify if the form is valid
+  it('form should be valid', () => {
+
+      component.cardForm.controls['mail'].setValue("asdf@gmai.com");
+      component.cardForm.controls['password'].setValue("asdf1234");
+
+      expect(component.cardForm.valid).toBeTruthy();
+
+  });
+
 });
