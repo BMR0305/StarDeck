@@ -48,6 +48,8 @@ namespace StarDeck_API.Logic_Files
                             //Crear aux para enviar al front end la lista de los planetas y jugadores como objetos completos.
                             Partida_DTO partida_DTO = CreatePartida_DTO(partida, current_user, PlayersWaiting[i], planets);
 
+                            Match_Logic.GetInstance.InitialTurn(partida.ID, email);
+
                             string json_partida = JsonConvert.SerializeObject(partida_DTO);
 
                             return json_partida;

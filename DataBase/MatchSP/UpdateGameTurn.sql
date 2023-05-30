@@ -1,0 +1,10 @@
+CREATE PROCEDURE SetGameTurn
+@gameID NVARCHAR(15),
+@turnID NVARCHAR(15)
+AS
+BEGIN
+	UPDATE Partida
+	SET C_Turn = @turnID
+	WHERE ID = @gameID
+END
+GO
