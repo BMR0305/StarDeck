@@ -32,6 +32,7 @@ namespace StarDeck_API.Controllers
         [Route("post")]
         public dynamic PostUsers([FromBody] Users u)
         {
+            CardsUsers_DB.GetInstance().SetContext(this.context);
             try
             {
                 string ret = CardsUsers_Logic.GetInstance().PostUser(u);
@@ -62,6 +63,7 @@ namespace StarDeck_API.Controllers
         [Route("mail/{mail}")]
         public dynamic Mail(string mail) {
 
+            CardsUsers_DB.GetInstance().SetContext(this.context);
             try
             {
                 bool ret = CardsUsers_Logic.GetInstance().Mail(mail);
@@ -85,6 +87,7 @@ namespace StarDeck_API.Controllers
         [Route("login")]
         public dynamic UserValidation([FromQuery] List<string> data)
         {
+            CardsUsers_DB.GetInstance().SetContext(this.context);
             try
             {
                 string output = CardsUsers_Logic.GetInstance().ValidateUser(data[0], data[1]);
@@ -110,6 +113,7 @@ namespace StarDeck_API.Controllers
         [Route("get/{email}")]
         public dynamic GetUser(string email)
         {
+            CardsUsers_DB.GetInstance().SetContext(this.context);
             try
             {
                 string output = CardsUsers_Logic.GetInstance().GetUser(email);
@@ -134,6 +138,8 @@ namespace StarDeck_API.Controllers
         [Route("setDeck/{id}/{email}")]
         public dynamic SetID(string id, string email)
         {
+            CardsUsers_DB.GetInstance().SetContext(this.context);
+            Deck_DB.GetInstance().SetContext(this.context);
             try
             {
                 Deck_Logic.GetInstance().SetUserDeck(id, email);

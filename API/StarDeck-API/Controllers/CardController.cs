@@ -30,6 +30,7 @@ namespace StarDeck_API.Controllers
         [Route("post")]
         public dynamic PostCard([FromBody] Card c)
         {
+            CardsUsers_DB.GetInstance().SetContext(this.context);
             try
             {
                
@@ -56,6 +57,7 @@ namespace StarDeck_API.Controllers
 
         public dynamic GetRandomCards(int num, [FromQuery] List<string> types)
         {
+            CardsUsers_DB.GetInstance().SetContext(this.context);
             try
             {
 
@@ -82,6 +84,7 @@ namespace StarDeck_API.Controllers
 
         public dynamic GetAllCards()
         {
+            CardsUsers_DB.GetInstance().SetContext(this.context);
             try
             {
                 string output = CardsUsers_Logic.GetInstance().GetAllCards();

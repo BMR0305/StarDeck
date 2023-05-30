@@ -23,6 +23,9 @@ namespace StarDeck_API.Controllers
         [Route("lookForGame/{email}")]
         public async Task<IActionResult> LookForGame(string email)
         {
+            Matchmaking_DB.GetInstance().SetContext(this.context);
+            CardsUsers_DB.GetInstance().SetContext(this.context);
+            Planet_DB.GetInstance().SetContext(this.context);
             try
             {
                 string output = await  Matchmaking_Logic.GetInstance().LookForGame(context, email);

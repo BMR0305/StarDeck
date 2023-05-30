@@ -12,6 +12,7 @@ namespace StarDeck_API.Logic_Files
     {
         private static Matchmaking_Logic instance = null;
         private Matchmaking_DB CallDB = Matchmaking_DB.GetInstance();
+        private static object lockObject = new object();
 
         public static Matchmaking_Logic GetInstance()
         {
@@ -27,6 +28,8 @@ namespace StarDeck_API.Logic_Files
             try
             {
                 var PlayersWaiting = CallDB.GetUsersBP();
+
+                lock (lockObject)
 
                 if (PlayersWaiting.Count > 0)
                 {
@@ -56,7 +59,7 @@ namespace StarDeck_API.Logic_Files
                 return output;
 
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
                 return e.Message;
             }

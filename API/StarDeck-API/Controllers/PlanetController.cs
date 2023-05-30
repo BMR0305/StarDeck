@@ -29,6 +29,7 @@ namespace StarDeck_API.Controllers
         [Route("post")]
         public dynamic PostPlanet([FromBody] Planet p)
         {
+            Planet_DB.GetInstance().SetContext(this.context);
             try
             {
                 Planet_Logic.GetInstance().PostPlanet(p);
@@ -50,6 +51,7 @@ namespace StarDeck_API.Controllers
         [Route("getAll")]
         public dynamic GetAllPlanet()
         {
+            Planet_DB.GetInstance().SetContext(this.context);
             try
             {
                 string output = Planet_Logic.GetInstance().GetAllPlanets();
@@ -73,6 +75,7 @@ namespace StarDeck_API.Controllers
         [Route("get/{name}")]
         public dynamic GetPlanet(string name)
         {
+            Planet_DB.GetInstance().SetContext(this.context);
             try
             {
                 string output = Planet_Logic.GetInstance().GetPlanet(name);
@@ -92,6 +95,7 @@ namespace StarDeck_API.Controllers
         [Route("getTypes")]
         public dynamic GetTypes()
         {
+            Planet_DB.GetInstance().SetContext(this.context);
             try
             {
                 string output = Planet_Logic.GetInstance().GetTypes();

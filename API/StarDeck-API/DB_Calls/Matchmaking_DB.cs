@@ -25,9 +25,9 @@ namespace StarDeck_API.DB_Calls
             return context.users.FromSqlRaw("EXEC GetPlayersBP").ToList();
         }
 
-        public async void UpdateUserStatus(string email, string status)
+        public void UpdateUserStatus(string email, string status)
         {
-            await context.Database.ExecuteSqlRawAsync("EXEC UpdateUserStatus @email = {0}, @status = {1}", email, status);
+            context.Database.ExecuteSqlRaw("EXEC UpdateUserStatus @email = {0}, @status = {1}", email, status);
         }
 
         public void AddGame(Partida partida)

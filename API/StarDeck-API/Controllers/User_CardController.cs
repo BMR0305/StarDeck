@@ -31,6 +31,7 @@ namespace StarDeck_API.Controllers
         [Route("post/{email}")]
         public dynamic PostUserCard(string email, [FromBody] List<Card> cards)
         {
+            CardsUsers_DB.GetInstance().SetContext(this.context);
             try
             {
                 CardsUsers_Logic.GetInstance().PostUserCard(email, cards);
@@ -54,6 +55,7 @@ namespace StarDeck_API.Controllers
         [Route("HasCards/{email}")]
         public dynamic HasCards(string email)
         {
+            CardsUsers_DB.GetInstance().SetContext(this.context);
             try
             {
                 bool flag = CardsUsers_Logic.GetInstance().HasCards(email);
@@ -78,6 +80,7 @@ namespace StarDeck_API.Controllers
         [Route("GetAllCards/{email}")]
         public dynamic GetAllCards(string email)
         {
+            CardsUsers_DB.GetInstance().SetContext(this.context);
             try
             {
                 var cards = CardsUsers_Logic.GetInstance().GetUserCards(email);
