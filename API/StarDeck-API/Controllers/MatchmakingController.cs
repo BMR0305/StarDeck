@@ -26,6 +26,7 @@ namespace StarDeck_API.Controllers
             Matchmaking_DB.GetInstance().SetContext(this.context);
             CardsUsers_DB.GetInstance().SetContext(this.context);
             Planet_DB.GetInstance().SetContext(this.context);
+            Match_DB.GetInstance.SetContext(this.context);
             try
             {
                 string output = await  Matchmaking_Logic.GetInstance().LookForGame(context, email);

@@ -221,6 +221,16 @@ namespace StarDeck_API.DB_Calls
             }
         }
 
+        public Card GetCard(string cardID)
+        {
+            Card card = context.cards.FromSqlRaw("EXEC GetCard @cardID = {0}", cardID).ToList()[0];
+            if (card == null)
+            {
+                throw new Exception("Card not found");
+            }
+            return card;
+        }
+
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
