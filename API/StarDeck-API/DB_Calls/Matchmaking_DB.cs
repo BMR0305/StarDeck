@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using StarDeck_API.Models;
 using System.Data;
+using System.Diagnostics;
 
 namespace StarDeck_API.DB_Calls
 {
@@ -45,6 +46,7 @@ namespace StarDeck_API.DB_Calls
 
         public List<Partida> GetPlayerMatch(string email)
         {
+            Debug.WriteLine("Hi im getting the player match");
             List<Partida> game =  context.partida.FromSqlRaw("EXEC GetUserMatch @email = {0}", email).ToList();
             if (game.Count == 0)
             {

@@ -65,5 +65,22 @@ namespace StarDeck_API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+
+        [HttpPut]
+        [Route("EndTurn/{gameID}/{email}")]
+        public dynamic EndTurn([FromBody] List<CardPlayed> cardsPlayed, string gameID, string email)
+        {
+            Match_DB.GetInstance.SetContext(context);
+            CardsUsers_DB.GetInstance().SetContext(context);
+            try
+            {
+                string output = Match_Logic.GetInstance.EndTurn(cardsPlayed, gameID, email);
+                return output;
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
     }
 }

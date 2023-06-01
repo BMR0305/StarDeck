@@ -129,6 +129,43 @@ namespace StarDeck_API.DB_Calls
             }
         }
 
+        public void SetTurnActivePlayer(string turnID, string playerID)
+        {
+            try
+            {
+                context.Database.ExecuteSqlRaw("EXEC SetTurnActivePlayer @turnID = {0}, @playerID = {1}",turnID,playerID);
+            }
+            catch (SqlException e)
+            {
+                throw new Exception("Failed to set turn active player: " + e.Message);
+            }
+        }
+
+        public void InsertCardPlayed(CardPlayed cardPlayed)
+        {
+            try
+            {
+                context.cardPlayed.Add(cardPlayed);
+                context.SaveChanges();
+            }
+            catch (SqlException e)
+            {
+                throw new Exception("Failed to insert card played: " + e.Message);
+            }
+        }
+
+        public void CountTurn(string gameID)
+        {
+            try
+            {
+                context.Database.ExecuteSqlRaw("EXEC CountTurn @gameID = {0}", gameID);
+            }
+            catch (SqlException e)
+            {
+                throw new Exception("Failed to count turn: " + e.Message);
+            }
+        }
+
         public void SetContext(DBContext context)
         {
             this.context = context;

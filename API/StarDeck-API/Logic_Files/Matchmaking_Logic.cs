@@ -86,23 +86,23 @@ namespace StarDeck_API.Logic_Files
                 user = UsersDB_call.GetUser(email)[0];
                 if (user.u_status != "BP")
                 {
-                    //stopwatch.Stop();
+                    stopwatch.Stop();
                     break;
                 }
             }
 
-            var partidaList = CallDB.GetPlayerMatch(email);
+            var partidaList = await Task.Run(() => CallDB.GetPlayerMatch(email));
 
             if (partidaList.Count > 0)
             {
                 Debug.WriteLine("Entro al hp IF");
                 Partida partida = partidaList[0];
                 List<Planet> planets = new List<Planet>();
-                planets.Add(Planet_DB.GetInstance().GetPlanetByID(partida.Planet1)[0]);
-                planets.Add(Planet_DB.GetInstance().GetPlanetByID(partida.Planet2)[0]);
-                planets.Add(Planet_DB.GetInstance().GetPlanetByID(partida.Planet3)[0]);
+                await Task.Run(()=> planets.Add(Planet_DB.GetInstance().GetPlanetByID(partida.Planet1)[0]));
+                await Task.Run(() => planets.Add(Planet_DB.GetInstance().GetPlanetByID(partida.Planet2)[0]));
+                await Task.Run(() => planets.Add(Planet_DB.GetInstance().GetPlanetByID(partida.Planet3)[0]));
                 Debug.WriteLine("Obtuvo los planetas de miercoles");
-                Users opponent = UsersDB_call.GetUserByID(partida.Player1)[0];
+                Users opponent = await Task.Run(()=> UsersDB_call.GetUserByID(partida.Player1)[0]);
                 Debug.WriteLine("Oponente");
                 Partida_DTO partida_DTO = CreatePartida_DTO(partida, opponent, user, planets);
                 Debug.WriteLine("Obtuvo la partida");

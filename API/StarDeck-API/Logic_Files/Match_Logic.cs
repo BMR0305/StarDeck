@@ -29,6 +29,17 @@ namespace StarDeck_API.Logic_Files
             Partida game = CallDB.GetGameByID(gameID);
 
             Turn turn = new Turn();
+
+            turn.Turn_ID = CreateTurnID();
+            turn.Active_Player = game.Player1;
+            turn.Game_ID = gameID;
+            CallDB.InsertTurn(turn);
+            CallDB.UpdateGameTurn(gameID, turn.Turn_ID);
+
+        }
+
+        public string CreateTurnID()
+        {
             string id = "";
             List<Turn> turns = CallDB.GetTurns();
             if (turns.Count == 0)
@@ -47,17 +58,50 @@ namespace StarDeck_API.Logic_Files
                     }
                 }
             }
-            turn.Turn_ID = id;
-            turn.Active_Player = game.Player1;
-            turn.Game_ID = gameID;
-            CallDB.InsertTurn(turn);
-            CallDB.UpdateGameTurn(gameID, id);
-
+            return id;
         }
 
         public void CreateNewTurn(Turn turn)
         {
             CallDB.InsertTurn(turn);
+        }
+
+        public string EndTurn(List<CardPlayed> cardsPlayed, string gameID, string email)
+        {
+            Partida game = CallDB.GetGameByID(gameID);
+            Users user = CardsUsers_DB.GetInstance().GetUser(email)[0];
+            int MaxTurns = 8;
+            if (user.ID == game.Player2)
+            {
+                if (game.TurnCount <= MaxTurns)
+                {
+                    CallDB.SetTurnActivePlayer(game.C_Turn, "None");
+                    Turn turn = new Turn();
+                    turn.Turn_ID = CreateTurnID();
+                    turn.Active_Player = game.Player1;
+                    turn.Game_ID = gameID;
+                    CallDB.InsertTurn(turn);
+                    CallDB.UpdateGameTurn(gameID, turn.Turn_ID);
+                    CallDB.CountTurn(gameID);
+                } else
+                {
+                    //Logica de terminar partida
+                }
+
+            } else
+            {
+                CallDB.SetTurnActivePlayer(game.C_Turn, game.Player2);
+            }
+
+            if (cardsPlayed.Count > 0)
+            {
+                for (int i = 0; i < cardsPlayed.Count; i++)
+                {
+                    CallDB.InsertCardPlayed(cardsPlayed[i]);
+                }
+            }
+
+            return "Turno terminado"; //Crear un game-state segun lo que pase, ya sea que termine la partida o no. La info del turno se solicita por aparte.
         }
 
         public void InsertDeckToCardsLeft(string gameID)
