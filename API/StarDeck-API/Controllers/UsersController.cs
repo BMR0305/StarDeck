@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using StarDeck_API.DB_Calls;
 using StarDeck_API.Models;
 using StarDeck_API.Logic_Files;
+using Microsoft.EntityFrameworkCore;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -140,16 +141,19 @@ namespace StarDeck_API.Controllers
         {
             CardsUsers_DB.GetInstance().SetContext(this.context);
             Deck_DB.GetInstance().SetContext(this.context);
+            string output = "";
+            Message m = new Message();
             try
             {
                 Deck_Logic.GetInstance().SetUserDeck(id, email);
-                return Ok();
+                m.message = "Deck " + id + "set for: " + email;
+                output = JsonConvert.SerializeObject(m, Formatting.Indented);
+                return Ok(m);
             }
             catch (Exception ex)
             {
-                Message m = new Message();
                 m.message = ex.Message;
-                string output = JsonConvert.SerializeObject(m, Formatting.Indented);
+                output = JsonConvert.SerializeObject(m, Formatting.Indented);
                 return output;
             }
         }

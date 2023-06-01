@@ -29,7 +29,7 @@ namespace StarDeck_API.Logic_Files
             {
                 var PlayersWaiting = CallDB.GetUsersBP();
 
-                lock (lockObject)
+                //lock (lockObject)
 
                 if (PlayersWaiting.Count > 0)
                 {
@@ -37,7 +37,7 @@ namespace StarDeck_API.Logic_Files
                     {
                         if (PlayersWaiting[i].u_status == "BP" && PlayersWaiting[i].email != email)
                         {
-                            CallDB.UpdateUserStatus(PlayersWaiting[i].email, "EP");
+                            //CallDB.UpdateUserStatus(PlayersWaiting[i].email, "EP");
                             Users current_user = CardsUsers_DB.GetInstance().GetUser(email)[0];
                             CallDB.UpdateUserStatus(email, "EP");
 
@@ -47,6 +47,8 @@ namespace StarDeck_API.Logic_Files
 
                             //Crear aux para enviar al front end la lista de los planetas y jugadores como objetos completos.
                             Partida_DTO partida_DTO = CreatePartida_DTO(partida, current_user, PlayersWaiting[i], planets);
+
+                            CallDB.UpdateUserStatus(PlayersWaiting[i].email, "EP");
 
                             Match_Logic.GetInstance.InitialTurn(partida.ID, email);
 
@@ -89,17 +91,21 @@ namespace StarDeck_API.Logic_Files
                 }
             }
 
-            var partidaList = context.partida.FromSqlRaw("EXEC GetUserMatch @email = {0}", email).ToList();
+            var partidaList = CallDB.GetPlayerMatch(email);
 
             if (partidaList.Count > 0)
             {
+                Debug.WriteLine("Entro al hp IF");
                 Partida partida = partidaList[0];
                 List<Planet> planets = new List<Planet>();
                 planets.Add(Planet_DB.GetInstance().GetPlanetByID(partida.Planet1)[0]);
                 planets.Add(Planet_DB.GetInstance().GetPlanetByID(partida.Planet2)[0]);
                 planets.Add(Planet_DB.GetInstance().GetPlanetByID(partida.Planet3)[0]);
+                Debug.WriteLine("Obtuvo los planetas de miercoles");
                 Users opponent = UsersDB_call.GetUserByID(partida.Player1)[0];
-                Partida_DTO partida_DTO = CreatePartida_DTO(partida, opponent, user, planets); 
+                Debug.WriteLine("Oponente");
+                Partida_DTO partida_DTO = CreatePartida_DTO(partida, opponent, user, planets);
+                Debug.WriteLine("Obtuvo la partida");
 
                 string json_partida = JsonConvert.SerializeObject(partida_DTO);
                 return json_partida;

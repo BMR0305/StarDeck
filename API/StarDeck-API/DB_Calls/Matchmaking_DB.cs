@@ -43,6 +43,16 @@ namespace StarDeck_API.DB_Calls
             }
         }
 
+        public List<Partida> GetPlayerMatch(string email)
+        {
+            List<Partida> game =  context.partida.FromSqlRaw("EXEC GetUserMatch @email = {0}", email).ToList();
+            if (game.Count == 0)
+            {
+                throw new Exception("Player has no game");
+            }
+            return game;
+        }
+
         public void SetContext(DBContext context)
         {
             this.context = context;
