@@ -82,5 +82,37 @@ namespace StarDeck_API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+
+        [HttpGet]
+        [Route("GetCardsPlayed/{gameID}/{turnID}/{email}")]
+        public dynamic GetCardsPlayed(string gameID, string turnID, string email)
+        {
+            CardsUsers_DB.GetInstance().SetContext(context);
+            try
+            {
+                string output = Match_Logic.GetInstance.GetCardsPlayed(gameID, turnID, email);
+                return output;
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("EndGame/{gameID}")]
+        public dynamic EndGame(string gameID)
+        {
+            try
+            {
+                string output = Match_Logic.GetInstance.EndGame(gameID);
+                return output;
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
     }
 }

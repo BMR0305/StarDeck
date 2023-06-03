@@ -2,6 +2,8 @@
 using StarDeck_API.Models;
 using StarDeck_API.Logic_Files;
 using Newtonsoft.Json;
+using Microsoft.Data.SqlClient;
+using System.Data;
 
 namespace StarDeck_API.Logic_Files
 {
@@ -156,6 +158,66 @@ namespace StarDeck_API.Logic_Files
 
             string output = JsonConvert.SerializeObject(card, Formatting.Indented);
 
+            return output;
+        }
+
+        public string GetCardsPlayed(string gameID, string turnID, string email)
+        {
+            Users player = CardsUsers_DB.GetInstance().GetUser(email)[0];
+            Partida game = CallDB.GetGameByID(gameID);
+            string otherp = "";
+            if (player.ID == game.Player1)
+            {
+                otherp = game.Player2;
+            }
+            else
+            {
+                otherp = game.Player1;
+            }
+
+            List<CardPlayed> cardsPlayed = CallDB.GetCardsPlayed(gameID, turnID, otherp);
+            string output = JsonConvert.SerializeObject(cardsPlayed, Formatting.Indented);
+            return output;
+        }
+
+        public string EndGame(string gameID)
+        {
+            Partida game = CallDB.GetGameByID(gameID);
+            List<CardPlayed> cardsPlayed = CallDB.GetCardsPlayedFullGame(gameID, game.Player1);
+            List<CardPlayed> cardsPlayed2 = CallDB.GetCardsPlayedFullGame(gameID, game.Player2);
+
+            string cards1 = "";
+            string cards2 = "";
+
+            for (int i = 0; i < cardsPlayed.Count; i++)
+            {
+                cards1 += cardsPlayed[i].CardID + "#";
+            }
+
+            for (int i = 0; i < cardsPlayed2.Count; i++)
+            {
+                cards2 += cardsPlayed2[i].CardID + "#";
+            }
+
+            int score1 = CallDB.GetUserPoints(cards1);
+            int score2 = CallDB.GetUserPoints(cards1);
+
+            string output = "";
+            if (score1 > score2)
+            {
+                CallDB.UpdateWinner(game.Player1, gameID);
+                Users player = CardsUsers_DB.GetInstance().GetUserByID(game.Player1)[0];
+                output = JsonConvert.SerializeObject(player, Formatting.Indented);
+            } else if (score1 == score2)
+            {
+                CallDB.UpdateWinner("Tie", gameID);
+                output = "";
+            } else
+            {
+                CallDB.UpdateWinner(game.Player2, gameID);
+                Users player = CardsUsers_DB.GetInstance().GetUserByID(game.Player2)[0];
+                output = JsonConvert.SerializeObject(player, Formatting.Indented);
+            }
             return output;
         }
 

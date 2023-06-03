@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using StarDeck_API.Models;
+using System.Data;
 
 namespace StarDeck_API.DB_Calls
 {
@@ -163,6 +164,65 @@ namespace StarDeck_API.DB_Calls
             catch (SqlException e)
             {
                 throw new Exception("Failed to count turn: " + e.Message);
+            }
+        }
+
+        public List<CardPlayed> GetCardsPlayed(string gameID ,string turnID, string playerID)
+        {
+            try
+            {
+                List<CardPlayed> cardsPlayed = context.cardPlayed.FromSqlRaw("EXEC GetCardPlayedInTurn @gameID = {0}, @turnID = {1}, @playerID = {2}",
+                                                                                                                   gameID, turnID, playerID).ToList();
+                return cardsPlayed;
+            }
+            catch (SqlException e)
+            {
+                throw new Exception("Failed to get card played: " + e.Message);
+            }
+        }
+
+        public List<CardPlayed> GetCardsPlayedFullGame(string playerID, string gameID)
+        {
+            CardsUsers_DB.GetInstance().SetContext(context);
+            try
+            {
+                List<CardPlayed> cardsPlayed = context.cardPlayed.FromSqlRaw("EXEC GetCardsPlayed @playerID = {0}, @gameID = {1}",
+                                                                                                       playerID, gameID).ToList();
+                return cardsPlayed;
+            }
+            catch (SqlException e)
+            {
+                throw new Exception("Failed to get card played: " + e.Message);
+            }
+        }
+
+        public int GetUserPoints(string card_list)
+        {
+            try
+            {
+                SqlParameter score = new SqlParameter("@points", SqlDbType.NVarChar, -1);
+                score.Direction = ParameterDirection.Output;
+                context.Database.ExecuteSqlRaw("EXEC GetPlayerPoints @cardID_list, @pointsP OUTPUT",
+                                                new SqlParameter("@cardID_list",card_list),score);
+                int scoreInt = Convert.ToInt32(score.Value);
+                return scoreInt;
+            }
+            catch (SqlException e)
+            {
+                throw new Exception("Failed to get user points: " + e.Message);
+            }
+        }
+
+        public void UpdateWinner(string playerID, string gameID)
+        {
+            try
+            {
+                //Update winner updates the winner of the game and also the status of the game to finished represented by a 'T'
+                context.Database.ExecuteSqlRaw("EXEC UpdateWinner @playerID = {0}, @gameID = {1}", playerID, gameID);
+            }
+            catch (SqlException e)
+            {
+                throw new Exception("Failed to update winner: " + e.Message);
             }
         }
 
