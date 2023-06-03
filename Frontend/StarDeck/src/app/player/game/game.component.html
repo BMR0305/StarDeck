@@ -6,9 +6,9 @@
   <h1>{{oponente}}</h1>
 </header>
 
-<section>
+<section style="height: 1200px;">
 
-  <div class="planet-container">
+  <div class="planet-container" style="margin-right: 20px;">
 
     <div class="card-container">
       <mat-grid-list class="mat-grid-list" cols="2" rowHeight="130px">
@@ -18,7 +18,7 @@
       </mat-grid-list>
     </div>
 
-    <img src="{{planet1}}" style="width: 200px; height: 200px; padding: 30px;">
+    <img src="{{planet1}}" style="width: 200px; height: 200px; padding: 30px;" (click)="addToPlanetDown('planet1',planet1BottomCards.length)">
 
     <div class="card-container">
       <mat-grid-list class="mat-grid-list" cols="2" rowHeight="130px">
@@ -30,7 +30,9 @@
 
   </div>
 
-  <div class="planet-container">
+  <div class="divider"></div>
+
+  <div class="planet-container" style="margin-right: 20px;">
 
     <div class="card-container">
       <mat-grid-list class="mat-grid-list" cols="2" rowHeight="130px">
@@ -40,7 +42,7 @@
       </mat-grid-list>
     </div>
 
-    <img src="{{planet2}}" style="width: 200px; height: 200px; padding: 30px;">
+    <img src="{{planet2}}" style="width: 200px; height: 200px; padding: 30px;" (click)="addToPlanetDown('planet2', planet2BottomCards.length)">
 
     <div class="card-container">
       <mat-grid-list class="mat-grid-list" cols="2" rowHeight="130px">
@@ -52,6 +54,8 @@
 
   </div>
 
+  <div class="divider"></div>
+
   <div class="planet-container">
 
     <div class="card-container">
@@ -62,7 +66,7 @@
       </mat-grid-list>
     </div>
 
-    <img src="{{planet3}}" style="width: 200px; height: 200px; padding: 30px;">
+    <img src="{{planet3}}" style="width: 200px; height: 200px; padding: 30px;" (click)="addToPlanetDown('planet3', planet3BottomCards.length)">
 
     <div class="card-container">
       <mat-grid-list class="mat-grid-list" cols="2" rowHeight="130px">
@@ -78,13 +82,13 @@
 
 <footer style="padding-top: 20px;">
   <div class="section20">
-    <h1>{{seconds}}</h1>
+    <h1>Tiempo: {{seconds}}</h1>
   </div>
 
   <div class="hand">
-    <mat-grid-list class="mat-grid-list" cols="5" rowHeight="130px">
-      <mat-grid-tile *ngFor="let item of hand_cards">
-        <img src='{{item.c_image}}' class="hand_img">
+    <mat-grid-list class="mat-grid-list" cols="5" rowHeight="200px" gutterSize="20">
+      <mat-grid-tile *ngFor="let item of hand_cards" class="custom-grid-tile">
+        <img src='{{item.c_image}}' class="hand_img" (click)="selectionCard(item)">
       </mat-grid-tile>
     </mat-grid-list>
   </div>
@@ -101,7 +105,7 @@
   </div>
 
   <div class="hand">
-    <h1>{{energy}}</h1>
+    <h1>Energía: {{energy}}</h1>
   </div>
 
   <div class="section20">

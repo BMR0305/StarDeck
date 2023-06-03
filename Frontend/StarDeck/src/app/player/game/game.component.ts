@@ -14,9 +14,7 @@ import { ApiService } from 'src/app/shared/api-module/api.service';
 export class GameComponent {
 
   temp: any; //temporal variable to save the cards from the api
-
-  //card back image from assets folder
-  backCardImg = "assets/img/card_back.png"
+  cardToPlay : any;
 
   //Profile player image default
   player_img = 'https://previews.123rf.com/images/ylivdesign/ylivdesign1609/ylivdesign160903327/62577801-icono-de-alien-en-estilo-monocromo-negro-sobre-una-ilustraci%C3%B3n-de-vector-de-fondo-blanco.jpg';
@@ -38,7 +36,8 @@ export class GameComponent {
   hand_cards: Cards[] = [];
   deck_cards: Cards[] = [];
   lenghtdeck = this.deck_cards.length;
-  energy = 1;
+  energy = 100;
+  cardPerPlanet = 5;
 
   planet1TopCards: Cards[] = [];
   planet1BottomCards: Cards[] = [];
@@ -50,8 +49,6 @@ export class GameComponent {
   constructor(private router: Router, private apiService: ApiService) {  }
 
   ngOnInit(): void {
-
-    this.setCardsEmpty();
 
     this.getOponente(localStorage.getItem('oponent')+"");
 
@@ -146,29 +143,53 @@ export class GameComponent {
     this.router.navigate(['/playerview/start'])
   }
 
-  setCardsEmpty(){
+  selectionCard(cardSelected: Cards){
+    let index = this.hand_cards.indexOf(cardSelected);
+    this.cardToPlay = this.hand_cards[index];
+    console.log(this.cardToPlay);
+  }
 
-    let card: Cards = {
-      c_image: this.backCardImg,
-      id: undefined,
-      c_name: undefined,
-      battle_pts: undefined,
-      energy: undefined,
-      c_type: undefined,
-      race: undefined,
-      c_status: undefined,
-      c_description: undefined
+  addToPlanetDown(planet : string, numberOfCards: number){
+
+    let condition = this.verificationCardSelected(numberOfCards);
+
+    if(condition){
+      if(planet == 'planet1'){
+        this.planet1BottomCards.push(this.cardToPlay);
+      }else if(planet == 'planet2'){
+        this.planet2BottomCards.push(this.cardToPlay);
+      }else if(planet == 'planet3'){
+        this.planet3BottomCards.push(this.cardToPlay);
+      }
+      this.energy -= this.cardToPlay.energy;
+      this.deleteToHand();
     }
 
-    for (let i = 0; i < 5; i++) {
-      this.planet1TopCards.push(card);
-      this.planet1BottomCards.push(card);
-      this.planet2TopCards.push(card);
-      this.planet2BottomCards.push(card);
-      this.planet3TopCards.push(card);
-      this.planet3BottomCards.push(card);
+  }
+
+  verificationCardSelected(numberOfCards: number) {
+
+    let condition = false;
+
+    if(this.cardToPlay == undefined){
+      alert("No ha seleccionado una carta");
+    } else if(numberOfCards == this.cardPerPlanet){
+      alert("No puede jugar mas cartas en este planeta");
+    } else if(this.cardToPlay.energy > this.energy){
+      alert("No tiene suficiente energia para jugar esta carta");
+    } else if(this.seconds == 0){
+      alert("No hay mas tiempo para jugar cartas");
+    } else {
+      condition = true;
     }
 
+    return condition;
+
+  }
+
+  deleteToHand(){
+    this.hand_cards.splice(this.hand_cards.indexOf(this.cardToPlay), 1);
+    this.cardToPlay = undefined;
   }
 
 }
