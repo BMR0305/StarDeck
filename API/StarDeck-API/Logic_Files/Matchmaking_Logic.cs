@@ -43,7 +43,7 @@ namespace StarDeck_API.Logic_Files
 
                             var planets = Planet_DB.GetInstance().GetGamePlanets();
 
-                            Partida partida = CreateGameObject(current_user, PlayersWaiting[i], planets);
+                            Partida partida = await Task.Run(()=> CreateGameObject(current_user, PlayersWaiting[i], planets));
 
                             //Crear aux para enviar al front end la lista de los planetas y jugadores como objetos completos.
                             Partida_DTO partida_DTO = CreatePartida_DTO(partida, current_user, PlayersWaiting[i], planets);
@@ -172,6 +172,8 @@ namespace StarDeck_API.Logic_Files
             partida.Planet1 = planets[0].ID;
             partida.Planet2 = planets[1].ID;
             partida.Planet3 = planets[2].ID;
+            partida.Winner = "P-ENELOPE";
+            partida.C_Turn = "C-ARETORTA";
             partida.p_status = "EC";
             CallDB.AddGame(partida);
             return partida;
