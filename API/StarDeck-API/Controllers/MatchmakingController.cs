@@ -30,8 +30,8 @@ namespace StarDeck_API.Controllers
             Deck_DB.GetInstance().SetContext(this.context);
             try
             {
-                string output = await  Matchmaking_Logic.GetInstance().LookForGame(context, email);
-                return Ok(output);
+                string output = await  Matchmaking_Logic.GetInstance().LookForGame(email);
+                return StatusCode(200,output);
             }
             catch (Exception ex)
             {
