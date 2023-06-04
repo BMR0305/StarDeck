@@ -226,6 +226,23 @@ namespace StarDeck_API.DB_Calls
             }
         }
 
+        public Turn GetTurnByID(string turnID)
+        {
+            try
+            {
+                List<Turn> turn = context.turn.FromSqlRaw("EXEC GetTurnByID @turnID = {0}", turnID).ToList();
+                if (turn.Count == 0)
+                {
+                    throw new Exception("Turn not found");
+                }
+                return turn[0];
+            }
+            catch (SqlException e)
+            {
+                throw new Exception("Failed to get turn: " + e.Message);
+            }
+        }
+
         public void SetContext(DBContext context)
         {
             this.context = context;

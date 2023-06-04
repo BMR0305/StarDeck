@@ -114,5 +114,35 @@ namespace StarDeck_API.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("GetGameTurn/{gameID}")]
+        public dynamic GetGameTurn(string gameID)
+        {
+            try
+            {
+                string output = Match_Logic.GetInstance.GetGameTurn(gameID);
+                return output;
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("GetActivePlayer/{gameID}")]
+        public dynamic GetActivePlayer(string gameID)
+        {
+            try
+            {
+                string output = Match_Logic.GetInstance.GetTurnActivePlayer(gameID);
+                return output;
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
     }
 }

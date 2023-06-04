@@ -221,6 +221,21 @@ namespace StarDeck_API.Logic_Files
             return output;
         }
 
+        public string GetGameTurn(string gameID)
+        {
+            Partida game = CallDB.GetGameByID(gameID);
+            string turnID = game.C_Turn;
+            return turnID;
+        }
+
+        public string GetTurnActivePlayer(string gameID)
+        {
+            Partida game = CallDB.GetGameByID(gameID);
+            string turnID = game.C_Turn;
+            string activePlayer = CallDB.GetTurnByID(turnID).Active_Player;
+            return activePlayer;
+        }
+
         private Match_Logic() { }
     }
 }

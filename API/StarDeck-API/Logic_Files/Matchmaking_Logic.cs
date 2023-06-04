@@ -69,56 +69,11 @@ namespace StarDeck_API.Logic_Files
             }
         }
 
-        //public async Task<string> WaitingGame(string email)
-        //{
-
-        //    Users user;
-        //    CardsUsers_DB UsersDB_call = CardsUsers_DB.GetInstance();
-
-        //    // Time limit to wait for a match to be found (in seconds)
-        //    int timeout = 20;
-        //    Stopwatch stopwatch = new Stopwatch();
-        //    stopwatch.Start();
-        //    user = UsersDB_call.GetUser(email)[0];
-        //    while (user.u_status == "BP" && stopwatch.Elapsed.TotalSeconds < timeout)
-        //    {
-        //        await Task.Delay(2000);
-        //        user = UsersDB_call.GetUser(email)[0];
-        //        if (user.u_status != "BP")
-        //        {
-        //            stopwatch.Stop();
-        //            break;
-        //        }
-        //    }
-
-        //    var partidaList = await Task.Run(() => CallDB.GetPlayerMatch(email));
-
-        //    if (partidaList.Count > 0)
-        //    {
-        //        Debug.WriteLine("Entro al hp IF");
-        //        Partida partida = partidaList[0];
-        //        List<Planet> planets = new List<Planet>();
-        //        await Task.Run(()=> planets.Add(Planet_DB.GetInstance().GetPlanetByID(partida.Planet1)[0]));
-        //        await Task.Run(() => planets.Add(Planet_DB.GetInstance().GetPlanetByID(partida.Planet2)[0]));
-        //        await Task.Run(() => planets.Add(Planet_DB.GetInstance().GetPlanetByID(partida.Planet3)[0]));
-        //        Debug.WriteLine("Obtuvo los planetas de miercoles");
-        //        Users opponent = await Task.Run(()=> UsersDB_call.GetUserByID(partida.Player1)[0]);
-        //        Debug.WriteLine("Oponente");
-        //        Partida_DTO partida_DTO = CreatePartida_DTO(partida, opponent, user, planets);
-        //        Debug.WriteLine("Obtuvo la partida");
-
-        //        string json_partida = JsonConvert.SerializeObject(partida_DTO);
-        //        return json_partida;
-        //    }
-        //    CallDB.UpdateUserStatus(email, "A");
-        //    Message mess = new Message();
-        //    mess.message = "Timeout reached";
-        //    string output = JsonConvert.SerializeObject(mess);
-
-        //    return output;
-
-        //}
-
+        /**
+         * Method that keeps a player searching for a match until a match is found or a timeout is reached.
+         * Params: email - email of the player that is searching for a match.
+         * Return: A string with the information of the match found or a message if a timeout is reached.
+         */
         public async Task<string> WaitingGame(string email)
         {
             CardsUsers_DB UsersDB_call = CardsUsers_DB.GetInstance();
@@ -172,8 +127,8 @@ namespace StarDeck_API.Logic_Files
             partida.Planet1 = planets[0].ID;
             partida.Planet2 = planets[1].ID;
             partida.Planet3 = planets[2].ID;
-            partida.Winner = "P-ENELOPE";
-            partida.C_Turn = "C-ARETORTA";
+            partida.Winner = "P-NULL";
+            partida.C_Turn = "C-NULL";
             partida.p_status = "EC";
             CallDB.AddGame(partida);
             return partida;
