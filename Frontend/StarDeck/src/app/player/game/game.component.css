@@ -21,7 +21,7 @@ footer{
 }
 
 .hand {
-  flex-basis: 100%;
+  flex-basis: 80%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -39,7 +39,7 @@ footer{
 .button{
 
   width: 85%;
-  height: 25px;
+  height: 45px;
   font-family: 'OCR A Std', sans-serif;
   font-size: 15px; /* Tamaño de letra deseado */
 }

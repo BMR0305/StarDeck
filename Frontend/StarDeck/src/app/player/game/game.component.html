@@ -86,7 +86,7 @@
   </div>
 
   <div class="hand">
-    <mat-grid-list class="mat-grid-list" cols="5" rowHeight="200px" gutterSize="20">
+    <mat-grid-list class="mat-grid-list" cols="5" rowHeight="200px" gutterSize="1" style="width: 100%; height: 100%;">
       <mat-grid-tile *ngFor="let item of hand_cards" class="custom-grid-tile">
         <img src='{{item.c_image}}' class="hand_img" (click)="selectionCard(item)">
       </mat-grid-tile>
