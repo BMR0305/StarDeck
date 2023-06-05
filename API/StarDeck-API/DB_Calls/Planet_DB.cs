@@ -8,6 +8,7 @@ namespace StarDeck_API.DB_Calls
 {
     public class Planet_DB
     {
+        private static object lockObject = new object();
         private static Planet_DB instance = null;
         private DBContext context;
         public static Planet_DB GetInstance()
@@ -44,6 +45,7 @@ namespace StarDeck_API.DB_Calls
 
         public List<Planet> GetPlanetByName(string name)
         {
+            lock (lockObject);
             Debug.WriteLine("Hi im getting the planet by name "+name);
             List<Planet> planetList = context.planet.FromSqlRaw("EXEC GetPlanet @name = {0}", name).ToList();
             if (planetList.Count == 0)
@@ -78,6 +80,7 @@ namespace StarDeck_API.DB_Calls
 
         public List<Planet> GetPlanetByID(string ID)
         {
+            lock (lockObject);
             List<Planet> planet = context.planet.FromSqlRaw("EXEC GetPlanetByID @ID = {0}", ID).ToList();
             if (planet.Count == 0)
             {

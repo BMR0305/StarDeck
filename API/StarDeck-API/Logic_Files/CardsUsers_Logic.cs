@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 using Newtonsoft.Json;
 using StarDeck_API.DB_Calls;
 using StarDeck_API.Models;
@@ -242,6 +243,13 @@ namespace StarDeck_API.Logic_Files
 
             List<Card> RandomCards = CallDB.GetRandomCardsSP(num, Types_String);
             string output = JsonConvert.SerializeObject(RandomCards.ToArray(), Formatting.Indented);
+            return output;
+        }
+
+        public string GetCard(string id)
+        {
+            Card cards = CallDB.GetCard(id);
+            string output = JsonConvert.SerializeObject(cards, Formatting.Indented);
             return output;
         }
 
