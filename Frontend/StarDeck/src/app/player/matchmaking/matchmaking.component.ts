@@ -37,7 +37,7 @@ export class MatchmakingComponent implements OnInit{
     url = url.replace(/"/g, "");
 
     this.apiService.get(url).subscribe((data) => {
-      console.log(data);
+
       this.temp = data;
        if (this.temp["message"] == 'Timeout reached'){
         this.msg = "";
@@ -62,9 +62,13 @@ export class MatchmakingComponent implements OnInit{
         localStorage.setItem('planet2',this.temp["Planets"][1]['p_name']);
         localStorage.setItem('planet3',this.temp["Planets"][2]['p_name']);
 
+        localStorage.setItem('game', this.temp);
+        localStorage.setItem('IdMatch',this.temp["ID"]);
+
+        console.log(this.temp);
+
 
         this.router.navigate(['/game']);
-        localStorage.setItem('game', this.temp);
        }
 
 
