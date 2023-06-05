@@ -125,8 +125,6 @@ namespace StarDeck_API.Logic_Files
 
             CallDB.InsertDeckToCardsLeft(user.ID, user.current_deck);
             List<CardsLeft> hand = CallDB.TakeCards(user.ID,HandSize);
-
-            List<Card> cards = new List<Card>();
             
             for (int i = 0; i < hand.Count; i++)
             {
@@ -147,9 +145,8 @@ namespace StarDeck_API.Logic_Files
             return output;
         }
 
-        public string TakeCard(string gameID, string email)
+        public string TakeCard(string email)
         {
-            Partida game = CallDB.GetGameByID(gameID);
             Users user = CardsUsers_DB.GetInstance().GetUser(email)[0];
 
             CardsLeft cardtaken = CallDB.TakeCards(user.ID, 1)[0];
