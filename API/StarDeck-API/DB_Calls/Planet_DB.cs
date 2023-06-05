@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using StarDeck_API.Models;
 using System.Data;
+using System.Diagnostics;
 
 namespace StarDeck_API.DB_Calls
 {
@@ -43,6 +44,7 @@ namespace StarDeck_API.DB_Calls
 
         public List<Planet> GetPlanetByName(string name)
         {
+            Debug.WriteLine("Hi im getting the planet by name "+name);
             List<Planet> planetList = context.planet.FromSqlRaw("EXEC GetPlanet @name = {0}", name).ToList();
             if (planetList.Count == 0)
             {
