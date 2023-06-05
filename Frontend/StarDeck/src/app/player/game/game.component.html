@@ -103,7 +103,7 @@
 
     <div class="deck">
       <h2>{{lenghtdeck}}</h2>
-      <img src="{{deck}}" class="hand_img" style="width: 100px; height: 100px;">
+      <img src="{{deck}}" (click)="getCardFromDeck()" class="hand_img" style="width: 100px; height: 100px;">
     </div>
   </footer>
 
@@ -117,7 +117,7 @@
     </div>
 
     <div class="section20">
-      <button class="button">Terminar turno</button>
+      <button class="button" (click)="endTurn()">Terminar turno</button>
     </div>
   </footer>
 

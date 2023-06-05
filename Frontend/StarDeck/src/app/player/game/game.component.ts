@@ -42,6 +42,7 @@ export class GameComponent {
   idMatch : any;
   idTurn : any;
   loadData = false;
+  canGetCard = true;
 
   cardsPlayed: CardPlayed[] = [];
   planet1TopCards: Cards[] = [];
@@ -56,6 +57,10 @@ export class GameComponent {
   ngOnInit(): void {
 
     this.idMatch = localStorage.getItem('IdMatch');
+
+    console.log(this.idMatch);
+    console.log(localStorage.getItem('email'));
+
     this.getOponente(localStorage.getItem('oponent')+"");
 
     this.getFirstPlanet();
@@ -101,7 +106,6 @@ export class GameComponent {
       this.planet3Img = this.planet3.p_image;
       this.planet3.p_image = this.planet0;
       this.getGameTurn();
-      this.setDeck();
     });
 
   }
@@ -112,26 +116,52 @@ export class GameComponent {
     url = url.replace(/"/g, "");
 
     this.apiService.get(url).subscribe((data) => {
-      console.log(data);
       this.temp = data;
-      this.idTurn = this.temp;
+      this.idTurn = this.temp["message"];
+      console.log(this.idTurn);
+      this.setHand();
     });
 
   }
 
-  setDeck(){
+  setHand(){
 
     let url = "Match/GetHand/" + this.idMatch + "/" + localStorage.getItem('email');
     url = url.replace(/"/g, "");
 
     this.apiService.get(url).subscribe((data) => {
       this.temp = data;
+
+      let listID : string[] = [];
+
+      listID.push(this.temp["Card1_ID"]);
+      listID.push(this.temp["Card2_ID"]);
+      listID.push(this.temp["Card3_ID"]);
+      listID.push(this.temp["Card4_ID"]);
+      listID.push(this.temp["Card5_ID"]);
+
+      console.log(listID);
+
+      this.setHandCards(listID);
+
+    });
+
+  }
+
+  setHandCards(listId: string[]){
+
+    this.apiService.get("Card/getCard/" + listId[0]).subscribe((data) => {
+      this.temp = data;
       console.log(this.temp);
+      this.hand_cards.push(this.temp);
+      listId.shift();
 
-
-
-      this.loadData = true;
-      this.seconds = 20;
+      if (listId.length > 0){
+        this.setHandCards(listId);
+      } else {
+        this.loadData = true;
+        this.seconds = 20;
+      }
 
     });
 
@@ -215,12 +245,44 @@ export class GameComponent {
       GameId: this.idMatch,
       CardId: this.cardToPlay.id,
       PlayerId: mail,
-      Turn: "hola", //this.idTurn,
+      Turn: this.idTurn,
       Planet : planetId
     }
 
     this.cardsPlayed.push(CardPlayed);
 
   }
+
+  endTurn() {
+
+    this.canGetCard = true;
+
+    // @ts-ignore
+    let mail = localStorage.getItem("email").toString();
+    mail = mail.replace(/"/g, "");
+
+    this.apiService.update("Match/EndTurn/" + this.idMatch + "/" + mail, this.cardsPlayed).subscribe((data) => {
+      this.temp = data;
+      this.cardsPlayed = [];
+      this.getGameTurn();
+    });
+
+  }
+
+  getCardFromDeck() {
+
+    this.canGetCard = false;
+
+    // @ts-ignore
+    let mail = localStorage.getItem("email").toString();
+    mail = mail.replace(/"/g, "");
+
+    this.apiService.get("Match/TakeCard/" + mail).subscribe((data) => {
+      this.temp = data;
+      this.hand_cards.push(this.temp);
+    });
+
+  }
+
 
 }
