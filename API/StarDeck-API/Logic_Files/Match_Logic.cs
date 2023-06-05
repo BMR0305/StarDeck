@@ -25,7 +25,7 @@ namespace StarDeck_API.Logic_Files
             }
         }
 
-        public void InitialTurn(string gameID, string email)
+        public Turn InitialTurn(string gameID, string email)
         {
             Users user = CardsUsers_DB.GetInstance().GetUser(email)[0];
             Partida game = CallDB.GetGameByID(gameID);
@@ -37,6 +37,7 @@ namespace StarDeck_API.Logic_Files
             turn.Game_ID = gameID;
             CallDB.InsertTurn(turn);
             CallDB.UpdateGameTurn(gameID, turn.Turn_ID);
+            return turn;
 
         }
 

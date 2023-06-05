@@ -50,7 +50,11 @@ namespace StarDeck_API.Logic_Files
 
                             CallDB.UpdateUserStatus(PlayersWaiting[i].email, "EP");
 
-                            Match_Logic.GetInstance.InitialTurn(partida.ID, email);
+                            Turn turn = Match_Logic.GetInstance.InitialTurn(partida.ID, email);
+
+                            Match_DB.GetInstance.UpdateGameTurn(partida.ID, turn.Turn_ID);
+
+                            Match_DB.GetInstance.CountTurn(partida.ID);
 
                             string json_partida = JsonConvert.SerializeObject(partida_DTO);
 
