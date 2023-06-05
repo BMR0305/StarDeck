@@ -46,11 +46,11 @@ namespace StarDeck_API.Logic_Files
                             Partida partida = await Task.Run(()=> CreateGameObject(current_user, PlayersWaiting[i], planets));
 
                             //Crear aux para enviar al front end la lista de los planetas y jugadores como objetos completos.
-                            Partida_DTO partida_DTO = CreatePartida_DTO(partida, current_user, PlayersWaiting[i], planets);
+                            Partida_DTO partida_DTO = await Task.Run(()=> CreatePartida_DTO(partida, current_user, PlayersWaiting[i], planets));
 
                             CallDB.UpdateUserStatus(PlayersWaiting[i].email, "EP");
 
-                            Turn turn = Match_Logic.GetInstance.InitialTurn(partida.ID, email);
+                            Turn turn = await Task.Run(()=> Match_Logic.GetInstance.InitialTurn(partida.ID, email));
 
                             Match_DB.GetInstance.UpdateGameTurn(partida.ID, turn.Turn_ID);
 
