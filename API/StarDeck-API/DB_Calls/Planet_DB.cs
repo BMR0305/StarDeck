@@ -43,12 +43,12 @@ namespace StarDeck_API.DB_Calls
 
         public List<Planet> GetPlanetByName(string name)
         {
-            List<Planet> planet = context.planet.FromSqlRaw("EXEC GetPlanet @name = {0}", name).ToList();
-            if (planet.Count == 0)
+            List<Planet> planetList = context.planet.FromSqlRaw("EXEC GetPlanet @name = {0}", name).ToList();
+            if (planetList.Count == 0)
             {
                 throw new Exception("No planet found");
             }
-            return planet;
+            return planetList;
         }
 
         /*

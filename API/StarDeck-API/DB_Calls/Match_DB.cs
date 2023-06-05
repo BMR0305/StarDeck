@@ -93,6 +93,7 @@ namespace StarDeck_API.DB_Calls
             try
             {
                 context.Database.ExecuteSqlRaw("EXEC SetGameTurn @gameID = {0}, @turnID = {1}", gameID, turnID);
+                context.SaveChanges();
             }
             catch (SqlException e)
             {
@@ -160,6 +161,7 @@ namespace StarDeck_API.DB_Calls
             try
             {
                 context.Database.ExecuteSqlRaw("EXEC CountTurn @gameID = {0}", gameID);
+                context.SaveChanges();
             }
             catch (SqlException e)
             {
