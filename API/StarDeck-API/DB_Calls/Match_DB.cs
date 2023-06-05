@@ -88,7 +88,7 @@ namespace StarDeck_API.DB_Calls
             }
         }
 
-        public void UpdateGameTurn(string turnID, string gameID)
+        public void UpdateGameTurn(string gameID, string turnID)
         {
             try
             {
