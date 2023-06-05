@@ -52,12 +52,13 @@ namespace StarDeck_API.Controllers
         }
 
         [HttpGet]
-        [Route("TakeCard/{gameID}/{email}")]
-        public dynamic TakeCard(string gameID, string email)
+        [Route("TakeCard/{email}")]
+        public dynamic TakeCard(string email)
         {
+            CardsUsers_DB.GetInstance().SetContext(context);
             try
             {
-                string output = Match_Logic.GetInstance.TakeCard(gameID, email);
+                string output = Match_Logic.GetInstance.TakeCard(email);
                 return output;
             }
             catch (Exception ex)
