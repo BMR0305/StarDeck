@@ -223,7 +223,10 @@ namespace StarDeck_API.Logic_Files
         {
             Partida game = CallDB.GetGameByID(gameID);
             string turnID = game.C_Turn;
-            return turnID;
+            Message message = new Message();
+            message.message = turnID;
+            string output = JsonConvert.SerializeObject(message, Formatting.Indented);
+            return output;
         }
 
         public string GetTurnActivePlayer(string gameID)
@@ -231,7 +234,10 @@ namespace StarDeck_API.Logic_Files
             Partida game = CallDB.GetGameByID(gameID);
             string turnID = game.C_Turn;
             string activePlayer = CallDB.GetTurnByID(turnID).Active_Player;
-            return activePlayer;
+            Message message = new Message();
+            message.message = activePlayer;
+            string output = JsonConvert.SerializeObject(message, Formatting.Indented);
+            return output;
         }
 
         private Match_Logic() { }
