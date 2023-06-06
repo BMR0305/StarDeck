@@ -53,6 +53,7 @@ namespace StarDeck_API.Logic_Files
                 id = KeyGenerator.CreatePattern("P-");
             }
             planet.ID = id;
+            CallDB.PostPlanet(planet);
         }
 
         /**
