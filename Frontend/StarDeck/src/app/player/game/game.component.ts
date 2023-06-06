@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Cards, Planet, Player, CardPlayed } from 'src/app/shared/models/models-cards';
+import {Cards, Planet, Player, CardPlayed, CardPlayed_DTO} from 'src/app/shared/models/models-cards';
 import { Observable, interval } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
 import { Router } from '@angular/router';
@@ -35,9 +35,8 @@ export class GameComponent {
   card?: Cards;
 
   hand_cards: Cards[] = [];
-  deck_cards: Cards[] = [];
-  lenghtdeck = this.deck_cards.length;
-  energy = 100;
+  lenghtdeck = 18;
+  energy = 0;
   cardPerPlanet = 5;
   idMatch : any;
   idPlayer : any;
@@ -46,7 +45,6 @@ export class GameComponent {
   canGetCard = true;
 
   cardsPlayed: CardPlayed[] = [];
-  cardsPlayedOpponent : CardPlayed[] = [];
   planet1TopCards: Cards[] = [];
   planet1BottomCards: Cards[] = [];
   planet2TopCards: Cards[] = [];
@@ -127,7 +125,13 @@ export class GameComponent {
 
     this.apiService.get(url).subscribe((data) => {
       this.temp = data;
-      this.idTurn = this.temp["message"];
+      console.log("turno inicial");
+      console.log(this.temp);
+      this.idTurn = this.temp["TurnID"];
+      this.energy = this.temp["energy"];
+      if (this.temp["TurnNumber"] == 4){
+        this.planet3.p_image = this.planet3Img;
+      }
       console.log(this.idTurn);
       this.setHand();
     });
@@ -143,14 +147,18 @@ export class GameComponent {
 
     this.apiService.get(url).subscribe((data) => {
       this.temp = data;
-      let turnFromAPI : string = this.temp["message"];
+      let turnFromAPI : string = this.temp["TurnID"];
       let lastTurn : string = this.idTurn;
 
       console.log("Turno actual: " + actualTurn);
       console.log("Turno de la API: " + turnFromAPI);
 
       if(turnFromAPI != actualTurn){
+        if (this.temp["TurnNumber"] == 4){
+          this.planet3.p_image = this.planet3Img;
+        }
         this.idTurn = turnFromAPI;
+        this.energy = this.temp["energy"];
         this.getCardsFromOponent(lastTurn);
       }else{
         this.getNextTurn(actualTurn);
@@ -168,10 +176,25 @@ export class GameComponent {
 
     this.apiService.get(url).subscribe((data) => {
       this.temp = data;
-      let listCardPlayed : CardPlayed[] = [];
-      listCardPlayed = this.temp;
+      let listCardOpponent : CardPlayed_DTO[] = [];
+      listCardOpponent = this.temp;
 
+      console.log("Cartas del oponente");
+      console.log(listCardOpponent);
 
+      for(let i = 0; i < listCardOpponent.length; i++){
+
+        let cardPlayed : CardPlayed_DTO = listCardOpponent[i];
+
+        if(cardPlayed.Planet == this.planet1.ID){
+          this.planet1TopCards.push(cardPlayed.Card);
+        } else if(cardPlayed.Planet == this.planet2.ID){
+          this.planet1TopCards.push(cardPlayed.Card);
+        } else if(cardPlayed.Planet == this.planet3.ID){
+          this.planet1TopCards.push(cardPlayed.Card);
+        }
+
+      }
 
     });
   }
@@ -208,6 +231,7 @@ export class GameComponent {
       if (listId.length > 0){
         this.setHandCards(listId);
       } else {
+        this.getCardsLeft();
         this.loadData = true;
         this.seconds = 20;
       }
@@ -327,6 +351,23 @@ export class GameComponent {
     this.apiService.get("Match/TakeCard/" + mail).subscribe((data) => {
       this.temp = data;
       this.hand_cards.push(this.temp);
+      this.getCardsLeft();
+    });
+
+  }
+
+  getCardsLeft(){
+
+    console.log("get cards left");
+
+    // @ts-ignore
+    let mail = localStorage.getItem("email").toString();
+    mail = mail.replace(/"/g, "");
+
+    this.apiService.get("Match/GetCardsLeft/" + mail).subscribe((data) => {
+      this.temp = data;
+      console.log(this.temp);
+      this.lenghtdeck = this.temp["message"];
     });
 
   }

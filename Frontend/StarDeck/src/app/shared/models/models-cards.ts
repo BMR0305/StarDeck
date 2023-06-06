@@ -52,3 +52,13 @@ export interface CardPlayed {
 
 }
 
+
+export interface CardPlayed_DTO {
+
+  GameId: any;
+  Card: Cards;
+  PlayerId: any;
+  Turn: any;
+  Planet : any;
+
+}
