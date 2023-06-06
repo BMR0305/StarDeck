@@ -269,7 +269,7 @@ namespace StarDeck_API.DB_Calls
             {
                 SqlParameter count = new SqlParameter("@cards_left", SqlDbType.Int);
                 count.Direction = ParameterDirection.Output;
-                context.Database.ExecuteSqlRaw("EXEC CountCardsLeft @playerID = {0}, @turn_number OUTPUT", playerID, count);
+                context.Database.ExecuteSqlRaw("EXEC CountCardsLeft @playerID = {0}, @cards_left OUTPUT", playerID, count);
                 int countInt = Convert.ToInt32(count.Value);
                 return countInt;
             }
