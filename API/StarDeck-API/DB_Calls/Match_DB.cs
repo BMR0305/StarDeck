@@ -77,6 +77,18 @@ namespace StarDeck_API.DB_Calls
             }
         }
 
+        public void RefreshGameCache(Partida game)
+        {
+            try
+            {
+                context.Entry(game).Reload();
+            }
+            catch (SqlException e)
+            {
+                throw new Exception("Failed to refresh game cache: " + e.Message);
+            }
+        }
+
         public List<Turn> GetTurns()
         {
             try

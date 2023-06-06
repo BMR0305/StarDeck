@@ -4,6 +4,7 @@ using StarDeck_API.Logic_Files;
 using Newtonsoft.Json;
 using Microsoft.Data.SqlClient;
 using System.Data;
+using System.Diagnostics;
 
 namespace StarDeck_API.Logic_Files
 {
@@ -70,7 +71,7 @@ namespace StarDeck_API.Logic_Files
             CallDB.InsertTurn(turn);
         }
 
-        public string EndTurn(List<CardPlayed> cardsPlayed, string gameID, string email)
+        public async Task<string> EndTurn(List<CardPlayed> cardsPlayed, string gameID, string email)
         {
             Partida game = CallDB.GetGameByID(gameID);
             Users user = CardsUsers_DB.GetInstance().GetUser(email)[0];
@@ -95,25 +96,26 @@ namespace StarDeck_API.Logic_Files
                     }
                 }
                 CallDB.AddPlayerReady(game.C_Turn);
-                return WaitingEndTurn(game.C_Turn);
+                return await WaitingEndTurn(game.ID,game.C_Turn);
             }
 
             return "Turno Maximo";
         }
 
-        public string WaitingEndTurn(string C_turn)
+        public async Task<string> WaitingEndTurn(string gameID,string turnID)
         {
-            Turn turn = CallDB.GetTurnByID(C_turn);
+            Partida game = CallDB.GetGameByID(gameID);
             bool ready = false;
             while (!ready)
             {
-                if (turn.Players_Ready >= 2)
+                if (game.C_Turn != turnID)
                 {
-                    ready = true;
                     return "Turno terminado";
                 }
-                turn = CallDB.GetTurnByID(C_turn);
-                Task.Delay(1000);
+                await Task.Run(() => CallDB.RefreshGameCache(game));
+                game = await Task.Run(()=> CallDB.GetGameByID(gameID));
+                Debug.WriteLine(game.C_Turn);
+                await Task.Delay(1500);
             }
             return "Turno terminado";
         }

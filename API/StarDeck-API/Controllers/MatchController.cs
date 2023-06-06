@@ -70,17 +70,17 @@ namespace StarDeck_API.Controllers
 
         [HttpPut]
         [Route("EndTurn/{gameID}/{email}")]
-        public dynamic EndTurn([FromBody] List<CardPlayed> cardsPlayed, string gameID, string email)
+        public async Task<IActionResult> EndTurn([FromBody] List<CardPlayed> cardsPlayed, string gameID, string email)
         {
             Match_DB.GetInstance.SetContext(context);
             CardsUsers_DB.GetInstance().SetContext(context);
             try
             {
-                string message = Match_Logic.GetInstance.EndTurn(cardsPlayed, gameID, email);
+                string message = await Match_Logic.GetInstance.EndTurn(cardsPlayed, gameID, email);
                 Message m = new Message();
                 m.message = message;
                 string output = JsonConvert.SerializeObject(m, Formatting.Indented);
-                return output;
+                return StatusCode(200,output);
             }
             catch (Exception ex)
             {
