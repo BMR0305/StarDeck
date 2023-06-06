@@ -46,6 +46,7 @@ export class GameComponent {
   canGetCard = true;
 
   cardsPlayed: CardPlayed[] = [];
+  cardsPlayedOpponent : CardPlayed[] = [];
   planet1TopCards: Cards[] = [];
   planet1BottomCards: Cards[] = [];
   planet2TopCards: Cards[] = [];
@@ -135,19 +136,22 @@ export class GameComponent {
 
   getNextTurn(actualTurn: any){
 
+    console.log("conseguir siguiente turno")
+
     let url = "Match/GetGameTurn/" + this.idMatch;
     url = url.replace(/"/g, "");
 
     this.apiService.get(url).subscribe((data) => {
       this.temp = data;
       let turnFromAPI : string = this.temp["message"];
+      let lastTurn : string = this.idTurn;
 
       console.log("Turno actual: " + actualTurn);
       console.log("Turno de la API: " + turnFromAPI);
 
       if(turnFromAPI != actualTurn){
         this.idTurn = turnFromAPI;
-        this.getCardFromOponent();
+        this.getCardsFromOponent(lastTurn);
       }else{
         this.getNextTurn(actualTurn);
       }
@@ -157,14 +161,18 @@ export class GameComponent {
 
   }
 
-  getCardFromOponent(){
+  getCardsFromOponent(lastTurn : string){
 
-    let url = "Match/GetCardsPlayed/" + this.idMatch + "/" + this.idTurn + "/" + localStorage.getItem('email');
+    let url = "Match/GetCardsPlayed/" + this.idMatch + "/" + lastTurn + "/" + localStorage.getItem('email');
     url = url.replace(/"/g, "");
 
     this.apiService.get(url).subscribe((data) => {
       this.temp = data;
-      console.log(this.temp);
+      let listCardPlayed : CardPlayed[] = [];
+      listCardPlayed = this.temp;
+
+
+
     });
   }
 
@@ -256,7 +264,7 @@ export class GameComponent {
 
     if(this.cardToPlay == undefined){
       alert("No ha seleccionado una carta");
-    } else if(numberOfCards == this.cardPerPlanet){
+    } else if(numberOfCards >= this.cardPerPlanet){
       alert("No puede jugar mas cartas en este planeta");
     } else if(this.cardToPlay.energy > this.energy){
       alert("No tiene suficiente energia para jugar esta carta");
@@ -290,6 +298,8 @@ export class GameComponent {
   }
 
   endTurn() {
+
+    console.log("terminar turno");
 
     this.canGetCard = true;
 
