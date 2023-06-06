@@ -133,6 +133,41 @@ export class GameComponent {
 
   }
 
+  getNextTurn(actualTurn: any){
+
+    let url = "Match/GetGameTurn/" + this.idMatch;
+    url = url.replace(/"/g, "");
+
+    this.apiService.get(url).subscribe((data) => {
+      this.temp = data;
+      let turnFromAPI : string = this.temp["message"];
+
+      console.log("Turno actual: " + actualTurn);
+      console.log("Turno de la API: " + turnFromAPI);
+
+      if(turnFromAPI != actualTurn){
+        this.idTurn = turnFromAPI;
+        this.getCardFromOponent();
+      }else{
+        this.getNextTurn(actualTurn);
+      }
+
+    });
+
+
+  }
+
+  getCardFromOponent(){
+
+    let url = "Match/GetCardsPlayed/" + this.idMatch + "/" + this.idTurn + "/" + localStorage.getItem('email');
+    url = url.replace(/"/g, "");
+
+    this.apiService.get(url).subscribe((data) => {
+      this.temp = data;
+      console.log(this.temp);
+    });
+  }
+
   setHand(){
 
     let url = "Match/GetHand/" + this.idMatch + "/" + localStorage.getItem('email');
@@ -268,7 +303,7 @@ export class GameComponent {
       this.cardsPlayed = [];
       console.log("Turno terminados")
       console.log(this.temp);
-      //this.getGameTurn();
+      this.getNextTurn(this.idTurn);
     });
 
   }
