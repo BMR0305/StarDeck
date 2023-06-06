@@ -255,7 +255,9 @@ namespace StarDeck_API.Logic_Files
                     else if (score1 == score2)
                     {
                         CallDB.UpdateWinner("Tie", gameID);
-                        output = "";
+                        Message m = new Message();
+                        m.message = "Tie";
+                        output = JsonConvert.SerializeObject(m,Formatting.Indented);
                     }
                     else
                     {
