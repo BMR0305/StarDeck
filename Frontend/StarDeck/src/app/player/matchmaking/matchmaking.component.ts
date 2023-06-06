@@ -53,9 +53,11 @@ export class MatchmakingComponent implements OnInit{
 
         if (this.temp["Players"][0]["email"] === this.userEmail){
           localStorage.setItem('oponent', this.temp["Players"][1]["email"]);
+          localStorage.setItem('playerID', this.temp["Players"][0]["ID"])
         }
         else{
           localStorage.setItem('oponent', this.temp["Players"][0]["email"]);
+          localStorage.setItem('playerID', this.temp["Players"][1]["ID"])
         }
 
         localStorage.setItem('planet1',this.temp["Planets"][0]['p_name']);
@@ -66,7 +68,6 @@ export class MatchmakingComponent implements OnInit{
         localStorage.setItem('IdMatch',this.temp["ID"]);
 
         console.log(this.temp);
-
 
         this.router.navigate(['/game']);
        }

@@ -40,6 +40,7 @@ export class GameComponent {
   energy = 100;
   cardPerPlanet = 5;
   idMatch : any;
+  idPlayer : any;
   idTurn : any;
   loadData = false;
   canGetCard = true;
@@ -57,6 +58,7 @@ export class GameComponent {
   ngOnInit(): void {
 
     this.idMatch = localStorage.getItem('IdMatch');
+    this.idPlayer = localStorage.getItem('playerID');
 
     console.log(this.idMatch);
     console.log(localStorage.getItem('email'));
@@ -70,11 +72,18 @@ export class GameComponent {
 
     timer.subscribe(() => {
       this.seconds--;
+
+      if(this.seconds == 0){
+        console.log("Termino el turno");
+        //this.endTurn();
+      }
+
     });
 
   }
 
   getFirstPlanet(){
+
     let url = "Planet/get/" + localStorage.getItem('planet1');
     url = url.replace(/"/g, "");
 
@@ -140,8 +149,6 @@ export class GameComponent {
       listID.push(this.temp["Card4_ID"]);
       listID.push(this.temp["Card5_ID"]);
 
-      console.log(listID);
-
       this.setHandCards(listID);
 
     });
@@ -152,7 +159,6 @@ export class GameComponent {
 
     this.apiService.get("Card/getCard/" + listId[0]).subscribe((data) => {
       this.temp = data;
-      console.log(this.temp);
       this.hand_cards.push(this.temp);
       listId.shift();
 
@@ -237,14 +243,10 @@ export class GameComponent {
 
   addCardPlayed(planetId: string){
 
-    // @ts-ignore
-    let mail = localStorage.getItem("email").toString();
-    mail = mail.replace(/"/g, "");
-
     let CardPlayed: CardPlayed = {
       GameId: this.idMatch,
-      CardId: this.cardToPlay.id,
-      PlayerId: mail,
+      CardId: this.cardToPlay.ID,
+      PlayerId: this.idPlayer,
       Turn: this.idTurn,
       Planet : planetId
     }
@@ -264,7 +266,9 @@ export class GameComponent {
     this.apiService.update("Match/EndTurn/" + this.idMatch + "/" + mail, this.cardsPlayed).subscribe((data) => {
       this.temp = data;
       this.cardsPlayed = [];
-      this.getGameTurn();
+      console.log("Turno terminados")
+      console.log(this.temp);
+      //this.getGameTurn();
     });
 
   }
