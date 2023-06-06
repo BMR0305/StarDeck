@@ -24,7 +24,7 @@
 
       <label> Efecto de planeta <span class="red-text">* </span> </label> <br>
       <select  class="cardForm" formControlName="efects">
-        <option *ngFor="let item of raceoptions" [value]="item">{{ item }}</option>
+        <option *ngFor="let item of efectoptions" [value]="item">{{ item }}</option>
       </select>
       <div class = "required" *ngIf="cardForm.get('type')?.hasError('required') && cardForm.get('type')?.touched">
         El efecto de planeta es requerido
