@@ -74,7 +74,7 @@ export class GameComponent {
       this.seconds--;
 
       if(this.seconds == 0){
-        console.log("Termino el turno");
+        //console.log("Termino el turno");
         //this.endTurn();
       }
 
@@ -235,7 +235,6 @@ export class GameComponent {
 
     if(condition){
       if(planet == 'planet1'){
-        console.log(this.planet1)
         this.addCardPlayed(this.planet1.ID);
         this.planet1BottomCards.push(this.cardToPlay);
       }else if(planet == 'planet2'){
@@ -301,7 +300,6 @@ export class GameComponent {
     this.apiService.update("Match/EndTurn/" + this.idMatch + "/" + mail, this.cardsPlayed).subscribe((data) => {
       this.temp = data;
       this.cardsPlayed = [];
-      console.log("Turno terminados")
       console.log(this.temp);
       this.getNextTurn(this.idTurn);
     });
