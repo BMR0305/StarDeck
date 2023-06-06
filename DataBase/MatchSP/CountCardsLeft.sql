@@ -3,7 +3,7 @@ CREATE PROCEDURE CountCardsLeft
 @cards_left INT OUTPUT
 AS
 BEGIN
-	SELECT COUNT(*)
+	SELECT @cards_left = COUNT(*)
 	FROM CardsLeft
 	WHERE Player_ID = @playerID
 END
