@@ -93,7 +93,6 @@ namespace StarDeck_API.Controllers
         public dynamic GetCardsPlayed(string gameID, string turnID, string email)
         {
             CardsUsers_DB.GetInstance().SetContext(context);
-            Planet_DB.GetInstance().SetContext(context);
             try
             {
                 string output = Match_Logic.GetInstance.GetCardsPlayed(gameID, turnID, email);
