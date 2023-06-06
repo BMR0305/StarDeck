@@ -138,6 +138,7 @@ namespace StarDeck_API.Controllers
         [Route("GetCardsLeft/{email}")]
         public dynamic GetCardsLeft(string email)
         {
+            CardsUsers_DB.GetInstance().SetContext(context);
             try
             {
                 string output = Match_Logic.GetInstance.GetCardsLeft(email);
