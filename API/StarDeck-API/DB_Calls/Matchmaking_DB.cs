@@ -44,15 +44,18 @@ namespace StarDeck_API.DB_Calls
             }
         }
 
-        public List<Partida> GetPlayerMatch(string email)
+        public async Task<Partida> GetPlayerMatch(string email)
         {
             Debug.WriteLine("Hi im getting the player match");
-            List<Partida> game =  context.partida.FromSqlRaw("EXEC GetUserMatch @email = {0}", email).ToList();
-            if (game.Count == 0)
+            List<Partida> games = await context.partida.FromSqlRaw("EXEC GetUserMatch @email = {0}", email).ToListAsync();
+            if (games.Count > 0)
             {
-                throw new Exception("Player has no game");
+                return games[0];
             }
-            return game;
+            else
+            {
+                return null;
+            }
         }
 
         public void SetContext(DBContext context)

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Cards, Planet, Player } from 'src/app/shared/models/models-cards';
+import { Cards, Planet, Player, CardPlayed } from 'src/app/shared/models/models-cards';
 import { Observable, interval } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
 import { Router } from '@angular/router';
@@ -24,10 +24,11 @@ export class GameComponent {
 
   //Image for hidden planet
   planet0 = 'https://cdn-icons-png.flaticon.com/512/16/16268.png?w=740&t=st=1684308443~exp=1684309043~hmac=a9aeb0e725b0764136935741b1d73d2c0d70f29d1e1cd5741c88f45efd447747';
+  planet3Img : any;
 
-  planet1? : Planet;
-  planet2? : Planet;
-  planet3? : string;
+  planet1 : any;
+  planet2 : any;
+  planet3 : any;
   seconds = 20;
   oponente?: Player;
 
@@ -38,7 +39,13 @@ export class GameComponent {
   lenghtdeck = this.deck_cards.length;
   energy = 100;
   cardPerPlanet = 5;
+  idMatch : any;
+  idPlayer : any;
+  idTurn : any;
+  loadData = false;
+  canGetCard = true;
 
+  cardsPlayed: CardPlayed[] = [];
   planet1TopCards: Cards[] = [];
   planet1BottomCards: Cards[] = [];
   planet2TopCards: Cards[] = [];
@@ -50,76 +57,151 @@ export class GameComponent {
 
   ngOnInit(): void {
 
+    this.idMatch = localStorage.getItem('IdMatch');
+    this.idPlayer = localStorage.getItem('playerID');
+
+    console.log(this.idMatch);
+    console.log(localStorage.getItem('email'));
+
     this.getOponente(localStorage.getItem('oponent')+"");
 
-    let url = "Planet/get/" + localStorage.getItem('planet1');
-    url = url.replace(/"/g, "");
-
-    this.apiService.get(url).subscribe((data) => {
-      this.temp = data;
-      this.planet1 = this.temp[0]["p_image"];
-    });
-
-    url = "Planet/get/" + localStorage.getItem('planet2');
-    url = url.replace(/"/g, "");
-
-    this.apiService.get(url).subscribe((data) => {
-      this.temp = data;
-      console.log(this.temp);
-      this.planet2 = this.temp[0]["p_image"];
-    });
-
-    url = "Planet/get/" + localStorage.getItem('planet3');
-    url = url.replace(/"/g, "");
-
-    this.apiService.get(url).subscribe((data) => {
-      this.temp = data;
-      //this.planet3 = this.temp[0]["p_image"];
-      this.planet3 = this.planet0;
-    });
-
-    this.setDeck();
+    this.getFirstPlanet();
 
     const source = interval(1000);
     const timer = source.pipe(takeWhile(() => this.seconds > 0));
 
     timer.subscribe(() => {
       this.seconds--;
+
+      if(this.seconds == 0){
+        console.log("Termino el turno");
+        //this.endTurn();
+      }
+
     });
 
   }
 
-  setDeck(){
+  getFirstPlanet(){
 
-    let url = "Deck/get/" + localStorage.getItem("deck");
+    let url = "Planet/get/" + localStorage.getItem('planet1');
     url = url.replace(/"/g, "");
 
     this.apiService.get(url).subscribe((data) => {
       this.temp = data;
-      this.temp = this.temp["cards"]
-      for(let i = 0; i < this.temp.length; i++){
-        const card: Cards = {
-          c_image: this.temp[i]["c_image"],
-          id: this.temp[i]["ID"],
-          c_name: this.temp[i]["c_name"],
-          battle_pts: this.temp[i]["battle_pts"],
-          energy: this.temp[i]["energy"],
-          c_type: this.temp[i]["c_type"],
-          race: this.temp[i]["race"],
-          c_status: this.temp[i]["c_status"],
-          c_description: this.temp[i]["c_description"]
-        }
-        this.deck_cards.push(card);
-        this.lenghtdeck = this.deck_cards.length;
-      }
-      this.deck_cards.sort(Shuffle);
+      this.planet1 = this.temp[0];
+      this.getSecondPlanet();
+    });
+  }
 
-      for(let i = 0; i < 5; i++){
-        let mycard = this.deck_cards.pop();
-        if(mycard) {
-          this.hand_cards.push(mycard);
-        }
-        this.lenghtdeck = this.deck_cards.length;
+  getSecondPlanet(){
+    let url = "Planet/get/" + localStorage.getItem('planet2');
+    url = url.replace(/"/g, "");
+    this.apiService.get(url).subscribe((data) => {
+      this.temp = data;
+      this.planet2 = this.temp[0];
+      this.getThirdPlanet();
+    });
+  }
+
+  getThirdPlanet(){
+
+    let url = "Planet/get/" + localStorage.getItem('planet3');
+    url = url.replace(/"/g, "");
+
+    this.apiService.get(url).subscribe((data) => {
+      this.temp = data;
+      this.planet3 = this.temp[0];
+      this.planet3Img = this.planet3.p_image;
+      this.planet3.p_image = this.planet0;
+      this.getGameTurn();
+    });
+
+  }
+
+  getGameTurn(){
+
+    let url = "Match/GetGameTurn/" + this.idMatch;
+    url = url.replace(/"/g, "");
+
+    this.apiService.get(url).subscribe((data) => {
+      this.temp = data;
+      this.idTurn = this.temp["message"];
+      console.log(this.idTurn);
+      this.setHand();
+    });
+
+  }
+
+  getNextTurn(actualTurn: any){
+
+    let url = "Match/GetGameTurn/" + this.idMatch;
+    url = url.replace(/"/g, "");
+
+    this.apiService.get(url).subscribe((data) => {
+      this.temp = data;
+      let turnFromAPI : string = this.temp["message"];
+
+      console.log("Turno actual: " + actualTurn);
+      console.log("Turno de la API: " + turnFromAPI);
+
+      if(turnFromAPI != actualTurn){
+        this.idTurn = turnFromAPI;
+        this.getCardFromOponent();
+      }else{
+        this.getNextTurn(actualTurn);
+      }
+
+    });
+
+
+  }
+
+  getCardFromOponent(){
+
+    let url = "Match/GetCardsPlayed/" + this.idMatch + "/" + this.idTurn + "/" + localStorage.getItem('email');
+    url = url.replace(/"/g, "");
+
+    this.apiService.get(url).subscribe((data) => {
+      this.temp = data;
+      console.log(this.temp);
+    });
+  }
+
+  setHand(){
+
+    let url = "Match/GetHand/" + this.idMatch + "/" + localStorage.getItem('email');
+    url = url.replace(/"/g, "");
+
+    this.apiService.get(url).subscribe((data) => {
+      this.temp = data;
+
+      let listID : string[] = [];
+
+      listID.push(this.temp["Card1_ID"]);
+      listID.push(this.temp["Card2_ID"]);
+      listID.push(this.temp["Card3_ID"]);
+      listID.push(this.temp["Card4_ID"]);
+      listID.push(this.temp["Card5_ID"]);
+
+      this.setHandCards(listID);
+
+    });
+
+  }
+
+  setHandCards(listId: string[]){
+
+    this.apiService.get("Card/getCard/" + listId[0]).subscribe((data) => {
+      this.temp = data;
+      this.hand_cards.push(this.temp);
+      listId.shift();
+
+      if (listId.length > 0){
+        this.setHandCards(listId);
+      } else {
+        this.loadData = true;
+        this.seconds = 20;
       }
 
     });
@@ -133,7 +215,6 @@ export class GameComponent {
 
     this.apiService.get(url).subscribe((data) => {
       this.temp = data;
-      console.log(this.temp);
       this.oponente = this.temp[0]["nickname"];
       this.player_img = this.temp[0]["avatar"]
     });
@@ -146,7 +227,6 @@ export class GameComponent {
   selectionCard(cardSelected: Cards){
     let index = this.hand_cards.indexOf(cardSelected);
     this.cardToPlay = this.hand_cards[index];
-    console.log(this.cardToPlay);
   }
 
   addToPlanetDown(planet : string, numberOfCards: number){
@@ -155,10 +235,14 @@ export class GameComponent {
 
     if(condition){
       if(planet == 'planet1'){
+        console.log(this.planet1)
+        this.addCardPlayed(this.planet1.ID);
         this.planet1BottomCards.push(this.cardToPlay);
       }else if(planet == 'planet2'){
+        this.addCardPlayed(this.planet2.ID);
         this.planet2BottomCards.push(this.cardToPlay);
       }else if(planet == 'planet3'){
+        this.addCardPlayed(this.planet3.ID);
         this.planet3BottomCards.push(this.cardToPlay);
       }
       this.energy -= this.cardToPlay.energy;
@@ -192,12 +276,52 @@ export class GameComponent {
     this.cardToPlay = undefined;
   }
 
+  addCardPlayed(planetId: string){
+
+    let CardPlayed: CardPlayed = {
+      GameId: this.idMatch,
+      CardId: this.cardToPlay.ID,
+      PlayerId: this.idPlayer,
+      Turn: this.idTurn,
+      Planet : planetId
+    }
+
+    this.cardsPlayed.push(CardPlayed);
+
+  }
+
+  endTurn() {
+
+    this.canGetCard = true;
+
+    // @ts-ignore
+    let mail = localStorage.getItem("email").toString();
+    mail = mail.replace(/"/g, "");
+
+    this.apiService.update("Match/EndTurn/" + this.idMatch + "/" + mail, this.cardsPlayed).subscribe((data) => {
+      this.temp = data;
+      this.cardsPlayed = [];
+      console.log("Turno terminados")
+      console.log(this.temp);
+      this.getNextTurn(this.idTurn);
+    });
+
+  }
+
+  getCardFromDeck() {
+
+    this.canGetCard = false;
+
+    // @ts-ignore
+    let mail = localStorage.getItem("email").toString();
+    mail = mail.replace(/"/g, "");
+
+    this.apiService.get("Match/TakeCard/" + mail).subscribe((data) => {
+      this.temp = data;
+      this.hand_cards.push(this.temp);
+    });
+
+  }
+
+
 }
-
-
-
-function Shuffle() {
-  return Math.random() - 0.5;
-}
-
-

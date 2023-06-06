@@ -99,5 +99,24 @@ namespace StarDeck_API.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("getCard/{id}")]
+        public dynamic GetCard(string id)
+        {
+            CardsUsers_DB.GetInstance().SetContext(this.context);
+            try
+            {
+                string output = CardsUsers_Logic.GetInstance().GetCard(id);
+                return output;
+            }
+            catch (Exception ex)
+            {
+                Message m = new Message();
+                m.message = ex.Message;
+                string output = JsonConvert.SerializeObject(m, Formatting.Indented);
+                return output;
+            }
+        }
+
     }
 }

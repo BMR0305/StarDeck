@@ -7,6 +7,7 @@ namespace StarDeck_API.DB_Calls
 {
     public class Match_DB
     {
+        private static object lockObject = new object();
         private static Match_DB instance = null;
         private DBContext context;
         public static Match_DB GetInstance
@@ -76,6 +77,18 @@ namespace StarDeck_API.DB_Calls
             }
         }
 
+        public void RefreshGameCache(Partida game)
+        {
+            try
+            {
+                context.Entry(game).Reload();
+            }
+            catch (SqlException e)
+            {
+                throw new Exception("Failed to refresh game cache: " + e.Message);
+            }
+        }
+
         public List<Turn> GetTurns()
         {
             try
@@ -88,11 +101,12 @@ namespace StarDeck_API.DB_Calls
             }
         }
 
-        public void UpdateGameTurn(string turnID, string gameID)
+        public void UpdateGameTurn(string gameID, string turnID)
         {
             try
             {
                 context.Database.ExecuteSqlRaw("EXEC SetGameTurn @gameID = {0}, @turnID = {1}", gameID, turnID);
+                context.SaveChanges();
             }
             catch (SqlException e)
             {
@@ -123,6 +137,7 @@ namespace StarDeck_API.DB_Calls
             try
             {
                 context.Database.ExecuteSqlRaw("EXEC EliminateCardLeft @playerID = {0}, @cardID = {1}", playerID, cardID);
+                context.SaveChanges();
             }
             catch (SqlException e)
             {
@@ -130,15 +145,16 @@ namespace StarDeck_API.DB_Calls
             }
         }
 
-        public void SetTurnActivePlayer(string turnID, string playerID)
+        public void AddPlayerReady(string turnID)
         {
             try
             {
-                context.Database.ExecuteSqlRaw("EXEC SetTurnActivePlayer @turnID = {0}, @playerID = {1}",turnID,playerID);
+                context.Database.ExecuteSqlRaw("EXEC AddPlayerReady @turnID = {0}", turnID);
+                context.SaveChanges();
             }
             catch (SqlException e)
             {
-                throw new Exception("Failed to set turn active player: " + e.Message);
+                throw new Exception("Failed to count player ready: " + e.Message);
             }
         }
 
@@ -160,6 +176,7 @@ namespace StarDeck_API.DB_Calls
             try
             {
                 context.Database.ExecuteSqlRaw("EXEC CountTurn @gameID = {0}", gameID);
+                context.SaveChanges();
             }
             catch (SqlException e)
             {
@@ -223,6 +240,42 @@ namespace StarDeck_API.DB_Calls
             catch (SqlException e)
             {
                 throw new Exception("Failed to update winner: " + e.Message);
+            }
+        }
+
+        public Turn GetTurnByID(string turnID)
+        {
+            lock (lockObject)
+            {
+                try
+                {
+                    List<Turn> turn = context.turn.FromSqlRaw("EXEC GetTurnByID @turnID = {0}", turnID).ToList();
+                    if (turn.Count == 0)
+                    {
+                        throw new Exception("Turn not found");
+                    }
+                    return turn[0];
+                }
+                catch (SqlException e)
+                {
+                    throw new Exception("Failed to get turn: " + e.Message);
+                }
+            }
+        }
+
+        public int CountCardsLeft(string playerID)
+        {
+            try
+            {
+                SqlParameter count = new SqlParameter("@cards_left", SqlDbType.Int);
+                count.Direction = ParameterDirection.Output;
+                context.Database.ExecuteSqlRaw("EXEC CountCardsLeft @playerID = {0}, @cards_left OUTPUT", playerID, count);
+                int countInt = Convert.ToInt32(count.Value);
+                return countInt;
+            }
+            catch (SqlException e)
+            {
+                throw new Exception("Failed to get turn number: " + e.Message);
             }
         }
 

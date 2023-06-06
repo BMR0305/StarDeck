@@ -4,6 +4,7 @@ using StarDeck_API.Logic_Files;
 using Newtonsoft.Json;
 using Microsoft.Data.SqlClient;
 using System.Data;
+using System.Diagnostics;
 
 namespace StarDeck_API.Logic_Files
 {
@@ -12,6 +13,7 @@ namespace StarDeck_API.Logic_Files
         private static Match_Logic instance = null;
         private Match_DB CallDB = Match_DB.GetInstance;
         private KeyGen KeyGenerator = KeyGen.GetInstance();
+        private static object lockObject = new object();
 
         public static Match_Logic GetInstance
         {
@@ -25,7 +27,7 @@ namespace StarDeck_API.Logic_Files
             }
         }
 
-        public void InitialTurn(string gameID, string email)
+        public Turn InitialTurn(string gameID, string email)
         {
             Users user = CardsUsers_DB.GetInstance().GetUser(email)[0];
             Partida game = CallDB.GetGameByID(gameID);
@@ -33,10 +35,12 @@ namespace StarDeck_API.Logic_Files
             Turn turn = new Turn();
 
             turn.Turn_ID = CreateTurnID();
-            turn.Active_Player = game.Player1;
+            turn.Players_Ready = 0;
             turn.Game_ID = gameID;
+            turn.Turn_Number = 1;
             CallDB.InsertTurn(turn);
             CallDB.UpdateGameTurn(gameID, turn.Turn_ID);
+            return turn;
 
         }
 
@@ -68,42 +72,63 @@ namespace StarDeck_API.Logic_Files
             CallDB.InsertTurn(turn);
         }
 
-        public string EndTurn(List<CardPlayed> cardsPlayed, string gameID, string email)
+        public async Task<string> EndTurn(List<CardPlayed> cardsPlayed, string gameID, string email)
         {
             Partida game = CallDB.GetGameByID(gameID);
             Users user = CardsUsers_DB.GetInstance().GetUser(email)[0];
             int MaxTurns = 8;
-            if (user.ID == game.Player2)
-            {
-                if (game.TurnCount <= MaxTurns)
-                {
-                    CallDB.SetTurnActivePlayer(game.C_Turn, "None");
-                    Turn turn = new Turn();
-                    turn.Turn_ID = CreateTurnID();
-                    turn.Active_Player = game.Player1;
-                    turn.Game_ID = gameID;
-                    CallDB.InsertTurn(turn);
-                    CallDB.UpdateGameTurn(gameID, turn.Turn_ID);
-                    CallDB.CountTurn(gameID);
-                } else
-                {
-                    //Logica de terminar partida
-                }
 
-            } else
+            if (game.TurnCount <= MaxTurns)
             {
-                CallDB.SetTurnActivePlayer(game.C_Turn, game.Player2);
+                Turn turn = CallDB.GetTurnByID(game.C_Turn);
+                lock (lockObject)
+                {
+                    InsertCardsPlayed(cardsPlayed);
+                    if (turn.Players_Ready >= 1)
+                    {
+                        CallDB.AddPlayerReady(game.C_Turn);
+                        Turn newTurn = new Turn();
+                        newTurn.Turn_ID = CreateTurnID();
+                        newTurn.Players_Ready = 0;
+                        newTurn.Game_ID = gameID;
+                        newTurn.Turn_Number = turn.Turn_Number+1;
+                        CallDB.InsertTurn(newTurn);
+                        CallDB.UpdateGameTurn(gameID, newTurn.Turn_ID);
+                        CallDB.CountTurn(gameID);
+                        return "Turno terminado";
+                    }
+                }
+                CallDB.AddPlayerReady(game.C_Turn);
+                return await WaitingEndTurn(game.ID,game.C_Turn);
             }
 
-            if (cardsPlayed.Count > 0)
-            {
-                for (int i = 0; i < cardsPlayed.Count; i++)
-                {
-                    CallDB.InsertCardPlayed(cardsPlayed[i]);
-                }
-            }
+            return "Turno Maximo";
+        }
 
-            return "Turno terminado"; //Crear un game-state segun lo que pase, ya sea que termine la partida o no. La info del turno se solicita por aparte.
+        public async Task<string> WaitingEndTurn(string gameID,string turnID)
+        {
+            Partida game = CallDB.GetGameByID(gameID);
+            bool ready = false;
+            while (!ready)
+            {
+                if (game.C_Turn != turnID)
+                {
+                    return "Turno terminado";
+                }
+                await Task.Run(() => CallDB.RefreshGameCache(game));
+                game = await Task.Run(()=> CallDB.GetGameByID(gameID));
+                Debug.WriteLine(game.C_Turn);
+                await Task.Delay(1500);
+            }
+            return "Turno terminado";
+        }
+
+        public void InsertCardsPlayed(List<CardPlayed> cardsPlayed)
+        {
+            for (int i = 0; i < cardsPlayed.Count; i++)
+            {
+                CallDB.InsertCardPlayed(cardsPlayed[i]);
+            }
         }
 
         public void InsertDeckToCardsLeft(string gameID)
@@ -125,8 +150,6 @@ namespace StarDeck_API.Logic_Files
 
             CallDB.InsertDeckToCardsLeft(user.ID, user.current_deck);
             List<CardsLeft> hand = CallDB.TakeCards(user.ID,HandSize);
-
-            List<Card> cards = new List<Card>();
             
             for (int i = 0; i < hand.Count; i++)
             {
@@ -147,9 +170,8 @@ namespace StarDeck_API.Logic_Files
             return output;
         }
 
-        public string TakeCard(string gameID, string email)
+        public string TakeCard(string email)
         {
-            Partida game = CallDB.GetGameByID(gameID);
             Users user = CardsUsers_DB.GetInstance().GetUser(email)[0];
 
             CardsLeft cardtaken = CallDB.TakeCards(user.ID, 1)[0];
@@ -163,61 +185,116 @@ namespace StarDeck_API.Logic_Files
 
         public string GetCardsPlayed(string gameID, string turnID, string email)
         {
-            Users player = CardsUsers_DB.GetInstance().GetUser(email)[0];
-            Partida game = CallDB.GetGameByID(gameID);
-            string otherp = "";
-            if (player.ID == game.Player1)
+            lock (lockObject)
             {
-                otherp = game.Player2;
-            }
-            else
-            {
-                otherp = game.Player1;
-            }
+                Users player = CardsUsers_DB.GetInstance().GetUser(email)[0];
+                Partida game = CallDB.GetGameByID(gameID);
+                string otherp = "";
+                if (player.ID == game.Player1)
+                {
+                    otherp = game.Player2;
+                }
+                else
+                {
+                    otherp = game.Player1;
+                }
 
-            List<CardPlayed> cardsPlayed = CallDB.GetCardsPlayed(gameID, turnID, otherp);
-            string output = JsonConvert.SerializeObject(cardsPlayed, Formatting.Indented);
-            return output;
+                List<CardPlayed> cardsPlayed = CallDB.GetCardsPlayed(gameID, turnID, otherp);
+
+                List<CardPlayed_DTO> cardsPlayed_DTO = new List<CardPlayed_DTO>();
+
+                for (int i = 0; i < cardsPlayed.Count; i++)
+                {
+                    CardPlayed_DTO cardPlayed_DTO = new CardPlayed_DTO();
+                    cardPlayed_DTO.GameID = cardsPlayed[i].GameID;
+                    cardPlayed_DTO.Card = CardsUsers_DB.GetInstance().GetCard(cardsPlayed[i].CardID);
+                    cardPlayed_DTO.PlayerID = cardsPlayed[i].PlayerID;
+                    cardPlayed_DTO.Turn = cardsPlayed[i].Turn;
+                    cardPlayed_DTO.Planet = cardsPlayed[i].Planet;
+                    cardsPlayed_DTO.Add(cardPlayed_DTO);
+                }
+
+                string output = JsonConvert.SerializeObject(cardsPlayed_DTO, Formatting.Indented);
+                return output;
+            }
         }
 
         public string EndGame(string gameID)
         {
             Partida game = CallDB.GetGameByID(gameID);
-            List<CardPlayed> cardsPlayed = CallDB.GetCardsPlayedFullGame(gameID, game.Player1);
-            List<CardPlayed> cardsPlayed2 = CallDB.GetCardsPlayedFullGame(gameID, game.Player2);
-
-            string cards1 = "";
-            string cards2 = "";
-
-            for (int i = 0; i < cardsPlayed.Count; i++)
+            lock (lockObject)
             {
-                cards1 += cardsPlayed[i].CardID + "#";
+                if (game.Winner == "P-NULL")
+                {
+                    List<CardPlayed> cardsPlayed = CallDB.GetCardsPlayedFullGame(gameID, game.Player1);
+                    List<CardPlayed> cardsPlayed2 = CallDB.GetCardsPlayedFullGame(gameID, game.Player2);
+
+                    string cards1 = "";
+                    string cards2 = "";
+
+                    for (int i = 0; i < cardsPlayed.Count; i++)
+                    {
+                        cards1 += cardsPlayed[i].CardID + "#";
+                    }
+
+                    for (int i = 0; i < cardsPlayed2.Count; i++)
+                    {
+                        cards2 += cardsPlayed2[i].CardID + "#";
+                    }
+
+                    int score1 = CallDB.GetUserPoints(cards1);
+                    int score2 = CallDB.GetUserPoints(cards1);
+
+                    string output = "";
+                    if (score1 > score2)
+                    {
+                        CallDB.UpdateWinner(game.Player1, gameID);
+                        Users player = CardsUsers_DB.GetInstance().GetUserByID(game.Player1)[0];
+                        output = JsonConvert.SerializeObject(player, Formatting.Indented);
+                    }
+                    else if (score1 == score2)
+                    {
+                        CallDB.UpdateWinner("Tie", gameID);
+                        Message m = new Message();
+                        m.message = "Tie";
+                        output = JsonConvert.SerializeObject(m,Formatting.Indented);
+                    }
+                    else
+                    {
+                        CallDB.UpdateWinner(game.Player2, gameID);
+                        Users player = CardsUsers_DB.GetInstance().GetUserByID(game.Player2)[0];
+                        output = JsonConvert.SerializeObject(player, Formatting.Indented);
+                    }
+                    return output;
+                }
+                else
+                {
+                    Users user = CardsUsers_DB.GetInstance().GetUserByID(game.Winner);
+                    string output = JsonConvert.SerializeObject(user, Formatting.Indented);
+                    return output;
+                }
             }
+        }
 
-            for (int i = 0; i < cardsPlayed2.Count; i++)
-            {
-                cards2 += cardsPlayed2[i].CardID + "#";
-            }
+        public string GetGameTurn(string gameID)
+        {
+            Partida game = CallDB.GetGameByID(gameID);
+            Turn turn = CallDB.GetTurnByID(game.C_Turn);
+            Turn_DTO turn_DTO = new Turn_DTO();
+            turn_DTO.TurnID = turn.Turn_ID;
+            turn_DTO.TurnNumber = turn.Turn_Number;
+            turn_DTO.Energy = (2 * turn.Turn_Number) - 1;
+            string output = JsonConvert.SerializeObject(turn_DTO, Formatting.Indented);
+            return output;
+        }
 
-            int score1 = CallDB.GetUserPoints(cards1);
-            int score2 = CallDB.GetUserPoints(cards1);
-
-            string output = "";
-            if (score1 > score2)
-            {
-                CallDB.UpdateWinner(game.Player1, gameID);
-                Users player = CardsUsers_DB.GetInstance().GetUserByID(game.Player1)[0];
-                output = JsonConvert.SerializeObject(player, Formatting.Indented);
-            } else if (score1 == score2)
-            {
-                CallDB.UpdateWinner("Tie", gameID);
-                output = "";
-            } else
-            {
-                CallDB.UpdateWinner(game.Player2, gameID);
-                Users player = CardsUsers_DB.GetInstance().GetUserByID(game.Player2)[0];
-                output = JsonConvert.SerializeObject(player, Formatting.Indented);
-            }
+        public string GetCardsLeft(string email)
+        {
+            Users user = CardsUsers_DB.GetInstance().GetUser(email)[0];
+            int cardsLeft = CallDB.CountCardsLeft(user.ID);
+            Message message = new Message();
+            message.message = cardsLeft.ToString();
+            string output = JsonConvert.SerializeObject(message, Formatting.Indented);
             return output;
         }
 

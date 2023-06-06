@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using StarDeck_API.DB_Calls;
 using StarDeck_API.Models;
 using StarDeck_API.Logic_Files;
+using Newtonsoft.Json;
 
 namespace StarDeck_API.Controllers
 {
@@ -52,12 +53,13 @@ namespace StarDeck_API.Controllers
         }
 
         [HttpGet]
-        [Route("TakeCard/{gameID}/{email}")]
-        public dynamic TakeCard(string gameID, string email)
+        [Route("TakeCard/{email}")]
+        public dynamic TakeCard(string email)
         {
+            CardsUsers_DB.GetInstance().SetContext(context);
             try
             {
-                string output = Match_Logic.GetInstance.TakeCard(gameID, email);
+                string output = Match_Logic.GetInstance.TakeCard(email);
                 return output;
             }
             catch (Exception ex)
@@ -68,14 +70,17 @@ namespace StarDeck_API.Controllers
 
         [HttpPut]
         [Route("EndTurn/{gameID}/{email}")]
-        public dynamic EndTurn([FromBody] List<CardPlayed> cardsPlayed, string gameID, string email)
+        public async Task<IActionResult> EndTurn([FromBody] List<CardPlayed> cardsPlayed, string gameID, string email)
         {
             Match_DB.GetInstance.SetContext(context);
             CardsUsers_DB.GetInstance().SetContext(context);
             try
             {
-                string output = Match_Logic.GetInstance.EndTurn(cardsPlayed, gameID, email);
-                return output;
+                string message = await Match_Logic.GetInstance.EndTurn(cardsPlayed, gameID, email);
+                Message m = new Message();
+                m.message = message;
+                string output = JsonConvert.SerializeObject(m, Formatting.Indented);
+                return StatusCode(200,output);
             }
             catch (Exception ex)
             {
@@ -113,6 +118,38 @@ namespace StarDeck_API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+
+        [HttpGet]
+        [Route("GetGameTurn/{gameID}")]
+        public dynamic GetGameTurn(string gameID)
+        {
+            try
+            {
+                string output = Match_Logic.GetInstance.GetGameTurn(gameID);
+                return output;
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("GetCardsLeft/{email}")]
+        public dynamic GetCardsLeft(string email)
+        {
+            CardsUsers_DB.GetInstance().SetContext(context);
+            try
+            {
+                string output = Match_Logic.GetInstance.GetCardsLeft(email);
+                return output;
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
 
     }
 }

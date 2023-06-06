@@ -4,6 +4,7 @@
     {
         public string Turn_ID { get; set; }
         public string Game_ID { get; set; }
-        public string Active_Player { get; set; }
+        public int Players_Ready { get; set; }
+        public int Turn_Number { get; set; }
     }
 }
