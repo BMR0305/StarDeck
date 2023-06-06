@@ -45,14 +45,16 @@ namespace StarDeck_API.DB_Calls
 
         public List<Planet> GetPlanetByName(string name)
         {
-            lock (lockObject);
-            Debug.WriteLine("Hi im getting the planet by name "+name);
-            List<Planet> planetList = context.planet.FromSqlRaw("EXEC GetPlanet @name = {0}", name).ToList();
-            if (planetList.Count == 0)
+            lock (lockObject)
             {
-                throw new Exception("No planet found");
+                Debug.WriteLine("Hi im getting the planet by name " + name);
+                List<Planet> planetList = context.planet.FromSqlRaw("EXEC GetPlanet @name = {0}", name).ToList();
+                if (planetList.Count == 0)
+                {
+                    throw new Exception("No planet found");
+                }
+                return planetList;
             }
-            return planetList;
         }
 
         /*

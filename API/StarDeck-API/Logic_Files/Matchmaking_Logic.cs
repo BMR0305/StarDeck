@@ -27,38 +27,39 @@ namespace StarDeck_API.Logic_Files
         {
             try
             {
-                var PlayersWaiting = CallDB.GetUsersBP();
-
                 lock (lockObject)
-
-                if (PlayersWaiting.Count > 0)
                 {
-                    for (int i = 0; i < PlayersWaiting.Count; i++)
+                    var PlayersWaiting = CallDB.GetUsersBP();
+
+                    if (PlayersWaiting.Count > 0)
                     {
-                        if (PlayersWaiting[i].u_status == "BP" && PlayersWaiting[i].email != email)
+                        for (int i = 0; i < PlayersWaiting.Count; i++)
                         {
-                            //CallDB.UpdateUserStatus(PlayersWaiting[i].email, "EP");
-                            Users current_user = CardsUsers_DB.GetInstance().GetUser(email)[0];
-                            CallDB.UpdateUserStatus(email, "EP");
+                            if (PlayersWaiting[i].u_status == "BP" && PlayersWaiting[i].email != email)
+                            {
+                                //CallDB.UpdateUserStatus(PlayersWaiting[i].email, "EP");
+                                Users current_user = CardsUsers_DB.GetInstance().GetUser(email)[0];
+                                CallDB.UpdateUserStatus(email, "EP");
 
-                            var planets = Planet_DB.GetInstance().GetGamePlanets();
+                                var planets = Planet_DB.GetInstance().GetGamePlanets();
 
-                            Partida partida = CreateGameObject(current_user, PlayersWaiting[i], planets);
+                                Partida partida = CreateGameObject(current_user, PlayersWaiting[i], planets);
 
-                            //Crear aux para enviar al front end la lista de los planetas y jugadores como objetos completos.
-                            Partida_DTO partida_DTO = CreatePartida_DTO(partida, current_user, PlayersWaiting[i], planets);
+                                //Crear aux para enviar al front end la lista de los planetas y jugadores como objetos completos.
+                                Partida_DTO partida_DTO = CreatePartida_DTO(partida, current_user, PlayersWaiting[i], planets);
 
-                            CallDB.UpdateUserStatus(PlayersWaiting[i].email, "EP");
+                                CallDB.UpdateUserStatus(PlayersWaiting[i].email, "EP");
 
-                            Turn turn = Match_Logic.GetInstance.InitialTurn(partida.ID, email);
+                                Turn turn = Match_Logic.GetInstance.InitialTurn(partida.ID, email);
 
-                            Match_DB.GetInstance.UpdateGameTurn(partida.ID, turn.Turn_ID);
+                                Match_DB.GetInstance.UpdateGameTurn(partida.ID, turn.Turn_ID);
 
-                            Match_DB.GetInstance.CountTurn(partida.ID);
+                                Match_DB.GetInstance.CountTurn(partida.ID);
 
-                            string json_partida = JsonConvert.SerializeObject(partida_DTO);
+                                string json_partida = JsonConvert.SerializeObject(partida_DTO);
 
-                            return json_partida;
+                                return json_partida;
+                            }
                         }
                     }
                 }

@@ -7,6 +7,7 @@ namespace StarDeck_API.DB_Calls
 {
     public class Match_DB
     {
+        private static object lockObject = new object();
         private static Match_DB instance = null;
         private DBContext context;
         public static Match_DB GetInstance
@@ -124,6 +125,7 @@ namespace StarDeck_API.DB_Calls
             try
             {
                 context.Database.ExecuteSqlRaw("EXEC EliminateCardLeft @playerID = {0}, @cardID = {1}", playerID, cardID);
+                context.SaveChanges();
             }
             catch (SqlException e)
             {
@@ -131,15 +133,16 @@ namespace StarDeck_API.DB_Calls
             }
         }
 
-        public void SetTurnActivePlayer(string turnID, string playerID)
+        public void AddPlayerReady(string turnID)
         {
             try
             {
-                context.Database.ExecuteSqlRaw("EXEC SetTurnActivePlayer @turnID = {0}, @playerID = {1}",turnID,playerID);
+                context.Database.ExecuteSqlRaw("EXEC AddPlayerReady @turnID = {0}", turnID);
+                context.SaveChanges();
             }
             catch (SqlException e)
             {
-                throw new Exception("Failed to set turn active player: " + e.Message);
+                throw new Exception("Failed to count player ready: " + e.Message);
             }
         }
 
@@ -230,18 +233,21 @@ namespace StarDeck_API.DB_Calls
 
         public Turn GetTurnByID(string turnID)
         {
-            try
+            lock (lockObject)
             {
-                List<Turn> turn = context.turn.FromSqlRaw("EXEC GetTurnByID @turnID = {0}", turnID).ToList();
-                if (turn.Count == 0)
+                try
                 {
-                    throw new Exception("Turn not found");
+                    List<Turn> turn = context.turn.FromSqlRaw("EXEC GetTurnByID @turnID = {0}", turnID).ToList();
+                    if (turn.Count == 0)
+                    {
+                        throw new Exception("Turn not found");
+                    }
+                    return turn[0];
                 }
-                return turn[0];
-            }
-            catch (SqlException e)
-            {
-                throw new Exception("Failed to get turn: " + e.Message);
+                catch (SqlException e)
+                {
+                    throw new Exception("Failed to get turn: " + e.Message);
+                }
             }
         }
 

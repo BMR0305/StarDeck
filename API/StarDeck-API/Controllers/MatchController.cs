@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using StarDeck_API.DB_Calls;
 using StarDeck_API.Models;
 using StarDeck_API.Logic_Files;
+using Newtonsoft.Json;
 
 namespace StarDeck_API.Controllers
 {
@@ -75,7 +76,10 @@ namespace StarDeck_API.Controllers
             CardsUsers_DB.GetInstance().SetContext(context);
             try
             {
-                string output = Match_Logic.GetInstance.EndTurn(cardsPlayed, gameID, email);
+                string message = Match_Logic.GetInstance.EndTurn(cardsPlayed, gameID, email);
+                Message m = new Message();
+                m.message = message;
+                string output = JsonConvert.SerializeObject(m, Formatting.Indented);
                 return output;
             }
             catch (Exception ex)
@@ -122,21 +126,6 @@ namespace StarDeck_API.Controllers
             try
             {
                 string output = Match_Logic.GetInstance.GetGameTurn(gameID);
-                return output;
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
-        }
-
-        [HttpGet]
-        [Route("GetActivePlayer/{gameID}")]
-        public dynamic GetActivePlayer(string gameID)
-        {
-            try
-            {
-                string output = Match_Logic.GetInstance.GetTurnActivePlayer(gameID);
                 return output;
             }
             catch (Exception ex)
