@@ -37,6 +37,7 @@ namespace StarDeck_API.Logic_Files
             turn.Turn_ID = CreateTurnID();
             turn.Players_Ready = 0;
             turn.Game_ID = gameID;
+            turn.Turn_Number = 1;
             CallDB.InsertTurn(turn);
             CallDB.UpdateGameTurn(gameID, turn.Turn_ID);
             return turn;
@@ -90,8 +91,10 @@ namespace StarDeck_API.Logic_Files
                         newTurn.Turn_ID = CreateTurnID();
                         newTurn.Players_Ready = 0;
                         newTurn.Game_ID = gameID;
+                        newTurn.Turn_Number = turn.Turn_Number+1;
                         CallDB.InsertTurn(newTurn);
                         CallDB.UpdateGameTurn(gameID, newTurn.Turn_ID);
+                        CallDB.CountTurn(gameID);
                         return "Turno terminado";
                     }
                 }
@@ -203,6 +206,7 @@ namespace StarDeck_API.Logic_Files
                 for (int i = 0; i < cardsPlayed.Count; i++)
                 {
                     CardPlayed_DTO cardPlayed_DTO = new CardPlayed_DTO();
+                    cardPlayed_DTO.GameID = cardsPlayed[i].GameID;
                     cardPlayed_DTO.Card = CardsUsers_DB.GetInstance().GetCard(cardsPlayed[i].CardID);
                     cardPlayed_DTO.PlayerID = cardsPlayed[i].PlayerID;
                     cardPlayed_DTO.Turn = cardsPlayed[i].Turn;
@@ -273,9 +277,21 @@ namespace StarDeck_API.Logic_Files
         public string GetGameTurn(string gameID)
         {
             Partida game = CallDB.GetGameByID(gameID);
-            string turnID = game.C_Turn;
+            Turn turn = CallDB.GetTurnByID(game.C_Turn);
+            Turn_DTO turn_DTO = new Turn_DTO();
+            turn_DTO.TurnID = turn.Turn_ID;
+            turn_DTO.TurnNumber = turn.Turn_Number;
+            turn_DTO.Energy = (2 * turn.Turn_Number) - 1;
+            string output = JsonConvert.SerializeObject(turn_DTO, Formatting.Indented);
+            return output;
+        }
+
+        public string GetCardsLeft(string email)
+        {
+            Users user = CardsUsers_DB.GetInstance().GetUser(email)[0];
+            int cardsLeft = CallDB.CountCardsLeft(user.ID);
             Message message = new Message();
-            message.message = turnID;
+            message.message = cardsLeft.ToString();
             string output = JsonConvert.SerializeObject(message, Formatting.Indented);
             return output;
         }
