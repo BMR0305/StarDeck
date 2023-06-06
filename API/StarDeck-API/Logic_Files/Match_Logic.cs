@@ -182,21 +182,37 @@ namespace StarDeck_API.Logic_Files
 
         public string GetCardsPlayed(string gameID, string turnID, string email)
         {
-            Users player = CardsUsers_DB.GetInstance().GetUser(email)[0];
-            Partida game = CallDB.GetGameByID(gameID);
-            string otherp = "";
-            if (player.ID == game.Player1)
+            lock (lockObject)
             {
-                otherp = game.Player2;
-            }
-            else
-            {
-                otherp = game.Player1;
-            }
+                Users player = CardsUsers_DB.GetInstance().GetUser(email)[0];
+                Partida game = CallDB.GetGameByID(gameID);
+                string otherp = "";
+                if (player.ID == game.Player1)
+                {
+                    otherp = game.Player2;
+                }
+                else
+                {
+                    otherp = game.Player1;
+                }
 
-            List<CardPlayed> cardsPlayed = CallDB.GetCardsPlayed(gameID, turnID, otherp);
-            string output = JsonConvert.SerializeObject(cardsPlayed, Formatting.Indented);
-            return output;
+                List<CardPlayed> cardsPlayed = CallDB.GetCardsPlayed(gameID, turnID, otherp);
+
+                List<CardPlayed_DTO> cardsPlayed_DTO = new List<CardPlayed_DTO>();
+
+                for (int i = 0; i < cardsPlayed.Count; i++)
+                {
+                    CardPlayed_DTO cardPlayed_DTO = new CardPlayed_DTO();
+                    cardPlayed_DTO.Card = CardsUsers_DB.GetInstance().GetCard(cardsPlayed[i].CardID);
+                    cardPlayed_DTO.PlayerID = cardsPlayed[i].PlayerID;
+                    cardPlayed_DTO.Turn = cardsPlayed[i].Turn;
+                    cardPlayed_DTO.Planet = Planet_DB.GetInstance().GetPlanetByID(cardsPlayed[i].Planet)[0];
+                    cardsPlayed_DTO.Add(cardPlayed_DTO);
+                }
+
+                string output = JsonConvert.SerializeObject(cardsPlayed_DTO, Formatting.Indented);
+                return output;
+            }
         }
 
         public string EndGame(string gameID)
