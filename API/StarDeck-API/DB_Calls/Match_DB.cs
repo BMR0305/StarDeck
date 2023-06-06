@@ -263,6 +263,22 @@ namespace StarDeck_API.DB_Calls
             }
         }
 
+        public int CountCardsLeft(string playerID)
+        {
+            try
+            {
+                SqlParameter count = new SqlParameter("@cards_left", SqlDbType.Int);
+                count.Direction = ParameterDirection.Output;
+                context.Database.ExecuteSqlRaw("EXEC CountCardsLeft @playerID = {0}, @turn_number OUTPUT", playerID, count);
+                int countInt = Convert.ToInt32(count.Value);
+                return countInt;
+            }
+            catch (SqlException e)
+            {
+                throw new Exception("Failed to get turn number: " + e.Message);
+            }
+        }
+
         public void SetContext(DBContext context)
         {
             this.context = context;

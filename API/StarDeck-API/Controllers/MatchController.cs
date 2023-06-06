@@ -134,5 +134,21 @@ namespace StarDeck_API.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("GetCardsLeft/{email}")]
+        public dynamic GetCardsLeft(string email)
+        {
+            try
+            {
+                string output = Match_Logic.GetInstance.GetCardsLeft(email);
+                return output;
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
+
     }
 }

@@ -17,8 +17,6 @@ namespace StarDeck_API.Models
 
         public DbSet<Planet> planet => Set<Planet>();
 
-        public DbSet<JoinUserCards> joinUserCards => Set<JoinUserCards>();
-
         public DbSet<Partida> partida => Set<Partida>();
 
         public DbSet<Deck> deck => Set<Deck>();
