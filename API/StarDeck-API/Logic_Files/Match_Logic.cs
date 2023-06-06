@@ -206,7 +206,7 @@ namespace StarDeck_API.Logic_Files
                     cardPlayed_DTO.Card = CardsUsers_DB.GetInstance().GetCard(cardsPlayed[i].CardID);
                     cardPlayed_DTO.PlayerID = cardsPlayed[i].PlayerID;
                     cardPlayed_DTO.Turn = cardsPlayed[i].Turn;
-                    cardPlayed_DTO.Planet = Planet_DB.GetInstance().GetPlanetByID(cardsPlayed[i].Planet)[0];
+                    cardPlayed_DTO.Planet = cardsPlayed[i].Planet;
                     cardsPlayed_DTO.Add(cardPlayed_DTO);
                 }
 
