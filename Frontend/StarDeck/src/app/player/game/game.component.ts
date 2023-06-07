@@ -91,7 +91,7 @@ export class GameComponent {
       if(this.seconds == 0 && this.inTurn){
         this.seconds = this.resetSeconds;
         console.log("Termino el turno por tiempo");
-        this.endTurn();
+        //this.endTurn();
       } else if(this.seconds <= 0 ){
         this.seconds = 0;
       }
