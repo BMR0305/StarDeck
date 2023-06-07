@@ -75,34 +75,27 @@ namespace StarDeck_API.Logic_Files
         public async Task<string> EndTurn(List<CardPlayed> cardsPlayed, string gameID, string email)
         {
             Partida game = CallDB.GetGameByID(gameID);
-            Users user = CardsUsers_DB.GetInstance().GetUser(email)[0];
-            int MaxTurns = 8;
-
-            if (game.TurnCount <= MaxTurns)
+            Users user = CardsUsers_DB.GetInstance().GetUser(email)[0];            
+            Turn turn = CallDB.GetTurnByID(game.C_Turn);
+            lock (lockObject)
             {
-                Turn turn = CallDB.GetTurnByID(game.C_Turn);
-                lock (lockObject)
+                InsertCardsPlayed(cardsPlayed);
+                if (turn.Players_Ready >= 1)
                 {
-                    InsertCardsPlayed(cardsPlayed);
-                    if (turn.Players_Ready >= 1)
-                    {
-                        CallDB.AddPlayerReady(game.C_Turn);
-                        Turn newTurn = new Turn();
-                        newTurn.Turn_ID = CreateTurnID();
-                        newTurn.Players_Ready = 0;
-                        newTurn.Game_ID = gameID;
-                        newTurn.Turn_Number = turn.Turn_Number+1;
-                        CallDB.InsertTurn(newTurn);
-                        CallDB.UpdateGameTurn(gameID, newTurn.Turn_ID);
-                        CallDB.CountTurn(gameID);
-                        return "Turno terminado";
-                    }
+                    CallDB.AddPlayerReady(game.C_Turn);
+                    Turn newTurn = new Turn();
+                    newTurn.Turn_ID = CreateTurnID();
+                    newTurn.Players_Ready = 0;
+                    newTurn.Game_ID = gameID;
+                    newTurn.Turn_Number = turn.Turn_Number + 1;
+                    CallDB.InsertTurn(newTurn);
+                    CallDB.UpdateGameTurn(gameID, newTurn.Turn_ID);
+                    CallDB.CountTurn(gameID);
+                    return "Turno terminado";
                 }
+            }
                 CallDB.AddPlayerReady(game.C_Turn);
                 return await WaitingEndTurn(game.ID,game.C_Turn);
-            }
-
-            return "Turno Maximo";
         }
 
         public async Task<string> WaitingEndTurn(string gameID,string turnID)
@@ -221,9 +214,9 @@ namespace StarDeck_API.Logic_Files
 
         public string EndGame(string gameID)
         {
-            Partida game = CallDB.GetGameByID(gameID);
             lock (lockObject)
             {
+                Partida game = CallDB.GetGameByID(gameID);
                 if (game.Winner == "P-NULL")
                 {
                     List<CardPlayed> cardsPlayed = CallDB.GetCardsPlayedFullGame(game.Player1, gameID);
