@@ -44,7 +44,7 @@ export class GameComponent {
   lenghtdeck = 18;
   seconds = 20;
   resetSeconds = 20;
-  maxTurns = 7;
+  maxTurns = 8;
   showThirdPlaner = 4;
 
   //Variable for change the screen
@@ -290,6 +290,7 @@ export class GameComponent {
       this.temp = data;
       let turnFromAPI : string = this.temp["TurnID"];
       let lastTurn : string = this.idTurn;
+      let flag : boolean = true;
 
       console.log("Turno actual: " + actualTurn);
       console.log("Turno de la API: " + turnFromAPI);
@@ -303,10 +304,14 @@ export class GameComponent {
         if (this.numberTurn == this.showThirdPlaner){
           this.planet3.p_image = this.planet3Img;
         } else if(this.numberTurn == this.maxTurns){
+          flag = false;
           this.endParty();
         }
 
-        this.getCardsFromOponent(lastTurn);
+        if(flag){
+          this.getCardsFromOponent(lastTurn);
+        }
+
       }else{
         this.getNextTurn(actualTurn);
       }
