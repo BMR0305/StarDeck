@@ -265,6 +265,8 @@ namespace StarDeck_API.Logic_Files
                         Users player = CardsUsers_DB.GetInstance().GetUserByID(game.Player2)[0];
                         output = JsonConvert.SerializeObject(player, Formatting.Indented);
                     }
+                    CallDB.EmptyCardsLeft(game.Player1);
+                    CallDB.EmptyCardsLeft(game.Player2);
                     return output;
                 }
                 else
