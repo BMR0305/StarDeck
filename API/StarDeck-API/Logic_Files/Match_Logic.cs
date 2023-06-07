@@ -254,9 +254,8 @@ namespace StarDeck_API.Logic_Files
                     else if (score1 == score2)
                     {
                         CallDB.UpdateWinner("Tie", gameID);
-                        Message m = new Message();
-                        m.message = "Tie";
-                        output = JsonConvert.SerializeObject(m,Formatting.Indented);
+                        Users tie = GenTie();
+                        output = JsonConvert.SerializeObject(tie, Formatting.Indented);
                     }
                     else
                     {
@@ -266,18 +265,47 @@ namespace StarDeck_API.Logic_Files
                     }
                     CallDB.EmptyCardsLeft(game.Player1);
                     CallDB.EmptyCardsLeft(game.Player2);
-                    Matchmaking_DB.GetInstance().UpdateUserStatus(game.Player1, "A");
-                    Matchmaking_DB.GetInstance().UpdateUserStatus(game.Player2, "A");
+                    Users user1 = CardsUsers_DB.GetInstance().GetUserByID(game.Player1)[0];
+                    Users user2 = CardsUsers_DB.GetInstance().GetUserByID(game.Player2)[0];
+                    Matchmaking_DB.GetInstance().UpdateUserStatus(user1.email, "A");
+                    Matchmaking_DB.GetInstance().UpdateUserStatus(user2.email, "A");
 
                     return output;
                 }
                 else
                 {
+                    string output = "";
+                    if (game.Winner == "Tie")
+                    {
+                        Users tie = GenTie();
+                        output = JsonConvert.SerializeObject(tie, Formatting.Indented);
+                        return output;
+                    }
                     Users user = CardsUsers_DB.GetInstance().GetUserByID(game.Winner)[0];
-                    string output = JsonConvert.SerializeObject(user, Formatting.Indented);
+                    output = JsonConvert.SerializeObject(user, Formatting.Indented);
                     return output;
                 }
             }
+        }
+
+        public Users GenTie()
+        {
+            Users tie = new Users();
+            tie.ID = "Tie";
+            tie.email = "Tie";
+            tie.nickname = "Tie";
+            tie.current_deck = "Tie";
+            tie.birthday = DateTime.Now;
+            tie.u_password = "Tie";
+            tie.u_status = "Tie";
+            tie.u_type = "Tie";
+            tie.coins = 0;
+            tie.ranking = 0;
+            tie.avatar = "Tie";
+            tie.nationality = "CR";
+            tie.u_name = "Tie";
+            
+            return tie;
         }
 
         public string GetGameTurn(string gameID)
