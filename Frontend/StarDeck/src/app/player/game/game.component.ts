@@ -21,7 +21,6 @@ export class GameComponent {
   planet0 = 'https://cdn-icons-png.flaticon.com/512/16/16268.png?w=740&t=st=1684308443~exp=1684309043~hmac=a9aeb0e725b0764136935741b1d73d2c0d70f29d1e1cd5741c88f45efd447747';
   planet3Img : any;
 
-
   //Variables get from API
   planet1 : any;
   planet2 : any;
@@ -91,13 +90,29 @@ export class GameComponent {
       if(this.seconds == 0 && this.inTurn){
         this.seconds = this.resetSeconds;
         console.log("Termino el turno por tiempo");
-        //this.endTurn();
-      } else if(this.seconds <= 0 ){
+      } else if(this.seconds <= 0 || !this.inTurn){
         this.seconds = 0;
       }
 
     });
 
+  }
+
+
+  /**
+   * This method is used to get the name and avatar from the opponent. This method is called when the player start the game.
+   * @param opp string with the email from the opponen
+   */
+  getOponente(opp: string) {
+
+    let url = "Users/get/" + opp;
+    url = url.replace(/"/g, "");
+
+    this.apiService.get(url).subscribe((data) => {
+      this.temp = data;
+      this.oponente = this.temp[0]["nickname"];
+      this.player_img = this.temp[0]["avatar"]
+    });
   }
 
   //Methods for get the planets from the api
@@ -148,7 +163,6 @@ export class GameComponent {
 
   }
 
-
   //Methods for get the turn from the api
 
   /**
@@ -173,6 +187,92 @@ export class GameComponent {
       this.setHand();
     });
 
+  }
+
+  /**
+   * Method for get first hand from the api. This method is called when the player start the game. This method get 5 cards from the api. This method only get the ID card. Needs the method setHandCards for get the cards.
+   */
+  setHand(){
+
+    let url = "Match/GetHand/" + this.idMatch + "/" + localStorage.getItem('email');
+    url = url.replace(/"/g, "");
+
+    this.apiService.get(url).subscribe((data) => {
+      this.temp = data;
+
+      let listID : string[] = [];
+
+      const numElements = Object.keys(this.temp).length;
+
+      for (let i = 0; i < numElements - 2; i++){
+        listID.push(this.temp["Card" + (i+1) + "_ID"]);
+      }
+
+      console.log(listID);
+
+      this.setHandCards(listID);
+
+    });
+
+  }
+
+  /**
+   * This method is used to get the cards from the api. Use the listID generated in the method setHand for call each card from the api.
+   * @param listId string[] with the ID cards
+   */
+  setHandCards(listId: string[]){
+
+    this.apiService.get("Card/getCard/" + listId[0]).subscribe((data) => {
+      this.temp = data;
+      this.hand_cards.push(this.temp);
+      listId.shift();
+
+      if (listId.length > 0){
+        this.setHandCards(listId);
+      } else {
+        this.getCardsLeft();
+        this.loadData = true;
+        this.seconds = 20;
+      }
+
+    });
+
+  }
+
+  /**
+   * This method is used to end turn and send the cards played to the api. First it verifies if the player is in turn, next verifies if the turn is 7,
+   * if it is 7, the method call the api to end the game, if not, the method call the api to end the turn and call the method getNextTurn.
+   */
+
+  endTurnOrGame() {
+
+    console.log("terminar turno");
+
+    if(!this.inTurn){
+      alert("No es su turno");
+      return;
+    }
+
+    this.inTurn = false;
+
+    this.endTurn();
+
+  }
+
+  /**
+   * This method is used to end the turn. This method call the api to end the turn and call the method getNextTurn for change the turn.
+   */
+  endTurn(){
+    // @ts-ignore
+    let mail = localStorage.getItem("email").toString();
+    mail = mail.replace(/"/g, "");
+
+    this.apiService.update("Match/EndTurn/" + this.idMatch + "/" + mail, this.cardsPlayed).subscribe((data) => {
+      this.temp = data;
+      this.cardsPlayed = [];
+      console.log(this.temp);
+      this.getNextTurn(this.idTurn);
+    });
   }
 
   /**
@@ -215,8 +315,11 @@ export class GameComponent {
 
   }
 
-
-  //Methods for get the opponent cards played from the api
+  /**
+   * This method is used to get the cards played from the oponent. This method is called the api using the idTurn that is the last turn of the player.\
+   * In addition reset the values of inTurn, seconds and canGetCardd.
+   * @param lastTurn string with the last turn of the player.
+   */
   getCardsFromOponent(lastTurn : string){
 
     let url = "Match/GetCardsPlayed/" + this.idMatch + "/" + lastTurn + "/" + localStorage.getItem('email');
@@ -256,81 +359,31 @@ export class GameComponent {
   }
 
   /**
-   * Method for get first hand from the api. This method is called when the player start the game. This method get 5 cards from the api. This method only get the ID card. Needs the method setHandCards for get the cards.
+   * This method is used to end party or game. This methos call to API to get the information of the winner, lose or tie and change the variable gameEnd to true and
+   * the game result to 0 if the player win, 1 if the player lose and 0 is the draw.
    */
-  setHand(){
-
-    let url = "Match/GetHand/" + this.idMatch + "/" + localStorage.getItem('email');
-    url = url.replace(/"/g, "");
-
-    this.apiService.get(url).subscribe((data) => {
+  endParty(){
+    this.apiService.get("Match/EndGame/" + this.idMatch).subscribe((data) => {
       this.temp = data;
-
-      let listID : string[] = [];
-
-      const numElements = Object.keys(this.temp).length;
-
-      console.log("Temp de cartas");
+      console.log("Terminada partida");
       console.log(this.temp);
-      console.log("Numero de cartas en la mano: " + numElements);
 
-      for (let i = 0; i < numElements - 2; i++){
-        listID.push(this.temp["Card" + (i+1) + "_ID"]);
+      if(this.temp["ID"] == this.idPlayer){
+        this.gameResult = 0;
+      } else if(this.temp["ID"] == "Tie"){
+        this.gameResult = 2;
+      } else{
+        this.gameResult = 1;
       }
+      this.gameEnd = true;
+      this.loadData = false;
 
-      console.log(listID);
-
-      this.setHandCards(listID);
-
-    });
-
-  }
-
-  /**
-   * This method is used to get the cards from the api. Use the listID generated in the method setHand for call each card from the api.
-   * @param listId string[] with the ID cards
-   */
-  setHandCards(listId: string[]){
-
-    this.apiService.get("Card/getCard/" + listId[0]).subscribe((data) => {
-      this.temp = data;
-      this.hand_cards.push(this.temp);
-      listId.shift();
-
-      if (listId.length > 0){
-        this.setHandCards(listId);
-      } else {
-        this.getCardsLeft();
-        this.loadData = true;
-        this.seconds = 20;
-      }
+      console.log(this.gameResult);
+      console.log(this.gameEnd);
 
     });
-
   }
 
-  /**
-   * This method is used to get the name and avatar from the opponent. This method is called when the player start the game.
-   * @param opp string with the email from the opponen
-   */
-  getOponente(opp: string) {
-
-    let url = "Users/get/" + opp;
-    url = url.replace(/"/g, "");
-
-    this.apiService.get(url).subscribe((data) => {
-      this.temp = data;
-      this.oponente = this.temp[0]["nickname"];
-      this.player_img = this.temp[0]["avatar"]
-    });
-  }
-
-  /**
-   * This method return to the main menu
-   */
-  withdraw(){
-    this.router.navigate(['/playerview/start'])
-  }
 
   /**
    * This method select the card to play from the hand cards
@@ -420,67 +473,6 @@ export class GameComponent {
 
   }
 
-  /**
-   * This method is used to end turn and send the cards played to the api. First it verifies if the player is in turn, next verifies if the turn is 7,
-   * if it is 7, the method call the api to end the game, if not, the method call the api to end the turn and call the method getNextTurn.
-   */
-
-  endTurnOrGame() {
-
-    console.log("terminar turno");
-
-    if(!this.inTurn){
-      alert("No es su turno");
-      return;
-    }
-
-    this.inTurn = false;
-
-    this.endTurn();
-
-  }
-
-  /**
-   * This method is used to end the turn. This method call the api to end the turn and call the method getNextTurn for change the turn.
-   */
-  endTurn(){
-    // @ts-ignore
-    let mail = localStorage.getItem("email").toString();
-    mail = mail.replace(/"/g, "");
-
-    this.apiService.update("Match/EndTurn/" + this.idMatch + "/" + mail, this.cardsPlayed).subscribe((data) => {
-      this.temp = data;
-      this.cardsPlayed = [];
-      console.log(this.temp);
-      this.getNextTurn(this.idTurn);
-    });
-  }
-
-  /**
-   * This method is used to end party or game. This methos call to API to get the information of the winner, lose or tie and change the variable gameEnd to true and
-   * the game result to 0 if the player win, 1 if the player lose and 0 is the draw.
-   */
-  endParty(){
-    this.apiService.get("Match/EndGame/" + this.idMatch).subscribe((data) => {
-      this.temp = data;
-      console.log("Terminada partida");
-      console.log(this.temp);
-
-      if(this.temp["ID"] == this.idPlayer){
-        this.gameResult = 0;
-      } else if(this.temp["ID"] == "Tie"){
-        this.gameResult = 2;
-      } else{
-        this.gameResult = 1;
-      }
-      this.gameEnd = true;
-      this.loadData = false;
-
-      console.log(this.gameResult);
-      console.log(this.gameEnd);
-
-    });
-  }
 
   /**
    * This method is used to get a card from deck. The deck is in the Backend, so we need to call the api to get a card from the deck.
@@ -528,6 +520,13 @@ export class GameComponent {
       this.lenghtdeck = this.temp["message"];
     });
 
+  }
+
+  /**
+   * This method return to the main menu
+   */
+  withdraw(){
+    this.router.navigate(['/playerview/start'])
   }
 
 
