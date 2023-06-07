@@ -144,7 +144,7 @@
 
       <div>
         <label style="position: relative; z-index: 1;">Puntos rival: {{this.pointsPlanets[4]}}</label>
-        <img src="{{planet3.p_image}}" style="width: 200px; height: 200px; padding: 30px;">
+        <img src="{{planet3.p_image}}" style="width: 200px; height: 200px; padding: 30px;" (click)="addToPlanetDown('planet3', planet3BottomCards.length)">
         <label style="position: relative; z-index: 1;">Puntos jugador: {{this.pointsPlanets[5]}}</label>
       </div>
 

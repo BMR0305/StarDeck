@@ -13,49 +13,53 @@ import { ApiService } from 'src/app/shared/api-module/api.service';
 
 export class GameComponent {
 
-  temp: any; //temporal variable to save the cards from the api
-  cardToPlay : any;
+  temp: any; //temporal variable to save cada from API
 
-  //Profile player image default
+  //images for the screen
   player_img = 'https://previews.123rf.com/images/ylivdesign/ylivdesign1609/ylivdesign160903327/62577801-icono-de-alien-en-estilo-monocromo-negro-sobre-una-ilustraci%C3%B3n-de-vector-de-fondo-blanco.jpg';
-
-  //Image for the deck
   deck = 'https://cdn-icons-png.flaticon.com/512/1178/1178933.png?w=740&t=st=1683845874~exp=1683846474~hmac=64a15b662b3545f116f90292fe99ab6f0f3c3036692aa285b3fe8114b3f4d4c3';
-
-  //Image for hidden planet
   planet0 = 'https://cdn-icons-png.flaticon.com/512/16/16268.png?w=740&t=st=1684308443~exp=1684309043~hmac=a9aeb0e725b0764136935741b1d73d2c0d70f29d1e1cd5741c88f45efd447747';
   planet3Img : any;
 
+
+  //Variables get from API
   planet1 : any;
   planet2 : any;
   planet3 : any;
-  seconds = 20;
   oponente?: Player;
-
   card?: Cards;
 
+  //Variable for send the API
   hand_cards: Cards[] = [];
-  lenghtdeck = 18;
-  energy = 0;
-  cardPerPlanet = 5;
   idMatch : any;
   idPlayer : any;
   idTurn : any;
+
+  //variable for control the actions
+  cardToPlay : any;
+  canGetCard = true;
   inTurn : boolean = true;
   numberTurn : number = 1;
+  cardPerPlanet = 5;
+  energy = 0;
+  lenghtdeck = 18;
+  seconds = 20;
+
+  //Variable for change the screen
   loadData = false;
-  canGetCard = true;
   gameEnd = false;
   gameResult = 0;
 
-  cardsPlayed: CardPlayed[] = [];
+  cardsPlayed: CardPlayed[] = []; //list for select the card to play
+
+  //list for cards per planet
   planet1TopCards: Cards[] = [];
   planet1BottomCards: Cards[] = [];
   planet2TopCards: Cards[] = [];
   planet2BottomCards: Cards[] = [];
   planet3TopCards: Cards[] = [];
   planet3BottomCards: Cards[] = [];
-  pointsPlanets : number[] = [0,0,0,0,0,0];
+  pointsPlanets : number[] = [0,0,0,0,0,0]; //list that have the points for each planet
 
   constructor(private router: Router, private apiService: ApiService) {  }
 
@@ -202,6 +206,8 @@ export class GameComponent {
 
   }
 
+
+  //Methods for get the opponent cards played from the api
   getCardsFromOponent(lastTurn : string){
 
     let url = "Match/GetCardsPlayed/" + this.idMatch + "/" + lastTurn + "/" + localStorage.getItem('email');
@@ -240,6 +246,9 @@ export class GameComponent {
     });
   }
 
+  /**
+   * Method for get first hand from the api. This method is called when the player start the game. This method get 5 cards from the api. This method only get the ID card. Needs the method setHandCards for get the cards.
+   */
   setHand(){
 
     let url = "Match/GetHand/" + this.idMatch + "/" + localStorage.getItem('email');
@@ -250,11 +259,9 @@ export class GameComponent {
 
       let listID : string[] = [];
 
-      listID.push(this.temp["Card1_ID"]);
-      listID.push(this.temp["Card2_ID"]);
-      listID.push(this.temp["Card3_ID"]);
-      listID.push(this.temp["Card4_ID"]);
-      listID.push(this.temp["Card5_ID"]);
+      for (let i = 0; i < this.temp.length; i++){
+        listID.push(this.temp[i]["Card" + (i+1) + "_ID"]);
+      }
 
       this.setHandCards(listID);
 
@@ -262,6 +269,10 @@ export class GameComponent {
 
   }
 
+  /**
+   * This method is used to get the cards from the api. Use the listID generated in the method setHand for call each card from the api.
+   * @param listId string[] with the ID cards
+   */
   setHandCards(listId: string[]){
 
     this.apiService.get("Card/getCard/" + listId[0]).subscribe((data) => {
@@ -281,6 +292,10 @@ export class GameComponent {
 
   }
 
+  /**
+   * This method is used to get the name and avatar from the opponent. This method is called when the player start the game.
+   * @param opp string with the email from the opponen
+   */
   getOponente(opp: string) {
 
     let url = "Users/get/" + opp;
@@ -293,15 +308,27 @@ export class GameComponent {
     });
   }
 
+  /**
+   * This method return to the main menu
+   */
   withdraw(){
     this.router.navigate(['/playerview/start'])
   }
 
+  /**
+   * This method select the card to play from the hand cards
+   * @param cardSelected Card selected from the hand cards
+   */
   selectionCard(cardSelected: Cards){
     let index = this.hand_cards.indexOf(cardSelected);
     this.cardToPlay = this.hand_cards[index];
   }
 
+  /**
+   * This method is used to put the card selected in the planet selected, plus the points of the card in the planet and added the card to the list of cards played.
+   * @param planet string with the planet id selected
+   * @param numberOfCards number of cards in the planet selected
+   */
   addToPlanetDown(planet : string, numberOfCards: number){
 
     let condition = this.verificationCardSelected(numberOfCards);
@@ -326,6 +353,10 @@ export class GameComponent {
 
   }
 
+  /**
+   * This method is used to verify if the card selected can be played.
+   * @param numberOfCards
+   */
   verificationCardSelected(numberOfCards: number) {
 
     let condition = false;
@@ -346,11 +377,18 @@ export class GameComponent {
 
   }
 
+  /**
+   * After the player select the card to play, this method is used to delete the card from the hand cards and reset the variable cardToPlay.
+   */
   deleteToHand(){
     this.hand_cards.splice(this.hand_cards.indexOf(this.cardToPlay), 1);
     this.cardToPlay = undefined;
   }
 
+  /**
+   * This method generate a cardPlayed model from the card selected and add it to the list of cards played. This list is used to send the cards played to the api when the player end the turn.
+   * @param planetId
+   */
   addCardPlayed(planetId: string){
 
     let CardPlayed: CardPlayed = {
@@ -364,6 +402,11 @@ export class GameComponent {
     this.cardsPlayed.push(CardPlayed);
 
   }
+
+  /**
+   * This method is used to end turn and send the cards played to the api. First it verifies if the player is in turn, next verifies if the turn is 7,
+   * if it is 7, the method call the api to end the game, if not, the method call the api to end the turn and call the method getNextTurn.
+   */
 
   endTurn() {
 
@@ -405,15 +448,10 @@ export class GameComponent {
 
   }
 
-
-
-
-
-
-
-
-
-
+  /**
+   * This method is used to get a card from deck. The deck is in the Backend, so we need to call the api to get a card from the deck.
+   * The method verify if the player can get a card and verify if the turn is in turn.
+   */
   getCardFromDeck() {
 
     if(!this.canGetCard){
@@ -439,6 +477,10 @@ export class GameComponent {
 
   }
 
+
+  /**
+   * This method get the cards left in the deck. The deck is in the Backend, so we need to call the api to get the cards left in the deck.
+   */
   getCardsLeft(){
 
     console.log("get cards left");
@@ -449,7 +491,6 @@ export class GameComponent {
 
     this.apiService.get("Match/GetCardsLeft/" + mail).subscribe((data) => {
       this.temp = data;
-      console.log(this.temp);
       this.lenghtdeck = this.temp["message"];
     });
 
