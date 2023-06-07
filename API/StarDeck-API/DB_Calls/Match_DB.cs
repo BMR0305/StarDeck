@@ -217,7 +217,7 @@ namespace StarDeck_API.DB_Calls
         {
             try
             {
-                SqlParameter score = new SqlParameter("@points", SqlDbType.NVarChar, -1);
+                SqlParameter score = new SqlParameter("@pointsP", SqlDbType.Int);
                 score.Direction = ParameterDirection.Output;
                 context.Database.ExecuteSqlRaw("EXEC GetPlayerPoints @cardID_list, @pointsP OUTPUT",
                                                 new SqlParameter("@cardID_list",card_list),score);
