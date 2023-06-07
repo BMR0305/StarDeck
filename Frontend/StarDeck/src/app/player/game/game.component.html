@@ -86,9 +86,9 @@
 
 
       <div>
-        <label style="position: relative; z-index: 1;">Puntos rival: {{this.pointsPlanets[0]}}</label>
+        <label style="position: relative; z-index: 1;">Puntos rival: {{this.pointsPlanets[1]}}</label>
         <img src="{{planet1.p_image}}" style="width: 200px; height: 200px; padding: 30px;" (click)="addToPlanetDown('planet1',planet1BottomCards.length)">
-        <label style="position: relative; z-index: 1;">Puntos jugador: {{this.pointsPlanets[1]}}</label>
+        <label style="position: relative; z-index: 1;">Puntos jugador: {{this.pointsPlanets[0]}}</label>
       </div>
 
 
@@ -115,9 +115,9 @@
       </div>
 
       <div>
-        <label style="position: relative; z-index: 1;">Puntos rival: {{this.pointsPlanets[2]}}</label>
+        <label style="position: relative; z-index: 1;">Puntos rival: {{this.pointsPlanets[3]}}</label>
         <img src="{{planet2.p_image}}" style="width: 200px; height: 200px; padding: 30px;" (click)="addToPlanetDown('planet2', planet2BottomCards.length)">
-        <label style="position: relative; z-index: 1;">Puntos jugador: {{this.pointsPlanets[3]}}</label>
+        <label style="position: relative; z-index: 1;">Puntos jugador: {{this.pointsPlanets[2]}}</label>
       </div>
 
       <div class="card-container">
@@ -143,9 +143,9 @@
       </div>
 
       <div>
-        <label style="position: relative; z-index: 1;">Puntos rival: {{this.pointsPlanets[4]}}</label>
+        <label style="position: relative; z-index: 1;">Puntos rival: {{this.pointsPlanets[5]}}</label>
         <img src="{{planet3.p_image}}" style="width: 200px; height: 200px; padding: 30px;" (click)="addToPlanetDown('planet3', planet3BottomCards.length)">
-        <label style="position: relative; z-index: 1;">Puntos jugador: {{this.pointsPlanets[5]}}</label>
+        <label style="position: relative; z-index: 1;">Puntos jugador: {{this.pointsPlanets[4]}}</label>
       </div>
 
       <div class="card-container">
@@ -189,7 +189,7 @@
     </div>
 
     <div class="section20">
-      <button class="button" (click)="endTurn()" [disabled]="!inTurn"> Terminar turno</button>
+      <button class="button" (click)="endTurnOrGame()" [disabled]="!inTurn"> Terminar turno</button>
     </div>
   </footer>
 

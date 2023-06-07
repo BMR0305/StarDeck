@@ -259,9 +259,17 @@ export class GameComponent {
 
       let listID : string[] = [];
 
-      for (let i = 0; i < this.temp.length; i++){
-        listID.push(this.temp[i]["Card" + (i+1) + "_ID"]);
+      const numElements = Object.keys(this.temp).length;
+
+      console.log("Temp de cartas");
+      console.log(this.temp);
+      console.log("Numero de cartas en la mano: " + numElements);
+
+      for (let i = 0; i < numElements; i++){
+        listID.push(this.temp["Card" + (i+1) + "_ID"]);
       }
+
+      console.log(listID);
 
       this.setHandCards(listID);
 
@@ -408,7 +416,7 @@ export class GameComponent {
    * if it is 7, the method call the api to end the game, if not, the method call the api to end the turn and call the method getNextTurn.
    */
 
-  endTurn() {
+  endTurnOrGame() {
 
     console.log("terminar turno");
 
@@ -419,33 +427,49 @@ export class GameComponent {
 
     this.inTurn = false;
 
+    if(this.numberTurn == 5){
+      this.endParty();
+    } else {
+      this.endTurn();
+    }
+
+  }
+
+  /**
+   * This method is used to end the turn. This method call the api to end the turn and call the method getNextTurn for change the turn.
+   */
+  endTurn(){
     // @ts-ignore
     let mail = localStorage.getItem("email").toString();
     mail = mail.replace(/"/g, "");
 
-    if(this.numberTurn == 5){
+    this.apiService.update("Match/EndTurn/" + this.idMatch + "/" + mail, this.cardsPlayed).subscribe((data) => {
+      this.temp = data;
+      this.cardsPlayed = [];
+      console.log(this.temp);
+      this.getNextTurn(this.idTurn);
+    });
+  }
 
-      this.apiService.get("Match/EndGame/" + this.idMatch).subscribe((data) => {
+  /**
+   * This method is used to end party or game. This methos call to API to get the information of the winner, lose or tie and change the variable gameEnd to true and
+   * the game result to 0 if the player win, 1 if the player lose and 0 is the draw.
+   */
+  endParty(){
+    this.apiService.get("Match/EndGame/" + this.idMatch).subscribe((data) => {
+      this.temp = data;
+      console.log(this.temp);
 
-        this.temp = data;
+      if(this.temp["ID"] == this.idPlayer){
+        this.gameResult = 0;
+      } else if(this.temp["ID"] == "Tie"){
+        this.gameResult = 2;
+      } else{
+        this.gameResult = 1;
+      }
+      this.gameEnd = true;
 
-        console.log(this.temp);
-
-      });
-
-    } else {
-
-      this.apiService.update("Match/EndTurn/" + this.idMatch + "/" + mail, this.cardsPlayed).subscribe((data) => {
-        this.temp = data;
-        this.cardsPlayed = [];
-        console.log(this.temp);
-        this.getNextTurn(this.idTurn);
-      });
-
-
-    }
-
-
+    });
   }
 
   /**
