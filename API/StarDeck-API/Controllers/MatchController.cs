@@ -108,6 +108,9 @@ namespace StarDeck_API.Controllers
         [Route("EndGame/{gameID}")]
         public dynamic EndGame(string gameID)
         {
+            CardsUsers_DB.GetInstance().SetContext(context);
+            Match_DB.GetInstance.SetContext(context);
+            Matchmaking_DB.GetInstance().SetContext(context);
             try
             {
                 string output = Match_Logic.GetInstance.EndGame(gameID);

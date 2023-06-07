@@ -266,6 +266,9 @@ namespace StarDeck_API.Logic_Files
                     }
                     CallDB.EmptyCardsLeft(game.Player1);
                     CallDB.EmptyCardsLeft(game.Player2);
+                    Matchmaking_DB.GetInstance().UpdateUserStatus(game.Player1, "A");
+                    Matchmaking_DB.GetInstance().UpdateUserStatus(game.Player2, "A");
+
                     return output;
                 }
                 else
