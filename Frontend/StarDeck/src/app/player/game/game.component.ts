@@ -44,7 +44,7 @@ export class GameComponent {
   lenghtdeck = 18;
   seconds = 20;
   resetSeconds = 20;
-  maxTurns = 7;
+  maxTurns = 8;
   showThirdPlaner = 4;
 
   //Variable for change the screen
