@@ -226,9 +226,9 @@ namespace StarDeck_API.Logic_Files
             {
                 if (game.Winner == "P-NULL")
                 {
-                    List<CardPlayed> cardsPlayed = CallDB.GetCardsPlayedFullGame(gameID, game.Player1);
-                    List<CardPlayed> cardsPlayed2 = CallDB.GetCardsPlayedFullGame(gameID, game.Player2);
-
+                    List<CardPlayed> cardsPlayed = CallDB.GetCardsPlayedFullGame(game.Player1, gameID);
+                    List<CardPlayed> cardsPlayed2 = CallDB.GetCardsPlayedFullGame(game.Player2, gameID);
+             
                     string cards1 = "";
                     string cards2 = "";
 
@@ -241,9 +241,9 @@ namespace StarDeck_API.Logic_Files
                     {
                         cards2 += cardsPlayed2[i].CardID + "#";
                     }
-
+                    
                     int score1 = CallDB.GetUserPoints(cards1);
-                    int score2 = CallDB.GetUserPoints(cards1);
+                    int score2 = CallDB.GetUserPoints(cards2);
 
                     string output = "";
                     if (score1 > score2)

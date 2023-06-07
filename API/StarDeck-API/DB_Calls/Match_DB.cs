@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using StarDeck_API.Models;
 using System.Data;
+using System.Diagnostics;
 
 namespace StarDeck_API.DB_Calls
 {
@@ -219,10 +220,18 @@ namespace StarDeck_API.DB_Calls
             {
                 SqlParameter score = new SqlParameter("@pointsP", SqlDbType.Int);
                 score.Direction = ParameterDirection.Output;
+                SqlParameter cards = new SqlParameter("@cardID_list", card_list);
                 context.Database.ExecuteSqlRaw("EXEC GetPlayerPoints @cardID_list, @pointsP OUTPUT",
-                                                new SqlParameter("@cardID_list",card_list),score);
-                int scoreInt = Convert.ToInt32(score.Value);
-                return scoreInt;
+                                                cards,score);
+                try
+                {
+                    int scoreInt = Convert.ToInt32(score.Value);
+                    return scoreInt;
+                } catch (Exception e)
+                {
+                    int scoreInt = 0;
+                    return scoreInt;
+                }
             }
             catch (SqlException e)
             {
