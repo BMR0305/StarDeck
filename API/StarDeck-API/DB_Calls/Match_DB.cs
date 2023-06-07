@@ -289,6 +289,20 @@ namespace StarDeck_API.DB_Calls
             }
         }
 
+        public void EmptyCardsLeft(string playerID)
+        {
+            try
+            {
+                context.Database.ExecuteSqlRaw("EXEC EmptyCardsLeft @playerID = {0}", playerID);
+                context.SaveChanges();
+            }
+            catch (SqlException e)
+            {
+                throw new Exception("Failed to empty cards left: " + e.Message);
+            }
+        }
+
+
         public void SetContext(DBContext context)
         {
             this.context = context;
