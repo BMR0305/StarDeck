@@ -41,6 +41,8 @@ export class GameComponent {
   idMatch : any;
   idPlayer : any;
   idTurn : any;
+  inTurn : boolean = true;
+  numberTurn : number = 1;
   loadData = false;
   canGetCard = true;
 
@@ -54,6 +56,9 @@ export class GameComponent {
 
   constructor(private router: Router, private apiService: ApiService) {  }
 
+  /**
+   * This method is used to call to get the initial data from the api
+   */
   ngOnInit(): void {
 
     this.idMatch = localStorage.getItem('IdMatch');
@@ -81,6 +86,11 @@ export class GameComponent {
 
   }
 
+  //Methods for get the planets from the api
+
+  /**
+   * This method is used to get the first planet from the api
+   */
   getFirstPlanet(){
 
     let url = "Planet/get/" + localStorage.getItem('planet1');
@@ -93,6 +103,9 @@ export class GameComponent {
     });
   }
 
+  /**
+   * This method is used to get the second planet from the api
+   */
   getSecondPlanet(){
     let url = "Planet/get/" + localStorage.getItem('planet2');
     url = url.replace(/"/g, "");
@@ -103,6 +116,9 @@ export class GameComponent {
     });
   }
 
+  /**
+   * This method is used to get the Third planet from the api
+   */
   getThirdPlanet(){
 
     let url = "Planet/get/" + localStorage.getItem('planet3');
@@ -118,6 +134,12 @@ export class GameComponent {
 
   }
 
+
+  //Methods for get the turn from the api
+
+  /**
+   * This method is used to get the turn from the api. Only the first turn.
+   */
   getGameTurn(){
 
     let url = "Match/GetGameTurn/" + this.idMatch;
@@ -128,8 +150,9 @@ export class GameComponent {
       console.log("turno inicial");
       console.log(this.temp);
       this.idTurn = this.temp["TurnID"];
-      this.energy = this.temp["energy"];
-      if (this.temp["TurnNumber"] == 4){
+      this.energy = this.temp["Energy"];
+      this.numberTurn = this.temp["TurnNumber"];
+      if (this.numberTurn == 4){
         this.planet3.p_image = this.planet3Img;
       }
       console.log(this.idTurn);
@@ -138,6 +161,9 @@ export class GameComponent {
 
   }
 
+  /**
+   * This method is used to get the next turn from the api. This methos is called when the player end his turn. Not the first turn.
+   */
   getNextTurn(actualTurn: any){
 
     console.log("conseguir siguiente turno")
@@ -154,11 +180,15 @@ export class GameComponent {
       console.log("Turno de la API: " + turnFromAPI);
 
       if(turnFromAPI != actualTurn){
-        if (this.temp["TurnNumber"] == 4){
+
+        this.numberTurn = this.temp["TurnNumber"];
+        this.idTurn = turnFromAPI;
+        this.energy = this.temp["Energy"];
+
+        if (this.numberTurn == 4){
           this.planet3.p_image = this.planet3Img;
         }
-        this.idTurn = turnFromAPI;
-        this.energy = this.temp["energy"];
+
         this.getCardsFromOponent(lastTurn);
       }else{
         this.getNextTurn(actualTurn);
@@ -195,6 +225,11 @@ export class GameComponent {
         }
 
       }
+
+      //This is the final request to the api. So the player can play again, we need to reset the variables.
+      this.inTurn = true;
+      this.canGetCard = true;
+      this.seconds = 20;
 
     });
   }
@@ -325,23 +360,60 @@ export class GameComponent {
 
     console.log("terminar turno");
 
-    this.canGetCard = true;
+    if(!this.inTurn){
+      alert("No es su turno");
+      return;
+    }
 
     // @ts-ignore
     let mail = localStorage.getItem("email").toString();
     mail = mail.replace(/"/g, "");
 
-    this.apiService.update("Match/EndTurn/" + this.idMatch + "/" + mail, this.cardsPlayed).subscribe((data) => {
-      this.temp = data;
-      this.cardsPlayed = [];
-      console.log(this.temp);
-      this.getNextTurn(this.idTurn);
-    });
+    if(this.numberTurn == 3){
+
+      this.apiService.get("Match/EndGame/" + this.idMatch).subscribe((data) => {
+
+        this.temp = data;
+
+        console.log(this.temp);
+
+      });
+
+    } else {
+
+      this.apiService.update("Match/EndTurn/" + this.idMatch + "/" + mail, this.cardsPlayed).subscribe((data) => {
+        this.temp = data;
+        this.cardsPlayed = [];
+        console.log(this.temp);
+        this.getNextTurn(this.idTurn);
+      });
+
+
+    }
+
 
   }
 
+
+
+
+
+
+
+
+
+
   getCardFromDeck() {
 
+    if(!this.canGetCard){
+      alert("Ya ha tomado una carta este turno");
+      return;
+    } else if(!this.inTurn){
+      alert("El turno ha acabado");
+      return;
+    }
+
+    //update the variable to not get more cards before to call the api.
     this.canGetCard = false;
 
     // @ts-ignore
