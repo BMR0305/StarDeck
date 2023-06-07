@@ -467,6 +467,7 @@ export class GameComponent {
         this.gameResult = 1;
       }
       this.gameEnd = true;
+      this.loadData = false;
 
       console.log(this.gameResult);
       console.log(this.gameEnd);
