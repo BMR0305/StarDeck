@@ -59,7 +59,8 @@ export class GameComponent {
   planet2BottomCards: Cards[] = [];
   planet3TopCards: Cards[] = [];
   planet3BottomCards: Cards[] = [];
-  pointsPlanets : number[] = [0,0,0,0,0,0]; //list that have the points for each planet
+  pointsPlanets : number[] = [0,0,0,0,0,0]; //list that have the points for each planet.
+  // 0 : planet 1 player. 1 : planet 1 opponent. 2 : planet 2 player. 3 : planet 2 opponent. 4 : planet 3 player. 5 : planet 3 opponent
 
   constructor(private router: Router, private apiService: ApiService) {  }
 
@@ -79,14 +80,15 @@ export class GameComponent {
     this.getFirstPlanet();
 
     const source = interval(1000);
-    const timer = source.pipe(takeWhile(() => this.seconds > 0));
+    const timer = source.pipe(takeWhile(() => this.seconds > -2));
 
     timer.subscribe(() => {
       this.seconds--;
 
       if(this.seconds == 0){
-        //console.log("Termino el turno");
-        //this.endTurn();
+        this.seconds = 0;
+        console.log("Termino el turno por tiempo");
+        this.endTurn();
       }
 
     });
