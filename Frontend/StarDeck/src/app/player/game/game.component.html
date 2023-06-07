@@ -17,11 +17,11 @@
     </label>
 
     <label>
-      ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ <br>
-      ░░░░█▀▀▀░█▀▀▀░░█▀▀░▀▀█░░█░░░░ <br>
-      ░░░░█░▀█░█░▀█░░█▀▀░▄▀░░░▀░░░░ <br>
-      ░░░░▀▀▀▀░▀▀▀▀░░▀▀▀░▀▀▀░░▀░░░░ <br>
-      ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ <br>
+      ──────▄▌▐▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▌ <br>
+      ───▄▄██▌█ BEEP BEEP            <br>
+      ▄▄▄▌▐██▌█ YOU LOSE             <br>
+      ███████▌█▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▌ <br>
+      ▀(⊙)▀▀▀▀▀▀▀(⊙)(⊙)▀▀▀▀▀▀▀▀▀▀(⊙  <br>
     </label>
 
   </div>
@@ -142,7 +142,7 @@
     </div>
 
     <div class="section20">
-      <button class="button" (click)="endTurn()">Terminar turno</button>
+      <button class="button" (click)="endTurn()" [disabled]="inTurn"> Terminar turno</button>
     </div>
   </footer>
 
