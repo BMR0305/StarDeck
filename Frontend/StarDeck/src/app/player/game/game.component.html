@@ -84,11 +84,10 @@
         </mat-grid-list>
       </div>
 
-
-      <div>
-        <label style="position: relative; z-index: 1;">Puntos rival: {{this.pointsPlanets[1]}}</label>
-        <img src="{{planet1.p_image}}" style="width: 200px; height: 200px; padding: 30px;" (click)="addToPlanetDown('planet1',planet1BottomCards.length)">
-        <label style="position: relative; z-index: 1;">Puntos jugador: {{this.pointsPlanets[0]}}</label>
+      <div class="monospace">
+        <div class="top-text">Puntos rival: {{this.pointsPlanets[1]}}</div>
+        <img class = "planet" src="{{planet1.p_image}}" (click)="addToPlanetDown('planet1',planet1BottomCards.length)">
+        <div class="bottom-text">Puntos jugador: {{this.pointsPlanets[0]}}</div>
       </div>
 
 

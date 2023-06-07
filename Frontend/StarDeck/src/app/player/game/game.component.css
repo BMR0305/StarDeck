@@ -117,3 +117,24 @@ h2{
     width: 300px; /* establece el ancho deseado */
     height: 300px; /* establece la altura deseada */
   }
+
+.planet-container {
+  position: relative;
+  text-align: center;
+  width: 300px; /* Ajusta el ancho según tus necesidades */
+}
+
+.planet {
+  display: block;
+  width: 200px;
+  height: 200px;
+  padding: 30px;
+}
+
+.top-text, .bottom-text {
+  position: absolute;
+  left: 0;
+  right: 0;
+  color: white;
+  font-size: 18px;
+}

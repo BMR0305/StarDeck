@@ -194,6 +194,8 @@ export class GameComponent {
 
         if (this.numberTurn == 4){
           this.planet3.p_image = this.planet3Img;
+        } else if(this.numberTurn == 5){
+          this.endParty();
         }
 
         this.getCardsFromOponent(lastTurn);
@@ -265,7 +267,7 @@ export class GameComponent {
       console.log(this.temp);
       console.log("Numero de cartas en la mano: " + numElements);
 
-      for (let i = 0; i < numElements; i++){
+      for (let i = 0; i < numElements - 2; i++){
         listID.push(this.temp["Card" + (i+1) + "_ID"]);
       }
 
@@ -427,11 +429,7 @@ export class GameComponent {
 
     this.inTurn = false;
 
-    if(this.numberTurn == 5){
-      this.endParty();
-    } else {
-      this.endTurn();
-    }
+    this.endTurn();
 
   }
 
