@@ -17,7 +17,13 @@ namespace StarDeck_API.DB_Calls
             {
                 if (instance == null)
                 {
-                    instance = new Match_DB();
+                    lock (lockObject)
+                    {
+                        if (instance == null)
+                        {
+                            instance = new Match_DB();
+                        }
+                    }
                 }
                 return instance;
             }
