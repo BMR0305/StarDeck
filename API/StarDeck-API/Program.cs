@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client.Extensions.Msal;
+using StarDeck_API.DB_Calls;
 using StarDeck_API.Models;
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -26,7 +27,7 @@ builder.Services.AddCors(options =>
 
 var connectionString = builder.Configuration.GetConnectionString("stardeckdb");
 builder.Services.AddDbContext<DBContext>(options =>
-    options.UseSqlServer(connectionString));
+    options.UseSqlServer(connectionString), ServiceLifetime.Scoped);
 
 var app = builder.Build();
 

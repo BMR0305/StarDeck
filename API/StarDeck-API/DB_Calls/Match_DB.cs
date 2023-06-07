@@ -71,12 +71,15 @@ namespace StarDeck_API.DB_Calls
         {
             try
             {
-                var partida = context.partida.FromSqlRaw("EXEC GetGameByID @gameID = {0}", gameID).ToList()[0];
-                if (partida == null)
+                lock (lockObject)
                 {
-                    throw new Exception("Game not found");
+                    var partida = context.partida.FromSqlRaw("EXEC GetGameByID @gameID = {0}", gameID).ToList()[0];
+                    if (partida == null)
+                    {
+                        throw new Exception("Game not found");
+                    }
+                    return partida;
                 }
-                return partida;
             }
             catch (SqlException e)
             {
