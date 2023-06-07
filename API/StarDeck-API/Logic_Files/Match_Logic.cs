@@ -21,7 +21,13 @@ namespace StarDeck_API.Logic_Files
             {
                 if (instance == null)
                 {
-                    instance = new Match_Logic();
+                    lock (lockObject)
+                    {
+                        if (instance == null)
+                        {
+                            instance = new Match_Logic();
+                        }
+                    }
                 }
                 return instance;
             }

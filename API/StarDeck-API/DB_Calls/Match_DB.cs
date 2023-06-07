@@ -86,6 +86,7 @@ namespace StarDeck_API.DB_Calls
 
         public void RefreshGameCache(Partida game)
         {
+            lock (lockObject)
             try
             {
                 context.Entry(game).Reload();
