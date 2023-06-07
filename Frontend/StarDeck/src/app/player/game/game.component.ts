@@ -88,10 +88,11 @@ export class GameComponent {
       this.seconds--;
 
       if(this.seconds == 0 && this.inTurn){
-        this.seconds = this.resetSeconds;
+        //this.seconds = this.resetSeconds;
         console.log("Termino el turno por tiempo");
+        this.endTurnOrGame();
       } else if(this.seconds <= 0 || !this.inTurn){
-        this.seconds = 0;
+        this.seconds = -1;
       }
 
     });
