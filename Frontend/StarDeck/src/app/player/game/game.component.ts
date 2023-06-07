@@ -45,8 +45,8 @@ export class GameComponent {
   numberTurn : number = 1;
   loadData = false;
   canGetCard = true;
-  gameEnd = true;
-  gameResult = 1;
+  gameEnd = false;
+  gameResult = 0;
 
   cardsPlayed: CardPlayed[] = [];
   planet1TopCards: Cards[] = [];
