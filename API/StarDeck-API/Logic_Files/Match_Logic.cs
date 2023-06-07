@@ -264,7 +264,7 @@ namespace StarDeck_API.Logic_Files
                 }
                 else
                 {
-                    Users user = CardsUsers_DB.GetInstance().GetUserByID(game.Winner);
+                    Users user = CardsUsers_DB.GetInstance().GetUserByID(game.Winner)[0];
                     string output = JsonConvert.SerializeObject(user, Formatting.Indented);
                     return output;
                 }
