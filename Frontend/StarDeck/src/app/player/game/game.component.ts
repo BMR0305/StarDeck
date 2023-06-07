@@ -45,8 +45,8 @@ export class GameComponent {
   numberTurn : number = 1;
   loadData = false;
   canGetCard = true;
-  gameEnd = false;
-  gameResult = 0;
+  gameEnd = true;
+  gameResult = 1;
 
   cardsPlayed: CardPlayed[] = [];
   planet1TopCards: Cards[] = [];
@@ -55,6 +55,7 @@ export class GameComponent {
   planet2BottomCards: Cards[] = [];
   planet3TopCards: Cards[] = [];
   planet3BottomCards: Cards[] = [];
+  pointsPlanets : number[] = [0,0,0,0,0,0];
 
   constructor(private router: Router, private apiService: ApiService) {  }
 
@@ -219,11 +220,14 @@ export class GameComponent {
         let cardPlayed : CardPlayed_DTO = listCardOpponent[i];
 
         if(cardPlayed.Planet == this.planet1.ID){
+          this.pointsPlanets[1] += cardPlayed.Card.battle_pts;
           this.planet1TopCards.push(cardPlayed.Card);
         } else if(cardPlayed.Planet == this.planet2.ID){
-          this.planet1TopCards.push(cardPlayed.Card);
+          this.planet2TopCards.push(cardPlayed.Card);
+          this.pointsPlanets[3] += cardPlayed.Card.battle_pts;
         } else if(cardPlayed.Planet == this.planet3.ID){
-          this.planet1TopCards.push(cardPlayed.Card);
+          this.planet3TopCards.push(cardPlayed.Card);
+          this.pointsPlanets[5] += cardPlayed.Card.battle_pts;
         }
 
       }
@@ -306,12 +310,15 @@ export class GameComponent {
       if(planet == 'planet1'){
         this.addCardPlayed(this.planet1.ID);
         this.planet1BottomCards.push(this.cardToPlay);
+        this.pointsPlanets[0] += this.cardToPlay.battle_pts;
       }else if(planet == 'planet2'){
         this.addCardPlayed(this.planet2.ID);
         this.planet2BottomCards.push(this.cardToPlay);
+        this.pointsPlanets[2] += this.cardToPlay.battle_pts;
       }else if(planet == 'planet3'){
         this.addCardPlayed(this.planet3.ID);
         this.planet3BottomCards.push(this.cardToPlay);
+        this.pointsPlanets[3] += this.cardToPlay.battle_pts;
       }
       this.energy -= this.cardToPlay.energy;
       this.deleteToHand();
@@ -367,11 +374,13 @@ export class GameComponent {
       return;
     }
 
+    this.inTurn = false;
+
     // @ts-ignore
     let mail = localStorage.getItem("email").toString();
     mail = mail.replace(/"/g, "");
 
-    if(this.numberTurn == 3){
+    if(this.numberTurn == 5){
 
       this.apiService.get("Match/EndGame/" + this.idMatch).subscribe((data) => {
 
