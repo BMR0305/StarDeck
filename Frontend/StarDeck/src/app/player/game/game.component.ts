@@ -44,6 +44,9 @@ export class GameComponent {
   energy = 0;
   lenghtdeck = 18;
   seconds = 20;
+  resetSeconds = 20;
+  maxTurns = 7;
+  showThirdPlaner = 4;
 
   //Variable for change the screen
   loadData = false;
@@ -85,10 +88,12 @@ export class GameComponent {
     timer.subscribe(() => {
       this.seconds--;
 
-      if(this.seconds == 0){
-        this.seconds = 0;
+      if(this.seconds == 0 && this.inTurn){
+        this.seconds = this.resetSeconds;
         console.log("Termino el turno por tiempo");
         this.endTurn();
+      } else if(this.seconds <= 0 ){
+        this.seconds = 0;
       }
 
     });
@@ -194,9 +199,9 @@ export class GameComponent {
         this.idTurn = turnFromAPI;
         this.energy = this.temp["Energy"];
 
-        if (this.numberTurn == 4){
+        if (this.numberTurn == this.showThirdPlaner){
           this.planet3.p_image = this.planet3Img;
-        } else if(this.numberTurn == 5){
+        } else if(this.numberTurn == this.maxTurns){
           this.endParty();
         }
 
@@ -245,7 +250,7 @@ export class GameComponent {
       //This is the final request to the api. So the player can play again, we need to reset the variables.
       this.inTurn = true;
       this.canGetCard = true;
-      this.seconds = 20;
+      this.seconds = this.resetSeconds;
 
     });
   }
