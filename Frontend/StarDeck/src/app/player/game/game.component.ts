@@ -355,7 +355,7 @@ export class GameComponent {
       }else if(planet == 'planet3'){
         this.addCardPlayed(this.planet3.ID);
         this.planet3BottomCards.push(this.cardToPlay);
-        this.pointsPlanets[3] += this.cardToPlay.battle_pts;
+        this.pointsPlanets[4] += this.cardToPlay.battle_pts;
       }
       this.energy -= this.cardToPlay.energy;
       this.deleteToHand();
@@ -456,6 +456,7 @@ export class GameComponent {
   endParty(){
     this.apiService.get("Match/EndGame/" + this.idMatch).subscribe((data) => {
       this.temp = data;
+      console.log("Terminada partida");
       console.log(this.temp);
 
       if(this.temp["ID"] == this.idPlayer){
@@ -466,6 +467,9 @@ export class GameComponent {
         this.gameResult = 1;
       }
       this.gameEnd = true;
+
+      console.log(this.gameResult);
+      console.log(this.gameEnd);
 
     });
   }
