@@ -51,7 +51,8 @@ namespace StarDeck_API.Logic_Files
             {
                 id = KeyGenerator.CreatePattern("D-");
             }
-            Users user = CardsUsers_DB.GetInstance().GetUser(deck.email_user);
+            
+            Users user = CardsUsers_DB.GetInstance().GetUser(deck.email_user)[0];
 
             Deck deck_toSave = new Deck();
             deck_toSave.Deck_ID = id;
@@ -84,6 +85,11 @@ namespace StarDeck_API.Logic_Files
             return output;
         }
 
+        /*
+         * Method that creates the Deck_DTO based on the decks obtained from the DB corresponding to the email provided.
+         * Params: email - user email
+         * Return: JSON string with the decks in Deck_DTO format
+         */
         public string GetPlayerDecks(string email)
         {
             List<Deck_DTO> deck_DTOs = new List<Deck_DTO>();
@@ -95,6 +101,7 @@ namespace StarDeck_API.Logic_Files
                 deck_DTO.name = decks[i].d_name;
                 deck_DTO.code = decks[i].Deck_ID;
                 deck_DTO.email_user = decks[i].Player_ID;
+                deck_DTO.cards = CallDB.GetDeckCards(decks[i].Deck_ID);
                 deck_DTOs.Add(deck_DTO);
             }
 
