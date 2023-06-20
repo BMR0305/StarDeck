@@ -213,7 +213,7 @@ namespace StarDeck_API.Logic_Files
 
 
             c.ID = id;
-            bool ret = CallDB.PostCard(c);
+            bool ret = (CallDB.PostCard(c) == "Saved");
 
             if (!ret)
             {

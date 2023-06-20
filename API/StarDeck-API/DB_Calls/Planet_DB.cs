@@ -36,10 +36,6 @@ namespace StarDeck_API.DB_Calls
         public List<Planet> GetAll()
         {
             List<Planet> planets = context.planet.ToList();
-            if (planets.Count == 0)
-            {
-                throw new Exception("No planets found");
-            }
             return planets;
         }
 

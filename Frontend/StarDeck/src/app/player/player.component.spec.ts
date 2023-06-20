@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PlayerComponent } from './player.component';
+import {CUSTOM_ELEMENTS_SCHEMA} from "@angular/core";
 
 describe('PlayerComponent', () => {
   let component: PlayerComponent;
@@ -8,7 +9,8 @@ describe('PlayerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PlayerComponent ]
+      declarations: [ PlayerComponent ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
     })
     .compileComponents();
 

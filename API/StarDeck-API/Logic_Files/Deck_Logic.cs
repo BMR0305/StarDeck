@@ -51,7 +51,8 @@ namespace StarDeck_API.Logic_Files
             {
                 id = KeyGenerator.CreatePattern("D-");
             }
-            Users user = CardsUsers_DB.GetInstance().GetUser(deck.email_user);
+            
+            Users user = CardsUsers_DB.GetInstance().GetUser(deck.email_user)[0];
 
             Deck deck_toSave = new Deck();
             deck_toSave.Deck_ID = id;
