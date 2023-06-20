@@ -82,6 +82,7 @@ namespace StarDeck_API.DB_Calls
             try
             {
                 context.Database.ExecuteSqlRaw("EXEC SetDeck @deck_id = {0}, @email = {1}", deckID, email);
+                context.SaveChanges();
             }
             catch (SqlException e)
             {

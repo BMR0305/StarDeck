@@ -42,3 +42,23 @@ export interface Player {
   u_type: any;
 }
 
+export interface CardPlayed {
+
+  GameId: any;
+  CardId: any;
+  PlayerId: any;
+  Turn: any;
+  Planet : any;
+
+}
+
+
+export interface CardPlayed_DTO {
+
+  GameId: any;
+  Card: Cards;
+  PlayerId: any;
+  Turn: any;
+  Planet : any;
+
+}

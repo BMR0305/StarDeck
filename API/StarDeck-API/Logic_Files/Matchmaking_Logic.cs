@@ -12,6 +12,7 @@ namespace StarDeck_API.Logic_Files
     {
         private static Matchmaking_Logic instance = null;
         private Matchmaking_DB CallDB = Matchmaking_DB.GetInstance();
+        private static object lockObject = new object();
 
         public static Matchmaking_Logic GetInstance()
         {
@@ -22,90 +23,104 @@ namespace StarDeck_API.Logic_Files
             return instance;
         }
 
-        public async Task<string> LookForGame(DBContext context, string email)
+        public async Task<string> LookForGame(string email)
         {
             try
             {
-                var PlayersWaiting = CallDB.GetUsersBP();
-
-                if (PlayersWaiting.Count > 0)
+                lock (lockObject)
                 {
-                    for (int i = 0; i < PlayersWaiting.Count; i++)
+                    var PlayersWaiting = CallDB.GetUsersBP();
+
+                    if (PlayersWaiting.Count > 0)
                     {
-                        if (PlayersWaiting[i].u_status == "BP" && PlayersWaiting[i].email != email)
+                        for (int i = 0; i < PlayersWaiting.Count; i++)
                         {
-                            CallDB.UpdateUserStatus(PlayersWaiting[i].email, "EP");
-                            Users current_user = CardsUsers_DB.GetInstance().GetUser(email)[0];
-                            CallDB.UpdateUserStatus(email, "EP");
+                            if (PlayersWaiting[i].u_status == "BP" && PlayersWaiting[i].email != email)
+                            {
+                                //CallDB.UpdateUserStatus(PlayersWaiting[i].email, "EP");
+                                Users current_user = CardsUsers_DB.GetInstance().GetUser(email)[0];
+                                CallDB.UpdateUserStatus(email, "EP");
 
-                            var planets = Planet_DB.GetInstance().GetGamePlanets();
+                                var planets = Planet_DB.GetInstance().GetGamePlanets();
 
-                            Partida partida = CreateGameObject(current_user, PlayersWaiting[i], planets);
+                                Partida partida = CreateGameObject(current_user, PlayersWaiting[i], planets);
 
-                            //Crear aux para enviar al front end la lista de los planetas y jugadores como objetos completos.
-                            Partida_DTO partida_DTO = CreatePartida_DTO(partida, current_user, PlayersWaiting[i], planets);
+                                //Crear aux para enviar al front end la lista de los planetas y jugadores como objetos completos.
+                                Partida_DTO partida_DTO = CreatePartida_DTO(partida, current_user, PlayersWaiting[i], planets);
 
-                            string json_partida = JsonConvert.SerializeObject(partida_DTO);
+                                CallDB.UpdateUserStatus(PlayersWaiting[i].email, "EP");
 
-                            return json_partida;
+                                Turn turn = Match_Logic.GetInstance.InitialTurn(partida.ID, email);
+
+                                Match_DB.GetInstance.UpdateGameTurn(partida.ID, turn.Turn_ID);
+
+                                Match_DB.GetInstance.CountTurn(partida.ID);
+
+                                string json_partida = JsonConvert.SerializeObject(partida_DTO);
+
+                                return json_partida;
+                            }
                         }
                     }
                 }
                 CallDB.UpdateUserStatus(email, "BP");
-                string output = await WaitingGame(context, email);
+                string output = await WaitingGame(email);
                 return output;
 
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
                 return e.Message;
             }
         }
 
-        public async Task<string> WaitingGame(DBContext context, string email)
+        /**
+         * Method that keeps a player searching for a match until a match is found or a timeout is reached.
+         * Params: email - email of the player that is searching for a match.
+         * Return: A string with the information of the match found or a message if a timeout is reached.
+         */
+        public async Task<string> WaitingGame(string email)
         {
-
-            Users user;
             CardsUsers_DB UsersDB_call = CardsUsers_DB.GetInstance();
+            Partida game = null;
 
             // Time limit to wait for a match to be found (in seconds)
             int timeout = 20;
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            user = UsersDB_call.GetUser(email)[0];
-            while (user.u_status == "BP" && stopwatch.Elapsed.TotalSeconds < timeout)
+            Users user = UsersDB_call.GetUser(email)[0];
+
+            while (stopwatch.Elapsed.TotalSeconds < timeout)
             {
-                await Task.Delay(2000);
-                user = UsersDB_call.GetUser(email)[0];
-                if (user.u_status != "BP")
+                game = await Task.Run(() => CallDB.GetPlayerMatch(email));
+                if (game != null)
                 {
-                    //stopwatch.Stop();
-                    break;
+                    stopwatch.Stop();
+                    Debug.WriteLine("Entro al IF");
+                    List<Planet> planets = new List<Planet>();
+                    await Task.Run(() => planets.Add(Planet_DB.GetInstance().GetPlanetByID(game.Planet1)[0]));
+                    await Task.Run(() => planets.Add(Planet_DB.GetInstance().GetPlanetByID(game.Planet2)[0]));
+                    await Task.Run(() => planets.Add(Planet_DB.GetInstance().GetPlanetByID(game.Planet3)[0]));
+                    Debug.WriteLine("Obtuvo los planetas");
+                    Users opponent = await Task.Run(() => UsersDB_call.GetUserByID(game.Player1)[0]);
+                    Debug.WriteLine("Oponente");
+                    Partida_DTO partida_DTO = CreatePartida_DTO(game, opponent, user, planets);
+                    Debug.WriteLine("Obtuvo la partida");
+
+                    string json_partida = JsonConvert.SerializeObject(partida_DTO);
+                    return json_partida;
+
                 }
+                Debug.WriteLine("Esto es antes del delay");
+                await Task.Delay(2000);
             }
 
-            var partidaList = context.partida.FromSqlRaw("EXEC GetUserMatch @email = {0}", email).ToList();
-
-            if (partidaList.Count > 0)
-            {
-                Partida partida = partidaList[0];
-                List<Planet> planets = new List<Planet>();
-                planets.Add(Planet_DB.GetInstance().GetPlanetByID(partida.Planet1)[0]);
-                planets.Add(Planet_DB.GetInstance().GetPlanetByID(partida.Planet2)[0]);
-                planets.Add(Planet_DB.GetInstance().GetPlanetByID(partida.Planet3)[0]);
-                Users opponent = UsersDB_call.GetUserByID(partida.Player1)[0];
-                Partida_DTO partida_DTO = CreatePartida_DTO(partida, opponent, user, planets); 
-
-                string json_partida = JsonConvert.SerializeObject(partida_DTO);
-                return json_partida;
-            }
             CallDB.UpdateUserStatus(email, "A");
             Message mess = new Message();
             mess.message = "Timeout reached";
             string output = JsonConvert.SerializeObject(mess);
 
             return output;
-
         }
 
         public Partida CreateGameObject(Users user, Users opponent, List<Planet> planets)
@@ -117,6 +132,8 @@ namespace StarDeck_API.Logic_Files
             partida.Planet1 = planets[0].ID;
             partida.Planet2 = planets[1].ID;
             partida.Planet3 = planets[2].ID;
+            partida.Winner = "P-NULL";
+            partida.C_Turn = "C-NULL";
             partida.p_status = "EC";
             CallDB.AddGame(partida);
             return partida;

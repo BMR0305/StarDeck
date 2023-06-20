@@ -13,8 +13,8 @@ export class CreatePlanetComponent implements OnInit{
 
   constructor( private router: Router, private apiService: ApiService) { }
 
-  typeoptions = ['Basico', 'Popular', 'Raro'];
-  raceoptions = ['Raza A', 'Raza B', 'Raza C'];
+  typeoptions: string[] = [];
+  efectoptions = ['Efecto A', 'Efecto B', 'Efecto C'];
 
   planets: Planet[] = [];
   temp: any;
@@ -36,6 +36,7 @@ export class CreatePlanetComponent implements OnInit{
   ngOnInit() {
 
     this.getAllPlanets();
+    this.getPlanetsType();
 
   }
 
@@ -97,6 +98,18 @@ export class CreatePlanetComponent implements OnInit{
           p_status: this.temp[i].p_status
         }
         this.planets.push(planet);
+      }
+    });
+  }
+
+  /**
+   * Get all planets from database
+   */
+  getPlanetsType() {
+    this.apiService.get("Planet/getTypes").subscribe((data) => {
+      this.temp = data;
+      for (let i = 0; i < this.temp.length; i++) {
+        this.typeoptions.push(this.temp[i]);
       }
     });
   }

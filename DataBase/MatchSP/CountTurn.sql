@@ -1,0 +1,9 @@
+CREATE PROCEDURE CountTurn
+@gameID NVARCHAR(15)
+AS
+BEGIN
+	UPDATE Partida
+	SET TurnCount += 1
+	WHERE ID = @gameID
+END
+GO

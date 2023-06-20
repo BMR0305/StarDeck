@@ -37,7 +37,7 @@ export class MatchmakingComponent implements OnInit{
     url = url.replace(/"/g, "");
 
     this.apiService.get(url).subscribe((data) => {
-      console.log(data);
+
       this.temp = data;
        if (this.temp["message"] == 'Timeout reached'){
         this.msg = "";
@@ -53,18 +53,23 @@ export class MatchmakingComponent implements OnInit{
 
         if (this.temp["Players"][0]["email"] === this.userEmail){
           localStorage.setItem('oponent', this.temp["Players"][1]["email"]);
+          localStorage.setItem('playerID', this.temp["Players"][0]["ID"])
         }
         else{
           localStorage.setItem('oponent', this.temp["Players"][0]["email"]);
+          localStorage.setItem('playerID', this.temp["Players"][1]["ID"])
         }
 
         localStorage.setItem('planet1',this.temp["Planets"][0]['p_name']);
         localStorage.setItem('planet2',this.temp["Planets"][1]['p_name']);
         localStorage.setItem('planet3',this.temp["Planets"][2]['p_name']);
 
+        localStorage.setItem('game', this.temp);
+        localStorage.setItem('IdMatch',this.temp["ID"]);
+
+        console.log(this.temp);
 
         this.router.navigate(['/game']);
-        localStorage.setItem('game', this.temp);
        }
 
 

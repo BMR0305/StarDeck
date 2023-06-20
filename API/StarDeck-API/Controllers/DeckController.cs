@@ -26,6 +26,8 @@ namespace StarDeck_API.Controllers
         [Route("post")]
         public dynamic PostDeck([FromBody] Deck_DTO d)
         {
+            Deck_DB.GetInstance().SetContext(this.context);
+            CardsUsers_DB.GetInstance().SetContext(this.context);
             try
             {
                 Deck_Logic.GetInstance().PostDeck(d);
@@ -44,6 +46,7 @@ namespace StarDeck_API.Controllers
         [Route("get/{id}")]
         public dynamic GetDeck(string id)
         {
+            Deck_DB.GetInstance().SetContext(this.context);
             try
             {
                 string deck = Deck_Logic.GetInstance().GetDeck(id);
@@ -62,12 +65,13 @@ namespace StarDeck_API.Controllers
         [Route("getPlayerDecks/{email}")]
         public dynamic GetPlayerDecks(string email)
         {
+            Deck_DB.GetInstance().SetContext(this.context);
             try
             {
                 string decks = Deck_Logic.GetInstance().GetPlayerDecks(email);
                 return decks;
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
                 Message m = new Message();
                 m.message = e.Message;

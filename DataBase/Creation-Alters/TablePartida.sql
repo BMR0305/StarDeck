@@ -1,12 +1,14 @@
 CREATE TABLE Partida(
-	ID VARCHAR(20),
+	ID VARCHAR(15) NOT NULL,
 	Player1 VARCHAR(15),
 	Player2 VARCHAR(15),
 	Winner VARCHAR(15),
 	Planet1 VARCHAR(15),
 	Planet2 VARCHAR(15),
 	Planet3 VARCHAR(15),
-	p_status VARCHAR(30) --En curso: EC, T: Terminada 
+	p_status VARCHAR(30), --En curso: EC, T: Terminada
+	C_Turn VARCHAR(15), --Current turn
+	TurnCount INT
 );
 
 ALTER TABLE Partida
@@ -32,3 +34,7 @@ FOREIGN KEY (Planet2) REFERENCES Planet(ID);
 ALTER TABLE Partida
 ADD CONSTRAINT FK_PLANET3
 FOREIGN KEY (Planet3) REFERENCES Planet(ID);
+
+ALTER TABLE Partida
+ADD CONSTRAINT PK_PartidaID
+PRIMARY KEY (ID);

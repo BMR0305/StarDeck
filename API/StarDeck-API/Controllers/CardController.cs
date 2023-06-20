@@ -30,6 +30,7 @@ namespace StarDeck_API.Controllers
         [Route("post")]
         public dynamic PostCard([FromBody] Card c)
         {
+            CardsUsers_DB.GetInstance().SetContext(this.context);
             try
             {
                
@@ -56,6 +57,7 @@ namespace StarDeck_API.Controllers
 
         public dynamic GetRandomCards(int num, [FromQuery] List<string> types)
         {
+            CardsUsers_DB.GetInstance().SetContext(this.context);
             try
             {
 
@@ -82,12 +84,32 @@ namespace StarDeck_API.Controllers
 
         public dynamic GetAllCards()
         {
+            CardsUsers_DB.GetInstance().SetContext(this.context);
             try
             {
                 string output = CardsUsers_Logic.GetInstance().GetAllCards();
                 return output;
 
             } catch (Exception ex)
+            {
+                Message m = new Message();
+                m.message = ex.Message;
+                string output = JsonConvert.SerializeObject(m, Formatting.Indented);
+                return output;
+            }
+        }
+
+        [HttpGet]
+        [Route("getCard/{id}")]
+        public dynamic GetCard(string id)
+        {
+            CardsUsers_DB.GetInstance().SetContext(this.context);
+            try
+            {
+                string output = CardsUsers_Logic.GetInstance().GetCard(id);
+                return output;
+            }
+            catch (Exception ex)
             {
                 Message m = new Message();
                 m.message = ex.Message;
