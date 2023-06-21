@@ -1,0 +1,145 @@
+<!-- Modo ver decks -->
+<div class = "box" *ngIf="mode == 0">
+
+  <div>
+
+    <div style="flex: 1 1 100%;">
+      <h1>Decks creados</h1>
+    </div>
+
+    <mat-grid-list cols="5"  rowHeight="2:3">
+      <mat-grid-tile class="deck-item" *ngFor="let item of decks">
+        <label>{{item.name}}</label>
+        <img src= '{{item.cards[0].c_image}}' style="object-fit: cover; object-position: center center; width:100%; height: 90%;  margin-top: 10px;" (click)="editDeck(item)">
+        <mat-grid-tile-footer style = "background: rgb(0,0,0,0);">
+          <button class="cardForm" style="margin-top: 10px; width:100%; display: inline-block;" (click)="deleteDeck(item)">Eliminar</button>
+        </mat-grid-tile-footer>
+      </mat-grid-tile>
+    </mat-grid-list>
+
+    <div>
+      <button class="cardForm" (click)="createDeck()">Crear Deck</button>
+    </div>
+
+  </div>
+
+  <hr>
+
+  <div>
+
+    <div style="flex: 1 1 100%;">
+      <h1>Cartas obtenidas</h1>
+    </div>
+
+    <mat-grid-list cols="6"  rowHeight="2:3">
+      <mat-grid-tile *ngFor="let item of cardsAvailable">
+        <img src= '{{item.c_image}}' style="object-fit: cover; object-position: center center; width:90%; height: 90%;">
+      </mat-grid-tile>
+    </mat-grid-list>
+  </div>
+
+</div>
+
+<br>
+
+<!-- Modo crear deck -->
+<div class = "box" *ngIf="mode == 1">
+
+  <div>
+
+    <div style="flex: 1 1 100%;">
+      <h1>Cartas del deck</h1>
+    </div>
+
+    <mat-grid-list cols="6"  rowHeight="2:3">
+      <mat-grid-tile *ngFor="let item of cardsDeck">
+        <img src= '{{item.c_image}}' style="object-fit: cover; object-position: center center; width:90%; height: 90%;" (click)="deleteCard(item)">
+      </mat-grid-tile>
+    </mat-grid-list>
+
+
+  </div>
+
+
+  <div *ngIf="cardsDeck.length == 18">
+    <label class = 'monospace' > Nombre deck<span class="red-text">* </span>
+      <div>
+        <input class="cardForm" type="text" [(ngModel)]="nameDeck" [ngModelOptions] = "{standalone: true}" [attr.maxlength]="30">
+      </div>
+    </label>
+    <button class="cardForm" (click)="saveDeck()">Guardar</button>
+  </div>
+
+  <div>
+    <button class="cardForm" (click)="backToView()">Volver</button>
+  </div>
+
+
+  <hr>
+
+  <div>
+
+    <div style="flex: 1 1 100%;">
+      <h1>Cartas disponibles
+      </h1>
+    </div>
+
+    <mat-grid-list cols="6"  rowHeight="2:3">
+      <mat-grid-tile *ngFor="let item of cardsAvailable">
+        <img src= '{{item.c_image}}' style="object-fit: cover; object-position: center center; width:90%; height: 90%;" (click)="addCard(item)">
+      </mat-grid-tile>
+    </mat-grid-list>
+
+  </div>
+
+</div>
+
+
+<!-- Modo editar deck -->
+<div class = "box" *ngIf="mode == 2">
+
+  <div>
+
+    <div style="flex: 1 1 100%;">
+      <h1>Cartas del deck</h1>
+    </div>
+
+    <mat-grid-list cols="6"  rowHeight="2:3">
+      <mat-grid-tile *ngFor="let item of cardsDeck">
+        <img src= '{{item.c_image}}' style="object-fit: cover; object-position: center center; width:90%; height: 90%;" (click)="deleteCard(item)">
+      </mat-grid-tile>
+    </mat-grid-list>
+
+
+  </div>
+
+  <div *ngIf="cardsDeck.length == 18">
+    <button class="cardForm" (click)="saveDeck()">Guardar</button>
+  </div>
+
+  <div>
+    <button class="cardForm" (click)="backToView()">Volver</button>
+  </div>
+
+
+  <hr>
+
+  <div>
+
+    <div style="flex: 1 1 100%;">
+      <h1>Cartas disponibles
+      </h1>
+    </div>
+
+    <mat-grid-list cols="6"  rowHeight="2:3">
+      <mat-grid-tile *ngFor="let item of cardsEdit">
+        <img src= '{{item.c_image}}' style="object-fit: cover; object-position: center center; width:90%; height: 90%;" (click)="addCard(item)">
+      </mat-grid-tile>
+    </mat-grid-list>
+
+
+  </div>
+
+</div>
+
+

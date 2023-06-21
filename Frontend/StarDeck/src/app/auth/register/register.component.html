@@ -1,0 +1,113 @@
+<div style="display: flex; flex-wrap: wrap;" class="box">
+
+  <div style="flex: 1 1 100%;">
+    <h1>Crear cuenta </h1>
+  </div>
+
+
+  <div style="flex: 1 1 50%;">
+    <form class="form-container" [formGroup]="cardForm" (ngSubmit)="onSubmit()" class = "monospace">
+
+      <label>Correo<span class="red-text">* </span>
+      <div>
+        <input class="cardForm" type="email" formControlName="mail">
+        <div class = "required" *ngIf="cardForm.get('mail')?.hasError('email') && cardForm.get('mail')?.touched">
+          El correo no es válido
+        </div>
+      </div>
+      </label>
+
+      <br>
+
+      <label>Nombre<span class="red-text">* </span>
+      <div>
+        <input class="cardForm" type="text" formControlName="name" [attr.maxlength]="maxCharsName">
+        <div class = "required" *ngIf="cardForm.get('name')?.hasError('maxlength') && cardForm.get('name')?.touched">
+          El número de caracteres no es válido
+        </div>
+      </div>
+      </label>
+
+      <br>
+
+      <label>Nick Name<span class="red-text">* </span>
+      <div>
+        <input class="cardForm" type="text" formControlName="nickname" [attr.maxlength]="maxCharsName">
+        <div class = "required" *ngIf="cardForm.get('nickname')?.hasError('maxlength') && cardForm.get('nickname')?.touched">
+          El número de caracteres no es válido
+        </div>
+      </div>
+      </label>
+
+      <br>
+
+      <label>País<span class="red-text">* </span>
+      <div>
+        <select class="cardForm" formControlName="country">
+          <option value="MX">México</option>
+          <option value="CR">Costa Rica</option>
+          <option value="US">Estados Unidos</option>
+        </select>
+      </div>
+      </label>
+
+      <br>
+
+      <label>Fecha de nacimiento<span class="red-text">* </span>
+      <div>
+        <input class="cardForm" type="date" formControlName="birthdate">
+      </div>
+      </label>
+
+      <br>
+
+      <label>Contraseña<span class="red-text">* </span>
+      <div>
+        <input class="cardForm" type="password" formControlName="password" [attr.maxlength]="maxCharsPassword">
+        <div class = "required" *ngIf="cardForm.get('password')?.hasError('pattern') && cardForm.get('password')?.touched">
+          La contraseña debe contener al menos un número y una letra.
+        </div>
+        <div class = "required" *ngIf="cardForm.get('password')?.hasError('minlength') && cardForm.get('password')?.touched">
+          La contraseña debe contener 8 caracteres.
+        </div>
+      </div>
+      </label>
+
+      <br>
+
+      <label>Confirmar contraseña<span class="red-text">* </span>
+      <div>
+        <input class="cardForm" type="password" formControlName="passwordConfirm" [attr.maxlength]="maxCharsPassword">
+        <div class = "required" *ngIf="cardForm.get('passwordConfirm')?.hasError('pattern') && cardForm.get('passwordConfirm')?.touched">
+          La contraseña debe contener al menos un número y una letra.
+        </div>
+        <div class = "required" *ngIf="cardForm.get('passwordConfirm')?.hasError('minlength') && cardForm.get('passwordConfirm')?.touched">
+          La contraseña debe contener 8 caracteres.
+        </div>
+      </div>
+      </label>
+
+      <br>
+
+      <div>
+        <input type="checkbox" id="termsAndConditions" formControlName="checkboxButton">
+        <label class="inputstyle" for="termsAndConditions">Acepto los términos y condiciones<span class="red-text">*</span></label>
+        <strong  class="inputstyle"> <a href="https://drive.google.com/file/d/1ZwYynIlGtbLxbeTpz0G_OaMAQ8qLTnLq/view?usp=share_link"> Leer términos y condiciones</a>.</strong>
+      </div>
+
+      <br>
+
+      <button class="cardForm" type="submit" [disabled]="cardForm.invalid">Crear cuenta</button>
+
+      <br>
+
+
+
+    </form>
+  </div>
+
+
+
+</div>
+
+

@@ -1,0 +1,36 @@
+<div class = "box" *ngIf="loading">
+
+  <div>
+
+    <div style="flex: 1 1 100%;">
+      <h1>Cartas</h1>
+    </div>
+
+    <mat-grid-list cols="6"  rowHeight="2:3">
+      <mat-grid-tile *ngFor="let item of cards">
+        <img src= '{{item.c_image}}' style="object-fit: cover; object-position: center center; width:90%; height: 90%;">
+      </mat-grid-tile>
+    </mat-grid-list>
+
+  </div>
+
+  <div *ngIf="!finish">
+
+    <div style="flex: 1 1 100%;">
+      <h1 class="box-title">{{message}}</h1>
+    </div>
+
+    <div class="fila-imagenes" style="width: 80%;">
+
+      <img src='{{cardsPosible[cardPosition + 0].c_image}}' class="imagen" (click)="cardSelection(cardPosition + 0)">
+      <img src='{{cardsPosible[cardPosition + 1].c_image}}' class="imagen" (click)="cardSelection(cardPosition + 1)">
+      <img src='{{cardsPosible[cardPosition + 2].c_image}}' class="imagen" (click)="cardSelection(cardPosition + 2)">
+    </div>
+
+  </div>
+
+  <div *ngIf="finish">
+    <button class="cardForm" (click)="onSubmit()"> Guardar Deck </button>
+  </div>
+
+</div>

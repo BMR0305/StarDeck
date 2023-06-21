@@ -1,0 +1,10 @@
+CREATE PROCEDURE GetTurnByID
+@turnID NVARCHAR(15)
+AS
+BEGIN
+	SELECT *
+	FROM Turn
+	WHERE Turn_ID = @turnID
+END
+GO
+

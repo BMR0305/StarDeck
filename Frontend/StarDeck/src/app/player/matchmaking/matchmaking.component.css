@@ -1,0 +1,129 @@
+header{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 70px;
+  }
+
+  h1{
+    font-family: 'OCR A Std', sans-serif;
+    font-size: 30px; /* Tamaño de letra deseado */
+    font-weight: bold; /* Grosor de letra deseado */
+    color: #FFFF; /* Color de letra deseado */
+    margin-left: 10px;
+    align-self: auto;
+  }
+
+  h3{
+    font-family: 'OCR A Std', sans-serif;
+    font-size: 15px; /* Tamaño de letra deseado */
+    font-weight: bold; /* Grosor de letra deseado */
+    color: #FFFF; /* Color de letra deseado */
+    margin-left: 10px;
+    align-self: auto;
+  }
+
+  p{
+    font-family: 'OCR A Std', sans-serif;
+    font-size: 20px; /* Tamaño de letra deseado */
+    font-weight: bold; /* Grosor de letra deseado */
+    color: #FFFF; /* Color de letra deseado */
+    margin-left: 10px;
+    align-self: auto; 
+  }
+
+.deck{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  
+}
+.deck_img{
+    width: 40%;
+    height: 40%;
+    align-self:center;
+    
+  }
+.text{
+    font-family: 'OCR A Std', sans-serif;
+    color: #FFFF; 
+}
+
+  .selected{
+    font-family: 'OCR A Std', sans-serif;
+    color: #FFFF;
+    border: 10px solid black;
+  }
+
+  .imagen-seleccionada {
+    border: 10px solid black;
+  }
+
+.match{
+    width: 30%;
+    height: 25px;
+    font-family: 'OCR A Std', sans-serif;
+    font-size: 30px; /* Tamaño de letra deseado */
+    background-color: transparent;
+    border: none; 
+    color: #FFFF;
+}
+
+  .button{
+    width: 15%;
+    height: 25px;
+    font-family: 'OCR A Std', sans-serif;
+    font-size: 15px; /* Tamaño de letra deseado */
+    
+  }
+
+
+.box {
+    background-color: #046e8f; /* Color de fondo deseado */
+    border-radius: 20px; /* Radio de los bordes */
+    padding: 20px; /* Espacio de relleno interno */
+    align-items: center;
+    width: 80%;
+    margin: auto;
+    padding: 70px;
+    height: 100vh;
+    
+  }
+
+  /* Estilos para la imagen de usuario */
+  .user-img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  /* Estilos para las fotos seleccionables */
+  .photo {
+    width: 100px;
+    height: 100px;
+    border-radius: 5px;
+    margin-right: 10px;
+    object-fit: cover;
+  }
+
+  
+      /* Estilos para el botón de procesar */
+      .process-btn {
+        background-color: green;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      /* Estilos para el botón de cancelar */
+      .cancel-btn {
+        background-color: red;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }

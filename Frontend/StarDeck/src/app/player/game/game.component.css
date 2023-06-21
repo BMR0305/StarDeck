@@ -1,0 +1,140 @@
+
+@import url('https://fonts.cdnfonts.com/css/ocr-a-std');
+
+
+header{
+  display: flex;
+	align-items: center;
+}
+
+footer{
+  display: flex;
+	align-items: center;
+}
+
+.section20 {
+  flex-basis: 20%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+
+.hand {
+  flex-basis: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.deck {
+  flex-basis: 20%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+
+}
+
+.button{
+
+  width: 85%;
+  height: 45px;
+  font-family: 'OCR A Std', sans-serif;
+  font-size: 15px; /* Tamaño de letra deseado */
+}
+
+
+section{
+  display: flex; /* hacemos que el contenedor sea un contenedor flexible */
+	justify-content: center; /* centramos horizontalmente los elementos dentro del contenedor */
+	align-items: center;
+  height: 55vh;
+  margin-top: 20px;
+  background-color: #38aecc;
+  border-radius: 10px;
+}
+
+h1{
+  font-family: 'OCR A Std', sans-serif;
+  font-size: 30px; /* Tamaño de letra deseado */
+  font-weight: bold; /* Grosor de letra deseado */
+  color: #FFFF; /* Color de letra deseado */
+  margin-left: 10px;
+  align-self: auto;
+}
+
+.divider {
+  width: 1px;
+  height: 90%;
+  background-color: white;
+  margin-right: 20px;
+  display: inline-block;
+}
+
+
+h2{
+  font-family: 'OCR A Std', sans-serif;
+  font-size: 20px; /* Tamaño de letra deseado */
+  font-weight: bold; /* Grosor de letra deseado */
+  color: #FFFF; /* Color de letra deseado */
+  margin-left: 10px;
+  position: absolute;
+  bottom: 0;
+  padding: 4px;
+  background-color: black;
+  border-radius: 5px;
+
+}
+
+.box {
+    background-color: #046e8f; /* Color de fondo deseado */
+    border-radius: 20px; /* Radio de los bordes */
+    padding: 20px; /* Espacio de relleno interno */
+    align-items: center;
+    width: 80%;
+    margin: auto;
+    padding: 70px;
+    height: 125vh;
+
+  }
+
+  .monospace {
+    font-family: 'OCR A Std', sans-serif;
+    font-size: 18px; /* Tamaño de letra deseado */
+    font-weight: bold; /* Grosor de letra deseado */
+    color: #FFFF; /* Color de letra deseado */
+  }
+
+  .hand_img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+
+  }
+
+  .mat-grid-list {
+    width: 300px; /* establece el ancho deseado */
+    height: 300px; /* establece la altura deseada */
+  }
+
+.planet-container {
+  position: relative;
+  text-align: center;
+  width: 300px; /* Ajusta el ancho según tus necesidades */
+}
+
+.planet {
+  display: block;
+  width: 200px;
+  height: 200px;
+  padding: 30px;
+}
+
+.top-text, .bottom-text {
+  position: absolute;
+  left: 0;
+  right: 0;
+  color: white;
+  font-size: 18px;
+}

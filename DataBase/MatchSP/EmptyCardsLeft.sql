@@ -1,0 +1,8 @@
+CREATE PROCEDURE EmptyCardsLeft
+@playerID NVARCHAR(15)
+AS
+BEGIN
+	DELETE FROM CardsLeft
+	WHERE Player_ID = @playerID
+END
+GO

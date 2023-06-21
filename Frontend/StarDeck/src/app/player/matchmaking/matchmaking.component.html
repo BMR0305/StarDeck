@@ -1,0 +1,34 @@
+<html>
+  <body>
+    <div class="box">
+      <h1>Partida</h1>
+      <h3>Deck seleccionado: {{myDeck}}</h3>
+      <h3>{{msg}}</h3>
+
+      <header>
+		<img src = '{{img_src}}' style="width: 100px; height: 100px; align-self: center;">
+		<h1>{{user}}</h1>
+	  </header>
+      
+      <div >
+        <mat-grid-list class="mat-grid-list" cols="4" rowHeight="200px" >
+
+            <mat-grid-tile *ngFor="let item of deckList ">
+              <button (click)="deckClick(item.name)" class="match" style="text-align:center">  {{item.name}}</button>
+            </mat-grid-tile>
+          </mat-grid-list>
+        
+      </div>
+      <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+        <h1>vs</h1>
+        <button [disabled]="myDeck === undefined" (click)="matchClick()" class="match">Buscar oponente</button>
+      
+    </div>
+
+    <div style="padding: 100px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+        <button (click)="cancelClick()" class="button">Cancelar</button>
+    </div>
+    </div>
+  </body>
+</html>
+

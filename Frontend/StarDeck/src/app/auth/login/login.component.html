@@ -1,0 +1,51 @@
+<div style="display: flex; flex-wrap: wrap;" class="box">
+
+  <div style="flex: 1 1 100%;">
+    <h1>Iniciar sesión </h1>
+  </div>
+
+
+  <div style="flex: 1 1 ;">
+    <form [formGroup]="cardForm"  class = "monospace">
+
+      <label>Correo<span class="red-text">* </span>
+        <div>
+          <input  type="email" formControlName="mail">
+          <div class = "required" *ngIf="cardForm.get('mail')?.hasError('email') && cardForm.get('mail')?.touched">
+            El correo no es válido
+          </div>
+        </div>
+      </label>
+
+      <br>
+
+      <label>Contraseña<span class="red-text">* </span>
+        <div>
+          <input style="width: 100%;" type="password" formControlName="password" [attr.maxlength]="8">
+          <div class = "required" *ngIf="cardForm.get('password')?.hasError('pattern') && cardForm.get('password')?.touched">
+            La contraseña debe contener al menos un número y una letra.
+          </div>
+          <div class = "required" *ngIf="cardForm.get('password')?.hasError('minlength') && cardForm.get('password')?.touched">
+            La contraseña debe contener 8 caracteres.
+          </div>
+        </div>
+      </label>
+
+
+      <br>
+
+      <button class="cardForm" type="submit" [disabled]="cardForm.invalid" (click)="onSubmit()">Login</button>
+
+      <br>
+
+
+    </form>
+
+    <button class="cardForm"  (click)="redirecToRegister()">Registrarse</button>
+  </div>
+
+
+
+</div>
+
+

@@ -1,0 +1,41 @@
+.box {
+  background-color: #046e8f; /* Color de fondo deseado */
+  border-radius: 20px; /* Radio de los bordes */
+  padding: 20px; /* Espacio de relleno interno */
+  align-items: center;
+  width: 80%;
+  margin: auto;
+  padding: 70px;
+  height: auto;
+
+}
+
+h1{
+  font-family: 'OCR A Std', sans-serif;
+  font-size: 30px; /* Tamaño de letra deseado */
+  font-weight: bold; /* Grosor de letra deseado */
+  color: #FFFF; /* Color de letra deseado */
+
+}
+
+.fila-imagenes {
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  padding: 50px;
+  margin-left: 50px;
+
+}
+
+.imagen{
+  width:50%;
+  height:50%;
+  margin-right: 0px;
+  margin-left: 0px;
+}
+
+.botón {
+  display: block; /* cambia la visualización del botón a bloque para centrarlo */
+  margin: -1 auto; /* establece los márgenes izquierdo y derecho en "auto" para centrar el botón */
+  /* Establece otros estilos para el botón según tus necesidades */
+}
